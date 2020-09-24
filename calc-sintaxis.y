@@ -12,6 +12,17 @@ typedef enum type {INTEGER, BOOL, VOID,UNDEFINED}type;
  
 %union { int i; char *s; boolean b; enum type t} 
 
+%token<s> ID
+%token<s> EXTERN
+%token<s> RETURN
+%token<s> TYPE_INTEGER
+%token<s> TYPE_BOOL
+%token<i> BOOL_LITERAL
+%token<i> INTEGER_LITERAL
+%token<s> ARITH_OP
+%token<s> COND_OP
+%token<s> REL_OP
+
 %type var_decl
 %type var_declarations
 %type method_decl
@@ -25,56 +36,55 @@ typedef enum type {INTEGER, BOOL, VOID,UNDEFINED}type;
 %type expr
 %type bin_op
 %type literal
-%type id
+
 
 %%
 
 program : var_declarations method_decl
 
 var_declarations : var_decl                       {}
-		  |var_decl var_declarations      {}
-                  |{}
+		  |var_decl var_declarations                  {}
+      |{}
 
-var_decl : type id ';'                            {}
+var_decl : type ID ';'                            {}
+       
 
 method_decl : method_declar                       {}
-	     |method_declar method_decl           {}
-             |{}
+	     |method_declar method_decl                 {}
+       |{}
 
 method_declar : method_declaration block          {}
-	       |extern method_declaration ';'     {}
+	       |EXTERN method_declaration ';'           {}
 
-method_declaration : type id '(' parameters ')'   {}
-	            |void id '(' parameters ')'   {}
+method_declaration : type ID '(' parameters ')'   {}
+	            |VOID ID '(' parameters ')'         {}
 
-parameters : type id ',' parameters               {}
+parameters : type ID ',' parameters               {}
 	    |{}
 
 block : '{' var_declarations statements '}'       {}
 
-type : integer                                    {}
-      |bool                                       {}
+type : TYPE_INTEGER                               {}
+      |TYPE_BOOL                                  {}
 
 statements : statement                            {}
-	    |statement statements                 {}
-            |{}
+	    |statement statements                       {}
+      |{}
 
-statement : id '=' expr ';'                       {}
-           |return expr ';'                       {}
+statement : ID '=' expr ';'                       {}
+           |RETURN expr ';'                       {}
            |';'                                   {}
            |block                                 {}
 
-expr : id                                         {}
+expr : ID                                         {}
       |literal                                    {}
       |expr bin_op expr                           {}
       |'!' expr                                   {}
       |'(' expr ')'                               {}
 
-bin_op : arit_op                                  {} 
-        |rel_op                                   {}
-        |cond_op                                  {}
+bin_op : ARITH_OP                                 {} 
+        |REL_OP                                   {}
+        |COND_OP                                  {}
 
-literal : integer_literal                         {}
-	 |bool_literal                            {}
-
-id : alpha alpha_numbers                          {}
+literal : INTEGER_LITERAL                         {}
+	 |BOOL_LITERAL                                  {}
