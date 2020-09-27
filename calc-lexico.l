@@ -85,14 +85,11 @@ alpha_num {alpha}|{digit}
 
 "//./n"|"/*.*/"|"\s+"|"/t+"|"\n+" ;
 
-. {
-	yyerror(*yytext);
-}
 %%
 
-void yyerror(char* symbol) {
-	printf("Unexpected symbol \"%s\" on line %d\n",symbol,yylineno);
-	exit(1);
+
+void yyerror() {
+	printf("Unexpected symbol \"%s\" on line %d\n",yytext,yylineno);
 }
 
 int main(int argc, char* argv[]) {
