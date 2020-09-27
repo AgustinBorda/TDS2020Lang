@@ -4,14 +4,15 @@
 #include <string.h>
 
 
+#include "headers/table.h"
+nodoL* symbol_table = NULL;
 
-//REGISTRO TYPE (esto hiria en estructures.h)
-typedef enum type {INTEGER, BOOL, VOID,UNDEFINED}type;
 
 %}	
  
-%union { int i; char *s; boolean b; enum type t} 
+%union { int i; char *s;}
 
+%token<s> VOID
 %token<s> ID
 %token<s> EXTERN
 %token<s> RETURN
@@ -22,6 +23,7 @@ typedef enum type {INTEGER, BOOL, VOID,UNDEFINED}type;
 %token<s> ARITH_OP
 %token<s> COND_OP
 %token<s> REL_OP
+
 
 %type var_decl
 %type var_declarations
@@ -46,7 +48,7 @@ var_declarations : var_decl                       {}
 		  |var_decl var_declarations                  {}
       |{}
 
-var_decl : type ID ';'                            {}
+var_decl : type ID ';'                            {printf("%s\n", "variable declarada");}
        
 
 method_decl : method_declar                       {}

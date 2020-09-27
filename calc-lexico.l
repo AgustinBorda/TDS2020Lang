@@ -19,10 +19,10 @@ cond_op [&&]
 
 %%
 
-	"void"   { 
+	"void"  { 
 		return VOID;
 	}
-	
+
 	"return" { 
 		return RETURN;
 	}
@@ -83,7 +83,6 @@ cond_op [&&]
 	}
 
 	//.\n|/*.*/|" "|\t|\n ;
-	
 
 	. {
 		lex_error(*yytext);
@@ -94,10 +93,6 @@ cond_op [&&]
 
 %%
 
-void lex_error(char* symbol) {
-	printf("Unexpected symbol "%s" on line %d\n",symbol,yylineno);
-	exit(1);
-}
 
 int main(int argc, char* argv[]) {
 	++argv,--argc;
