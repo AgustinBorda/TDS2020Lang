@@ -16,6 +16,7 @@ alpha [a-zA-Z]
 arith_op [+-]
 rel_op [==]
 cond_op [&&]
+alpha_num {alpha}|{digit}
 
 %%
 
@@ -41,52 +42,52 @@ cond_op [&&]
 
 "true"|"false" {
 	if(strcmp(*yytext,"true")==0) {
-                        yylval.i = 1;
-                }
-                else {
-                        yylval.i = 0;
-                }
-                return BOOL_LITERAL;
+		yylval.i = 1;
         }
-
-        {alpha}({aplha}|{digit})* {
-                yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-                strcpy(yylval.s,yytext);
-                return ID;
+        else {
+        	yylval.i = 0;
         }
+        return BOOL_LITERAL;
+}
 
-	{digit}+ {
-		yylval.i = atoi(yytext);
-		return INTEGER_LITERAL;
-	}
+{alpha}{alpha_num}* {
+        yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
+        strcpy(yylval.s,yytext);
+        return ID;
+}
 
-	{arith_op} {
-		yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-		strcpy(yylval.s,yytext);
-		return ARITH_OP;
-	}
+{digit}+ {
+	yylval.i = atoi(yytext);
+	return INTEGER_LITERAL;
+}
 
-	{rel_op} {
-		yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-		strcpy(yylval.s,yytext);
-		return REL_OP;
-	}
+{arith_op} {
+	yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
+	strcpy(yylval.s,yytext);
+	return ARITH_OP;
+}
 
-	{cond_op} {
-		yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-		strcpy(yylval.s,yytext);
-		return COND_OP;
-	}
+{rel_op} {
+	yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
+	strcpy(yylval.s,yytext);
+	return REL_OP;
+}
 
-	[;()=]	{
-		return *yytext;
-	}
+{cond_op} {
+	yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
+	strcpy(yylval.s,yytext);
+	return COND_OP;
+}
 
-	//.\n|/*.*/|" "|\t|\n ;
+[;()=]	{
+	return *yytext;
+}
 
-	. {
-		lex_error(*yytext);
-	}
+"//./n"|"/*.*/"|"\s+"|"/t+"|"\n+" ;
+
+. {
+	lex_error(*yytext);
+}
 %%
 
 void lex_error(char* symbol) {
