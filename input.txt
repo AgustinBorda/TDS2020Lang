@@ -1,1 +1,2 @@
 integer x;
+void pot(integer a, integer b);
