@@ -18,43 +18,42 @@ rel_op [==]
 cond_op [&&]
 
 %%
+        "void" {
+                return VOID;
+        }
 
-	"void"  { 
-		return VOID;
-	}
+        "return" {
+                return RETURN;
+        }
 
-	"return" { 
-		return RETURN;
-	}
+        "extern" {
+                return EXTERN;
+        }
 
-	"extern" { 
-		return EXTERN;
-	}
+        "integer" {
+                return TYPE_INTEGER;
+        }
 
-	"integer" {
-		return TYPE_INTEGER;
-	}
+        "bool" {
+                return TYPE_BOOL;
+        }
 
-	"bool" {
-		return TYPE_BOOL;
-	}
+        "true"|"false" {
+                if(strcmp(*yytext,"true")==0) {
+                        yylval.i = 1;
+                }
+                else {
+                        yylval.i = 0;
+                }
+                return BOOL_LITERAL;
+        }
 
-	"true"|"false" {
-		if(strcmp(*yytext,"true")==0) {
-			yylval.i = 1;
-		}
-		else {
-			yylval.i = 0;
-		}
-		return BOOL_LITERAL;
-	}
+        {alpha}{aplha_num}* {
+                yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
+                strcpy(yylval.s,yytext);
+                return ID;
+        }
 
-	{alpha}{aplha_num}* { 
-		yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-		strcpy(yylval.s,yytext);
-		return ID;	
-	}
-	
 	{digit}+ {
 		yylval.i = atoi(yytext);
 		return INTEGER_LITERAL;
@@ -87,12 +86,12 @@ cond_op [&&]
 	. {
 		lex_error(*yytext);
 	}
-
-	
-
-
 %%
 
+void lex_error(char* symbol) {
+	printf("Unexpected symbol \"%s\" on line %d\n",symbol,yylineno);
+	exit(1);
+}
 
 int main(int argc, char* argv[]) {
 	++argv,--argc;

@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-
-#include "headers/table.h"
-nodoL* symbol_table = NULL;
-
-
 %}	
  
 %union { int i; char *s;}
