@@ -1,4 +1,5 @@
 %{
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -12,34 +13,34 @@
 
 digit [0-9]
 alpha [a-zA-Z]
-aplha_num {alpha}|{num}|-
 arith_op [+-]
 rel_op [==]
 cond_op [&&]
 
 %%
-        "void" {
-                return VOID;
-        }
 
-        "return" {
-                return RETURN;
-        }
+"void" {
+	return VOID;
+}
 
-        "extern" {
-                return EXTERN;
-        }
+"return" {
+	return RETURN;
+}
 
-        "integer" {
-                return TYPE_INTEGER;
-        }
+"extern" {
+ 	return EXTERN;
+}
 
-        "bool" {
-                return TYPE_BOOL;
-        }
+"integer" {
+	return TYPE_INTEGER;
+}
 
-        "true"|"false" {
-                if(strcmp(*yytext,"true")==0) {
+"bool" {
+	return TYPE_BOOL;
+}
+
+"true"|"false" {
+	if(strcmp(*yytext,"true")==0) {
                         yylval.i = 1;
                 }
                 else {
@@ -48,7 +49,7 @@ cond_op [&&]
                 return BOOL_LITERAL;
         }
 
-        {alpha}{aplha_num}* {
+        {alpha}({aplha}|{digit})* {
                 yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
                 strcpy(yylval.s,yytext);
                 return ID;
