@@ -36,18 +36,18 @@
 
 %%
 
-program : var_declarations method_decl
+program : var_declarations 
+        | method_decl
 
 var_declarations : var_decl                       {}
-		  |var_declarations var_decl                 {}
-      |{}
+		  |var_declarations var_decl                  {}
+    
 
 var_decl : type ID ';'                            {printf("%s\n", "variable declarada");}
        
 
 method_decl : method_declar                       {}
-	     |method_decl method_declar               {}
-       |{}
+	     |method_decl method_declar                 {}
 
 method_declar : method_declaration block          {}
 	       |EXTERN method_declaration ';'           {}
@@ -64,8 +64,8 @@ type : TYPE_INTEGER                               {}
       |TYPE_BOOL                                  {}
 
 statements : statement                            {}
-	    |statements statement                      {}
-      |{}
+	    |statements statement                       {}
+     
 
 statement : ID '=' expr ';'                       {}
            |RETURN expr ';'                       {}
