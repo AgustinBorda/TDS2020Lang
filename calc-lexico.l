@@ -41,7 +41,7 @@ alpha_num {alpha}|{digit}
 }
 
 "true"|"false" {
-	if(strcmp(*yytext,"true")==0) {
+	if(strcmp(yytext,"true")==0) {
 		yylval.i = 1;
         }
         else {
@@ -86,11 +86,11 @@ alpha_num {alpha}|{digit}
 "//./n"|"/*.*/"|"\s+"|"/t+"|"\n+" ;
 
 . {
-	lex_error(*yytext);
+	yyerror(*yytext);
 }
 %%
 
-void lex_error(char* symbol) {
+void yyerror(char* symbol) {
 	printf("Unexpected symbol \"%s\" on line %d\n",symbol,yylineno);
 	exit(1);
 }
