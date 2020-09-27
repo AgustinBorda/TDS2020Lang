@@ -19,19 +19,19 @@
 %token<s> REL_OP
 
 
-%type var_decl
-%type var_declarations
-%type method_decl
-%type method_declar
-%type method_declaration
-%type parameters
-%type block
-%type type
-%type statements
-%type statement
-%type expr
-%type bin_op
-%type literal
+%type<s> var_decl
+%type<s> var_declarations
+%type<s> method_decl
+%type<s> method_declar
+%type<s> method_declaration
+%type<s> parameters
+%type<s> block
+%type<s> type
+%type<s> statements
+%type<s> statement
+%type<s> expr
+%type<s> bin_op
+%type<s> literal
 
 
 %%
@@ -39,14 +39,14 @@
 program : var_declarations method_decl
 
 var_declarations : var_decl                       {}
-		  |var_decl var_declarations                  {}
+		  |var_declarations var_decl                 {}
       |{}
 
 var_decl : type ID ';'                            {printf("%s\n", "variable declarada");}
        
 
 method_decl : method_declar                       {}
-	     |method_declar method_decl                 {}
+	     |method_decl method_declar               {}
        |{}
 
 method_declar : method_declaration block          {}
@@ -64,7 +64,7 @@ type : TYPE_INTEGER                               {}
       |TYPE_BOOL                                  {}
 
 statements : statement                            {}
-	    |statement statements                       {}
+	    |statements statement                      {}
       |{}
 
 statement : ID '=' expr ';'                       {}
