@@ -10,13 +10,13 @@ Para ejecutar:
 
 1- extern integer inc(integer x);
 	
-2- integer prod(){
-    integer x;
-    integer y;
-    {x = 4;     
-    y = 5;
-    x * 3 * y; }
+2- void swap(integer a, integer b){
+    integer aux;
+    {aux = a;     
+    a = b;
+    b = aux; }
    } 
+
 
 3- integer suma(integer a, integer b) {
   return a + b;
