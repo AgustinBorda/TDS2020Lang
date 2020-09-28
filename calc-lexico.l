@@ -91,7 +91,7 @@ alpha_num {alpha}|{digit}
 	return COND_OP;
 }
 
-[;()=]	{
+[;()=,{}]	{
 	return *yytext;
 }
 
@@ -101,7 +101,7 @@ alpha_num {alpha}|{digit}
 
 
 void yyerror() {
-	printf("Unexpected symbol \"%s\" on line %d\n",yytext,yylineno);
+	printf("Syntax error on line %d\n",yylineno);
 }
 
 int main(int argc, char* argv[]) {

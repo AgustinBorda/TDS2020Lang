@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 %}	
- 
+
 %union { int i; char *s;}
 
 %token<s> VOID
@@ -33,56 +33,77 @@
 %type<s> bin_op
 %type<s> literal
 
+%left '='
 
 %%
 
-program : var_declarations method_decl
+program :
+	var_declarations {}
+	|var_declarations';' method_decl {}
+	| method_decl {}
+	;
 
 var_declarations : var_decl                       {}
-		  |var_declarations var_decl                  {}
-    
+		 |var_declarations ';' var_decl                  {}
+		;
 
-var_decl : type ID ';'                            {printf("%s\n", "variable declarada");}
-       
+
+var_decl : type ID                            {printf("%s\n", "variable declarada");}
+	 ;
+
 
 method_decl : method_declar                       {}
-	     |method_decl method_declar                 {}
+	    |method_decl method_declar                 {}
+		;
 
 method_declar : method_declaration block          {}
-	       |EXTERN method_declaration ';'           {printf("%s\n", "metodo declarada");}
+	      |EXTERN method_declaration ';'           {printf("%s\n", "metodo declarada");}
+		;
 
 method_declaration : type ID '(' parameters ')'   {}
-	            |VOID ID '(' parameters ')'         {}
+		   |VOID ID '(' parameters ')'         {}
+		;
 
-parameters : parameter               {}
-	    |parameter parameters    {}
-            |{}
+parameters :  var_decl               {}
+	   | parameters ',' var_decl    {}
+	;
 
-parameter : type ID                            {}
 
-block : '{' var_declarations statements '}'       {}
+block : '{' var_declarations statements '}'       {printf("bloque con declaraciones\n");}
+      | '{' statements '}' {printf("bloque pelado\n");}
+	;
 
 type : TYPE_INTEGER                               {}
-      |TYPE_BOOL                                  {}
+     | TYPE_BOOL                                  {}
+	;
 
-statements : statement                            {}
-	    |statements statement                       {}
-     
+statements :  statement                            {}
+	   | statements ';' statement                  {}
+	;
 
-statement : ID '=' expr ';'                       {}
-           |RETURN expr ';'                       {}
-           |';'                                   {}
-           |block                                 {}
+
+statement :  ID '=' expr ';'                       {}
+	  | RETURN expr ';'                       {}
+	   | ';'                                   {}
+	   | block                                 {}
+	;
 
 expr : ID                                         {}
-      |literal                                    {}
+     |literal                                    {}
       |expr bin_op expr                           {}
       |'!' expr                                   {}
       |'(' expr ')'                               {}
+	;
 
 bin_op : ARITH_OP                                 {} 
-        |REL_OP                                   {}
-        |COND_OP                                  {}
+       |REL_OP                                   {}
+	|COND_OP                                  {}
+	;
 
 literal : INTEGER_LITERAL                         {}
-	 |BOOL_LITERAL                                  {}
+	|BOOL_LITERAL                            {}
+	;
+
+
+
+

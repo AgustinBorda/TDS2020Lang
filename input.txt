@@ -1,2 +1,6 @@
+bool a;
+bool b;
+void q(bool c, integer q) {
 integer x;
-extern void pot(integer a, integer b);
+bool q;
+}
