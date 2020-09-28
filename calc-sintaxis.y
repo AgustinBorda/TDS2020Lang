@@ -36,8 +36,7 @@
 
 %%
 
-program : var_declarations 
-        | method_decl
+program : var_declarations method_decl
 
 var_declarations : var_decl                       {}
 		  |var_declarations var_decl                  {}
@@ -50,13 +49,16 @@ method_decl : method_declar                       {}
 	     |method_decl method_declar                 {}
 
 method_declar : method_declaration block          {}
-	       |EXTERN method_declaration ';'           {}
+	       |EXTERN method_declaration ';'           {printf("%s\n", "metodo declarada");}
 
 method_declaration : type ID '(' parameters ')'   {}
 	            |VOID ID '(' parameters ')'         {}
 
-parameters : type ID ',' parameters               {}
-	    |{}
+parameters : parameter               {}
+	    |parameter parameters    {}
+            |{}
+
+parameter : type ID                            {}
 
 block : '{' var_declarations statements '}'       {}
 

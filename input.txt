@@ -1,2 +1,2 @@
 integer x;
-void pot(integer a, integer b);
+extern void pot(integer a, integer b);
