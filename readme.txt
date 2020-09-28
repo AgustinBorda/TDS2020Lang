@@ -37,9 +37,17 @@ Para ejecutar:
 
 6- integer x;
    integer u;
-   bool z;
+   bool z
 
-7- integer func() {{{{{{}}}}}} 
+7- integer func() {{{{{{}}}}}}
+
+8 - //Comment!
+integer a;
+/*Comment!
+
+*/
+integer b
+ 
 
 //Casos de test negativos
 
@@ -65,4 +73,18 @@ Para ejecutar:
 int main(int argc, char[]* argv) {
 	printf("Hello World!\n\0");
 }
+
+5- //Comment!
+integer a;
+/*Comment!
+
+/
+integer b
+
+6- /Comment!
+integer a;
+/*Comment!
+
+*/
+integer b
 
