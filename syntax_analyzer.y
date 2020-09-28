@@ -14,9 +14,12 @@
 %token<s> TYPE_BOOL
 %token<i> BOOL_LITERAL
 %token<i> INTEGER_LITERAL
-%token<s> ARITH_OP
-%token<s> COND_OP
-%token<s> REL_OP
+%token<s> PLUS_OP
+%token<s> MINUS_OP
+%token<s> EQ_OP
+%token<s> AND_OP
+%token<s> ASIG_OP
+%token<s> NOT_OP
 
 
 %type<s> var_decl
@@ -30,11 +33,14 @@
 %type<s> statements
 %type<s> statement
 %type<s> expr
-%type<s> bin_op
 %type<s> literal
 
-%left '='
-
+%left NOT_OP
+%left EQ_OP
+%left PLUS_OP
+%left MINUS_OP
+%left AND_OP
+%left ASIG_OP
 %%
 
 program :
@@ -69,7 +75,7 @@ parameters :  var_decl               {}
 	;
 
 
-block : '{' var_declarations statements '}'       {printf("bloque con declaraciones\n");}
+block : '{' var_declarations ';' statements '}'       {printf("bloque con declaraciones\n");}
       | '{' statements '}' {printf("bloque pelado\n");}
 	;
 
@@ -82,7 +88,7 @@ statements :  statement                            {}
 	;
 
 
-statement :  ID REL_OP expr ';'                       {}
+statement :  ID ASIG_OP expr ';'                       {}
 	  | RETURN expr ';'                       {}
 	   | ';'                                   {}
 	   | block                                 {}
@@ -90,15 +96,14 @@ statement :  ID REL_OP expr ';'                       {}
 
 expr : ID                                         {}
      |literal                                    {}
-      |expr bin_op expr                           {}
-      |'!' expr                                   {}
+	| expr PLUS_OP expr {}
+	| expr MINUS_OP expr {}
+	| expr EQ_OP expr {}
+	| expr AND_OP expr {}
       |'(' expr ')'                               {}
+      |NOT_OP expr                                   {}
 	;
 
-bin_op : ARITH_OP                                 {} 
-       |REL_OP                                   {}
-	|COND_OP                                  {}
-	;
 
 literal : INTEGER_LITERAL                         {}
 	|BOOL_LITERAL                            {}

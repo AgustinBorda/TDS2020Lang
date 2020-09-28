@@ -13,8 +13,6 @@
 
 digit [0-9]
 alpha [a-zA-Z]
-arith_op [+-]
-rel_op [==]
 cond_op [&&]
 alpha_num {alpha}|{digit}
 
@@ -70,25 +68,28 @@ alpha_num {alpha}|{digit}
 	return INTEGER_LITERAL;
 }
 
-{arith_op} {
-	yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-	strcpy(yylval.s,yytext);
-        printf("ARITH_OP\n");
-	return ARITH_OP;
+"=" {
+	return ASIG_OP;
 }
 
-{rel_op} {
-	yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-	strcpy(yylval.s,yytext);
-        printf("REL_OP\n");
-	return REL_OP;
+"+" {
+	return PLUS_OP;
 }
 
-{cond_op} {
-	yylval.s=(char*) malloc(sizeof(yytext)*yyleng);
-	strcpy(yylval.s,yytext);
-        printf("COND_OP\n");
-	return COND_OP;
+"-" {
+	return MINUS_OP;
+}
+
+"==" {
+	return EQ_OP;
+}
+
+"&&" {
+	return AND_OP;
+}
+
+"!" {
+	return NOT_OP;
 }
 
 [;(),{}]	{
