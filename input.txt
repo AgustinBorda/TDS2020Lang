@@ -3,4 +3,6 @@ bool b;
 void q(bool c, integer q) {
 integer x;
 bool q;
+q = 8;
+return q = 99;
 }

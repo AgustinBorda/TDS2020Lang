@@ -91,7 +91,7 @@ alpha_num {alpha}|{digit}
 	return COND_OP;
 }
 
-[;()=,{}]	{
+[;(),{}]	{
 	return *yytext;
 }
 

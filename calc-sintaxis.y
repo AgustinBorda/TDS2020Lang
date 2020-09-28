@@ -78,11 +78,11 @@ type : TYPE_INTEGER                               {}
 	;
 
 statements :  statement                            {}
-	   | statements ';' statement                  {}
+	   | statements statement                  {}
 	;
 
 
-statement :  ID '=' expr ';'                       {}
+statement :  ID REL_OP expr ';'                       {}
 	  | RETURN expr ';'                       {}
 	   | ';'                                   {}
 	   | block                                 {}
