@@ -1,3 +1,4 @@
-intaxis.tab.c
-calc-sintaxis.tab.h
+*.tab.c
+*.tab.h
 lex.yy.c
+*.out
