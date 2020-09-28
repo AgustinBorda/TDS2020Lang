@@ -1,14 +1,16 @@
-// Para compilar 
+Para compilar:
 
-1) sh script
-2) ./a.out input.txt
+- ./script (si no tenemos permiso realizar: $ chmod 777 script)
+
+Para ejecutar:
+- ./a.out input.txt (donde input.txt es el archivo que queremos analizar)
 
 
-//Casos de test
+//Casos de test positivos
 
-*)integer inc(integer x);
+1- extern integer inc(integer x);
 	
-*) integer prod(){
+2- integer prod(){
     integer x;
     integer y;
     {x = 4;     
@@ -16,13 +18,13 @@
     x * 3 * y; }
    } 
 
-*)integer suma(integer a, integer b) {
+3- integer suma(integer a, integer b) {
   return a + b;
   } 
  
-*) extern void print(integer i);
+4- extern void print(integer i);
 
-*)integer main(){
+5- integer main(){
   integer y;
   y = 1;
   {
@@ -31,4 +33,36 @@
   y = x + 1;
   } 
   return x;
-  } 
+  }
+
+6- integer x;
+   integer u;
+   bool z;
+
+7- integer func() {{{{{{}}}}}} 
+
+//Casos de test negativos
+
+1- integer prod(){
+    integer x;
+    integer y;
+    {x = 4;
+    y = 5
+    x * 3 * y; }
+   }
+
+2-extern integer prod(){
+    integer x;
+    integer y;
+    {x = 4;
+    y = 5;
+    x * 3 * y; }
+   }
+
+3- integer func() {{{{{}}}}}}
+
+4- #include<stdio.h>
+int main(int argc char[]* argv) {
+	printf("Hello World!\n\0");
+}
+
