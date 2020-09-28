@@ -83,6 +83,7 @@ parameters:
 block:
 	'{' var_declarations ';' statements '}' {}
 	|'{' statements '}' {}
+	| '{''}' {}
 	;
 
 type:
