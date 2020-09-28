@@ -43,70 +43,81 @@
 %left ASIG_OP
 %%
 
-program :
+program:
 	var_declarations {}
 	|var_declarations';' method_decl {}
 	| method_decl {}
 	;
 
-var_declarations : var_decl                       {}
-		 |var_declarations ';' var_decl                  {}
-		;
+var_declarations:
+	var_decl {}
+	|var_declarations ';' var_decl {}
+	;
 
+var_decl:
+	type ID {}
+	;
 
-var_decl : type ID                            {printf("%s\n", "variable declarada");}
-	 ;
+method_decl:
+	method_declar {}
+	|method_decl method_declar {}
+	;
 
+method_declar:
+	method_declaration block {}
+	|EXTERN method_declaration ';' {}
+	;
 
-method_decl : method_declar                       {}
-	    |method_decl method_declar                 {}
-		;
+method_declaration:
+	type ID '(' parameters ')' {}
+	|VOID ID '(' parameters ')' {}
+	;
 
-method_declar : method_declaration block          {}
-	      |EXTERN method_declaration ';'           {printf("%s\n", "metodo declarada");}
-		;
-
-method_declaration : type ID '(' parameters ')'   {}
-		   |VOID ID '(' parameters ')'         {}
-		;
-
-parameters :  var_decl               {}
-	   | parameters ',' var_decl    {}
+parameters:
+	var_decl {}
+	|parameters ',' var_decl {}
+	|{}
 	;
 
 
-block : '{' var_declarations ';' statements '}'       {printf("bloque con declaraciones\n");}
-      | '{' statements '}' {printf("bloque pelado\n");}
+block:
+	'{' var_declarations ';' statements '}' {}
+	|'{' statements '}' {}
 	;
 
-type : TYPE_INTEGER                               {}
-     | TYPE_BOOL                                  {}
+type:
+	TYPE_INTEGER {}
+	|TYPE_BOOL {}
 	;
 
-statements :  statement                            {}
-	   | statements statement                  {}
+statements:
+	statement {}
+	|statements statement {}
 	;
 
 
-statement :  ID ASIG_OP expr ';'                       {}
-	  | RETURN expr ';'                       {}
-	   | ';'                                   {}
-	   | block                                 {}
+statement:
+	ID ASIG_OP expr ';' {}
+	|RETURN expr ';' {}
+	| ';' {}
+	|block {}
 	;
 
-expr : ID                                         {}
-     |literal                                    {}
+expr:
+	ID {}
+	|literal {}
 	| expr PLUS_OP expr {}
 	| expr MINUS_OP expr {}
 	| expr EQ_OP expr {}
 	| expr AND_OP expr {}
-      |'(' expr ')'                               {}
-      |NOT_OP expr                                   {}
+	|'(' expr ')' {}
+	|NOT_OP expr {}
 	;
 
 
-literal : INTEGER_LITERAL                         {}
-	|BOOL_LITERAL                            {}
+literal:
+	INTEGER_LITERAL {}
+	|BOOL_LITERAL {}
 	;
 
 
