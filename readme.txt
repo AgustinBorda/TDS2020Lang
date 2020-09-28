@@ -62,7 +62,7 @@ Para ejecutar:
 3- integer func() {{{{{}}}}}}
 
 4- #include<stdio.h>
-int main(int argc char[]* argv) {
+int main(int argc, char[]* argv) {
 	printf("Hello World!\n\0");
 }
 
