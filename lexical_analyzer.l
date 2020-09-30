@@ -71,6 +71,10 @@ alpha_num {alpha}|{digit}|[_-]
 	return MINUS_OP;
 }
 
+"*" {
+	return MULT_OP;
+}
+
 "==" {
 	return EQ_OP;
 }
@@ -89,9 +93,17 @@ alpha_num {alpha}|{digit}|[_-]
 
 "//".*"\n"|"\s"+|"/t"+|"\n"+|"/*"[^*]*|[*]*"*/" ;
 
+. { 
+//	printf("%s\n",yytext);
+	//lex_error(yytext);
+}
 
 %%
 
+void lex_error(char* msg) {
+	printf("Unexpected symbol \" %s \" on line %d\n",msg,yylineno);
+	exit(1);
+}
 
 void yyerror() {
 	printf("Syntax error on line %d\n",yylineno);

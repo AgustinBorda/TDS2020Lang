@@ -20,6 +20,7 @@
 %token<s> AND_OP
 %token<s> ASIG_OP
 %token<s> NOT_OP
+%token<s> MULT_OP
 
 
 %type<s> var_decl
@@ -35,12 +36,13 @@
 %type<s> expr
 %type<s> literal
 
-%left NOT_OP
 %left EQ_OP
+%left MULT_OP
 %left PLUS_OP
 %left MINUS_OP
 %left AND_OP
 %left ASIG_OP
+%left NOT_OP
 %%
 
 program:
@@ -83,6 +85,7 @@ parameters:
 block:
 	'{' var_declarations ';' statements '}' {}
 	|'{' statements '}' {}
+	|'{' var_declarations ';''}' {}
 	| '{''}' {}
 	;
 
@@ -111,6 +114,7 @@ expr:
 	| expr MINUS_OP expr {}
 	| expr EQ_OP expr {}
 	| expr AND_OP expr {}
+	| expr MULT_OP expr {}
 	|'(' expr ')' {}
 	|NOT_OP expr {}
 	;
