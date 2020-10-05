@@ -11,6 +11,8 @@ typedef node* tree;
 
  node* load_node( tree nd, tree ni, tree nn , nodoL* inf);
 
+ node* load_node( tree nd, tree ni, tree nn , int constante);
+
 int size();
 
 
