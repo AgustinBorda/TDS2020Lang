@@ -66,7 +66,7 @@ method_decl:
 	;
 
 method_declar:
-	method_declaration block {}
+	method_declaration open_brace block close_brace {printf("Declaration\n");}
 	|EXTERN method_declaration ';' {}
 	;
 
@@ -83,10 +83,10 @@ parameters:
 
 
 block:
-	'{' var_declarations ';' statements '}' {}
-	|'{' statements '}' {}
-	|'{' var_declarations ';''}' {}
-	| '{''}' {}
+	var_declarations ';' statements {printf("Definition\n");}
+	| statements {printf("Definition\n");}
+	| var_declarations ';' {printf("Definition\n");}
+	| {}
 	;
 
 type:
@@ -95,8 +95,8 @@ type:
 	;
 
 statements:
-	statement {}
-	|statements statement {}
+	statement {printf("Statement\n");}
+	|statements statement {printf("Statements\n");}
 	;
 
 
@@ -104,7 +104,7 @@ statement:
 	ID ASIG_OP expr ';' {}
 	|RETURN expr ';' {}
 	| ';' {}
-	|block {}
+	|open_brace block close_brace {printf("Declaration\n");}
 	;
 
 expr:
@@ -124,6 +124,12 @@ literal:
 	INTEGER_LITERAL {}
 	|BOOL_LITERAL {}
 	;
+
+open_brace:
+	  '{' {printf("Open brace\n");}
+
+close_brace: 
+	   '}' {printf("Close brace\n");}
 
 
 
