@@ -1,7 +1,17 @@
 #ifndef _STRUCTURES_H
 #define _STRUCTURES_H
 
+typedef enum type_var_fun {INT, BOOL, VOID} type_var;
+
 typedef enum flag_nodo {VAR, FUN, MAIN} flag_nodo;
+
+//ESTRUCTURA VARIABLE O FUNCION
+typedef struct dato {	
+	enum type_var_fun type;
+	char* name;
+	int value;
+	//TODO: Lista de tipos para funciones
+}dato;
 
 //ESTRUCTURA LISTA
 typedef struct nodo {
@@ -11,22 +21,12 @@ typedef struct nodo {
 
 }nodoL;
 
-typedef enum type_var_fun {INT, BOOL, VOID} type_var;
-
-//ESTRUCTURA VARIABLE O FUNCION
-typedef struct dato {	
-	enum type_var_fun type;
-	char* name;
-	int value;
-	nodoL* sig;
-}dato;
-
 
 // A structure to represent a node stack 
 typedef struct stack_node {
 	int level; 
-	nodoL* sig;
-	struct stack_node *sig;
+	nodoL* list;
+	struct stack_node* sig;
 }stack_node;
 
 
