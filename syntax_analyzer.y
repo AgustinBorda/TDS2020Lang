@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "headers/table.h"
+#include "headers/stack.h"
 
 nodoL* symbol_table = NULL;
+stack_node* stack = NULL;
 %}	
 
 %union { int i; char *s;}
@@ -48,7 +50,8 @@ nodoL* symbol_table = NULL;
 %left NOT_OP
 %%
 
-program:
+program: program1{push( stack, symbol_table);};
+program1:
 	var_declarations {}
 	|var_declarations';' method_decl {}
 	| method_decl {}
@@ -60,8 +63,9 @@ var_declarations:
 	;
 
 var_decl:
-	type ID {if(insertar(&symbol_table,$2,0) == 0) {
-				notifyError("Duplicate variable", $2);
+	type ID {
+		if(insertar(&symbol_table,$2) == 0) {
+			notifyError("Duplicate variable", $2);
 		}}
 	;
 
@@ -136,11 +140,12 @@ block:
 
 
 open_brace:
-	'{' {printf("Open brace\n");}
+	'{' {nodoL* symbol_table = malloc(sizeof(nodoL));
+		push( stack, symbol_table);}
 	;
 
 close_brace: 
-	'}' {printf("Close brace\n");}
+	'}' {pop(stack);}
 	;
 
 
