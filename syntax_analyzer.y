@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "headers/table.h"
+
+nodoL* symbol_table = NULL;
 %}	
 
 %union { int i; char *s;}
@@ -57,7 +60,9 @@ var_declarations:
 	;
 
 var_decl:
-	type ID {}
+	type ID {if(insertar(&symbol_table,$2,0) == 0) {
+				notifyError("Duplicate variable", $2);
+		}}
 	;
 
 method_decl:
