@@ -11,7 +11,7 @@ stack_node* stack = NULL;
 
 %union { int i; char *s;}
 
-%token<s> VOID
+%token<s> TOKEN_VOID
 %token<s> ID
 %token<s> EXTERN
 %token<s> RETURN
@@ -50,7 +50,7 @@ stack_node* stack = NULL;
 %left NOT_OP
 %%
 
-program: program1{push( stack, symbol_table);};
+
 program1:
 	var_declarations {}
 	|var_declarations';' method_decl {}
@@ -63,10 +63,7 @@ var_declarations:
 	;
 
 var_decl:
-	type ID {
-		if(insertar(&symbol_table,$2) == 0) {
-			notifyError("Duplicate variable", $2);
-		}}
+	type ID { }
 	;
 
 method_decl:
@@ -81,7 +78,7 @@ method_declar:
 
 method_declaration:
 	type ID '(' parameters ')' {}
-	|VOID ID '(' parameters ')' {}
+	|TOKEN_VOID ID '(' parameters ')' {}
 	;
 
 parameters:
@@ -140,12 +137,11 @@ block:
 
 
 open_brace:
-	'{' {nodoL* symbol_table = malloc(sizeof(nodoL));
-		push( stack, symbol_table);}
+	'{' {}
 	;
 
 close_brace: 
-	'}' {pop(stack);}
+	'}' {}
 	;
 
 

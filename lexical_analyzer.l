@@ -19,7 +19,7 @@ alpha_num {alpha}|{digit}|[_-]
 %%
 
 "void" {
-	return VOID;
+	return TOKEN_VOID;
 }
 
 "return" {
