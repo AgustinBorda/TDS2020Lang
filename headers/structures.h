@@ -18,10 +18,15 @@ typedef struct dato {
 	enum type_var_fun type;
 	char* name;
 	int value;
-	nodoL* sig;
+	nodoType* sig;
 }dato;
 
+//ESTRUCTURA NODO
+typedef struct nodo_type {
+	enum type_var_fun type;
+	struct nodo *sig;
 
+}nodoType;
 // A structure to represent a node stack 
 typedef struct stack_node {
 	int level; 
