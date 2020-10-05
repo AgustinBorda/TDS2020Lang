@@ -21,7 +21,7 @@ int existe(nodoL* head, char* var);
 *en la tabla
 */
 
-int buscar_valor(nodoL* head, char* var);
+//int buscar_valor(nodoL* head, char* var);
 
 /*
 *Imprime toda la lista
