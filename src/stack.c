@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include "../headers/stack.h"
 
-struct stack_node* createStack() {
-	stack_node* pila = malloc(sizeof(stack_node));
-	pila -> level = 0;
-	pila -> sig = NULL;
-	return pila;
+void createStack(stack_node** p) {
+	(*p) = malloc(sizeof(stack_node));
+	(*p) -> level = 0;
+	(*p) -> sig = NULL;
+	return;
 }
 
 int isEmpty(struct stack_node* p) {

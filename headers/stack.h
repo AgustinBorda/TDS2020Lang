@@ -2,7 +2,7 @@
 #define _STACK_H
 #include "structures.h"
 
-struct stack_node* createStack() ;
+void createStack(stack_node** p);
 
 int isEmpty(struct stack_node* p) ;
 
