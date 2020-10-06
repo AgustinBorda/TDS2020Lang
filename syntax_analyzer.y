@@ -62,7 +62,7 @@ program:
 	;
 
 var_declarations:
-	var_decl {}
+	var_decl ';' {}
 	|var_declarations ';' var_decl {}
 	;
 
