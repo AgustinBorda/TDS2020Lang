@@ -27,9 +27,9 @@ void push(struct stack_node** p) {
 		*p = p2;
 }
 
-nodoL* pop(struct stack_node* p) {
-	stack_node* p2 = p;
-	p = p -> sig;
+nodoL* pop(struct stack_node** p) {
+	stack_node* p2 = *p;
+	p = *p -> sig;
 	nodoL* ret_val = p2->list;
 	free(p2);
 	return ret_val;

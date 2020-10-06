@@ -8,7 +8,7 @@ int isEmpty(struct stack_node* p) ;
 
 void push(struct stack_node** p);
 
-nodoL* pop(struct stack_node* p);
+nodoL* pop(struct stack_node** p);
 
 nodoL* peek(struct stack_node* p); 
 

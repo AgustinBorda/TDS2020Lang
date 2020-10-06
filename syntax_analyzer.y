@@ -76,7 +76,7 @@ method_decl:
 	;
 
 method_declar:
-	method_declaration block {printf("Declaration\n");}
+	method_declaration block {}
 	|EXTERN method_declaration ';' {}
 	;
 
@@ -93,9 +93,9 @@ parameters:
 
 
 block_content:
-	var_declarations ';' statements {printf("Definition\n");}
-	| statements {printf("Definition\n");}
-	| var_declarations ';' {printf("Definition\n");}
+	var_declarations ';' statements {}
+	| statements {}
+	| var_declarations ';' {}
 	| {}
 	;
 
@@ -105,16 +105,16 @@ type:
 	;
 
 statements:
-	statement {printf("Statement\n");}
-	|statements statement {printf("Statements\n");}
+	statement {}
+	|statements statement {}
 	;
 
 
 statement:
-	ID ASIG_OP expr ';' {printf("asig\n");}
+	ID ASIG_OP expr ';' {}
 	|RETURN expr ';' {}
 	| ';' {}
-	|block {printf("Declaration\n");}
+	|block {}
 	;
 
 expr:
@@ -141,11 +141,11 @@ block:
 
 
 open_brace:
-	'{' {}
+	'{' {push(&stack);}
 	;
 
 close_brace: 
-	'}' {}
+	'}' {pop(&stack);}
 	;
 
 
