@@ -15,9 +15,8 @@ typedef struct dato {
 
 //ESTRUCTURA LISTA
 typedef struct nodo {
-	enum flag_nodo flag;
 	dato info;
-	struct nodo *sig;
+	struct nodo* sig;
 
 }nodoL;
 

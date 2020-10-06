@@ -1,100 +1,62 @@
-
-
-#ifndef _TABLE_C
-#define _TABLE_C
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "../headers/table.h"
 
 #include <string.h>
+//TODO: Utilizar un elem. ficticio
+//sino perdemos las referencias
 
-int cant_var = 0; // cantidad de variables insertada en la tabla de simbolos
-
-/*int buscar_valor(nodoL* head, char* var) {
-	nodoL* aux = head;
-	while (aux != NULL ) {
-		if (strcmp(aux -> info.name, var)==0) {		
-		   return aux -> info.value; 
-		}  
-		aux = aux -> sig; 
-	}
-}*/
-
-
-/* Retorna 1 si la variable existe en la TS, 0 en otro caso */
-int existe(nodoL* head, char* var){
-	nodoL* aux = head;
-	while(aux != NULL) { 
-		if (strcmp(aux->info.name, var)==0) {		
-		   return 1; 
-		}  
-		aux = aux -> sig; 
-	} 
-	return 0;	
+void create_list(nodoL** p) {
+	(*p) = malloc(sizeof(nodoL));
+	(*p) -> sig = NULL;
+	return;
 }
 
-/* Inserta la variable con su valor en la TS */
-/* Retorna 1 si pudo insertar correctamente, 0 si ya existe, -1 si la TS esta llena*/
-int insertar(nodoL** head, dato d) {
-
-	if (existe(*head, d.name) != 1) {
-		nodoL* aux = malloc(sizeof(nodoL)); //Crear un nuevo nodo.
-		aux -> flag = nodoL -> flag;
-		aux -> info.name = d.name;
-		aux -> info.type = d.type;
-		if (aux -> flag == VAR) {
-			aux -> info.value = d.value;
-		} else {
-			aux -> info.sig = d.sig;
+int exist(nodoL* head, char* var) {
+	nodoL* aux = head -> sig;
+	while(aux != NULL) {
+		if(strcmp(var,aux->info.name) == 0) {
+			return 1;
 		}
-		cant_var++;
-		(*aux).sig = *head; //Apuntar el nodo al nodo que apuntaba la lista.
-		*head = aux; //Hacer que la lista apunte al nodo nuevo.
-
-	    return 1; // se inserto correctamente 
-	} else  {  
-	    return 0; // ya existe, no se inserta
+		aux = aux -> sig;
 	}
-	
+	return 0;
 }
 
-void borrar(nodoL** head, char* var){
-    nodoL* aux = *head; //puntero auxiliar al primer nodoi
-    nodoL* aux2 = NULL;
-    while (aux != NULL && strcmp(aux->info.name, var)!=0){
-	aux2 = aux;
-    	aux = aux->sig;	
-    }
-    if(aux !=NULL && strcmp(aux->info.name, var)==0) {
-	if(aux2 ==NULL) {
-		*head = aux->sig;
+int insert(nodoL* head, dato d) {
+	if(!exist(head, d.name)) {
+		nodoL* aux = malloc(sizeof(nodoL));
+		aux -> info = d;
+		aux -> sig = head -> sig -> sig;
+		head -> sig = aux;
+		return 1;
 	}
-	else {
-        	aux2->sig = aux->sig;
-	        free(aux);
-
-	}
-    }
+	return 0;
 }
 
-
-int mostrar(nodoL* head) {
-	//Crea y asigna 0 a la variable a devolver
-	//Preguntar si la lista no es vacia
-	if (head != NULL){
-		//Asigna 1 a la variable i.
-		//Muestra el valor actual en pantalla
-		printf(" |%s =",head->info.name);
-		printf(" %d|->",head->info.type);
-		//Llama la función con el próximo valor.																																		
-		mostrar(head -> sig);
+void show(nodoL* head) {
+	nodoL* aux = head -> sig;
+	while(aux != NULL) {
+		printf("Type: %d\nName: %s\nValue: %i",aux->info.type,aux->info.name,aux->info.value);
+		aux = aux -> sig;
 	}
-	else {
-		printf(" NULL\n");
+}
+
+int delete_node(nodoL* head, char* var) {
+	nodoL* aux = head -> sig;
+	while(aux->sig!=NULL) {
+		if(strcmp(var,aux->sig->info.name)==0) {
+			nodoL* aux2 = aux ->sig;
+			aux -> sig = aux2 -> sig;
+			free(aux2);
+			return 1;
+		}
+		aux = aux -> sig;
 	}
 	return 0;
 }
 
 
-#endif
+
+
+

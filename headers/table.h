@@ -4,17 +4,23 @@
 
 #include "structures.h"
 
+
+/*
+* Crea una nueva lista
+*/
+void create_list(nodoL** p);
+
 /*
 *Inserta el nodo a la lista
 */
 
-int insertar(nodoL** head, dato d);
+int insert(nodoL* head, dato d);
 
 /*
 *Busca el nodo en la lista
 */
 
-int existe(nodoL* head, char* var);
+int exist(nodoL* head, char* var);
 
 /*
 *Devuelve el valor de un identificador si existe
@@ -27,13 +33,13 @@ int existe(nodoL* head, char* var);
 *Imprime toda la lista
 */
 
-int mostrar(nodoL* head);
+void show(nodoL* head);
 
 /*
 *Borra el nodo de un identificador si existe
 *en la tabla
 */
 
-void borrar(nodoL** head, char* var);
+int delete_node(nodoL* head, char* var);
 
 #endif
