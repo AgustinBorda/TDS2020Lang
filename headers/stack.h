@@ -6,7 +6,7 @@ void createStack(stack_node** p);
 
 int isEmpty(struct stack_node* p) ;
 
-void push(struct stack_node** p, nodoL* list);
+void push(struct stack_node** p);
 
 nodoL* pop(struct stack_node* p);
 
