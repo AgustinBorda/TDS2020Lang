@@ -1,10 +1,14 @@
 #include <stdlib.h>
 #include "../headers/stack.h"
+#include "../headers/table.h"
 
 void createStack(stack_node** p) {
+	nodoL* list = NULL;
+	create_list(&list);
 	(*p) = malloc(sizeof(stack_node));
 	(*p) -> level = 0;
 	(*p) -> sig = NULL;
+	(*p) -> list = list; 
 	return;
 }
 
@@ -13,7 +17,9 @@ int isEmpty(struct stack_node* p) {
 	return 0; 
 }
 
-void push(struct stack_node** p, nodoL* list) {
+void push(struct stack_node** p) {
+		nodoL* list = NULL;
+		create_list(&list);
 		stack_node* p2 = malloc(sizeof(stack_node));
 		p2 -> level = (*p) -> level + 1; 
 		p2 -> list = list; 
