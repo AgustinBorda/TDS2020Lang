@@ -5,8 +5,13 @@
 #include "headers/table.h"
 #include "headers/stack.h"
 
-nodoL* symbol_table = NULL;
-stack_node* stack = NULL;
+stack_node* stack;
+
+void initialize() {
+	printf("No exploto\n");
+	createStack(&stack);
+}
+
 %}	
 
 %union { int i; char *s;}
@@ -50,8 +55,7 @@ stack_node* stack = NULL;
 %left NOT_OP
 %%
 
-
-program1:
+program:
 	var_declarations {}
 	|var_declarations';' method_decl {}
 	| method_decl {}

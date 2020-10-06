@@ -37,7 +37,7 @@ int insert(nodoL* head, dato d) {
 void show(nodoL* head) {
 	nodoL* aux = head -> sig;
 	while(aux != NULL) {
-		printf("Type: %d\nName: %s\nValue: %i\n",aux->info.type,aux->info.name,aux->info.value);
+		printf("Type: %d\nName: %s\nValue: %i\nV\n",aux->info.type,aux->info.name,aux->info.value);
 		aux = aux -> sig;
 	}
 }
