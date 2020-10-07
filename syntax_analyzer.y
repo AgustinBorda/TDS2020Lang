@@ -68,8 +68,14 @@ var_declarations:
 var_decl:
 	type ID { 	printf("%s\n", $2);
 				dato* d = malloc(sizeof(dato));
-				d-> type = tipo($1);
+				if($1 == TYPE_INTEGER) {
+					d-> type = INT;
+				} else {
+					d-> type = BOOL;
+				}
 				d-> name = $2;
+				d-> flag = VAR;
+				enum flag_nodo id_type = VAR;
 				int a = insert((stack->list), d);
 				if(a==1) {
 				  	printf("Se inserto Correctamente \n");

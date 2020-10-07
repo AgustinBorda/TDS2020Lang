@@ -10,6 +10,7 @@ typedef struct dato {
 	enum type_var_fun type;
 	char* name;
 	int value;
+	enum flag_nodo flag;
 	//TODO: Lista de tipos para funciones
 }dato;
 
