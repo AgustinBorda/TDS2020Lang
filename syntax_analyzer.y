@@ -55,6 +55,8 @@ void initialize() {
 %left NOT_OP
 %%
 
+programInit:
+	   {initialize();}program ;
 program:
 	var_declarations {}
 	|var_declarations';' method_decl {}
