@@ -2,4 +2,5 @@
 
 flex lexical_analyzer.l 
 bison -d syntax_analyzer.y
-gcc -o ctds lex.yy.c syntax_analyzer.tab.c src/stack.c src/table.c
+gcc -o ctds lex.yy.c syntax_analyzer.tab.c src/stack.c src/table.c 
+

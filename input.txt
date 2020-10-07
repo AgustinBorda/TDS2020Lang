@@ -1,11 +1,2 @@
-integer main() {
-x = 5;
-y = 7;
-{x=7;
-y=5;}
-}
-
-
-
-
+integer x;
 

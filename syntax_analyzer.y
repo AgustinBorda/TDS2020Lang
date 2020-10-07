@@ -75,7 +75,6 @@ var_decl:
 				}
 				d-> name = $2;
 				d-> flag = VAR;
-				enum flag_nodo id_type = VAR;
 				int a = insert((stack->list), d);
 				if(a==1) {
 				  	printf("Se inserto Correctamente \n");
