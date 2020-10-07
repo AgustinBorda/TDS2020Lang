@@ -55,88 +55,90 @@ void initialize() {
 %%
 
 programInit:
-	{initialize();} program {}
+	   {initialize();} program {}
 	;
 
 program:
-	var_declarations {}
+       var_declarations {}
 	|var_declarations method_decl {}
 	| method_decl {}
 	;
 
 var_declarations:
-	var_decl {}
+		var_decl {}
 	|var_declarations var_decl {}
 	;
 
 var_decl:
-	type ID ';' { 	printf("%s\n", $2);
-				dato* d = malloc(sizeof(dato));
-				if($1 == TYPE_INTEGER) {
-					d-> type = INT;
-				} else {
-					d-> type = BOOL;
-				}
-				d-> name = $2;
-				d-> flag = VAR;
-				int a = insert((stack->list), d);
-				if(a==1) {
-				  	printf("Se inserto Correctamente \n");
-				} else {
-					printf("Error,no se cargo");
-				}
-			}
+	type ID ';' {
+		dato* d = malloc(sizeof(dato));
+		if($1 == TYPE_INTEGER) {
+			d-> type = INT;
+		} 
+		else {
+			d-> type = BOOL;
+		}
+		d-> name = $2;
+		d-> flag = VAR;
+		int a = insert((stack->list), d);
+		if(a==1) {
+			printf("Se inserto Correctamente \n");
+		}
+		 else {
+			printf("Error,no se cargo");
+		}
+	}
 	;
 
 method_decl:
-	method_declar {}
+	   method_declar {}
 	|method_decl method_declar {}
 	;
 
 method_declar:
-	method_declaration block {}
+	     method_declaration block {}
 	|EXTERN method_declaration ';' {}
 	;
 
 method_declaration:
-	type ID '(' parameters ')' {}
+		  type ID '(' parameters ')' {}
 	|TOKEN_VOID ID '(' parameters ')' {}
 	;
 
 parameters:
-	var_decl {}
+	  var_decl {}
 	|parameters ',' var_decl {}
 	|{}
 	;
 
 
 block_content:
-	var_declarations statements {}
+	     var_declarations statements {}
 	| statements {}
 	| var_declarations {}
 	| {}
 	;
 
 type:
-	TYPE_INTEGER {}
+    TYPE_INTEGER {}
 	|TYPE_BOOL {}
 	;
 
 statements:
-	statement {}
+	  statement {}
 	|statements statement {}
 	;
 
 
 statement:
-	ID ASIG_OP expr ';' {}
+	 ID ASIG_OP expr ';' {}
 	|RETURN expr ';' {}
 	| ';' {}
 	|block {}
 	;
 
 expr:
-	ID {}
+    ID {}
 	|literal {}
 	| expr PLUS_OP expr {}
 	| expr MINUS_OP expr {}
@@ -149,21 +151,21 @@ expr:
 
 
 literal:
-	INTEGER_LITERAL {}
+       INTEGER_LITERAL {}
 	|BOOL_LITERAL {}
 	;
 
 block:
-	open_brace block_content close_brace {}
+     open_brace block_content close_brace {}
 	;
 
 
 open_brace:
-	'{' {push(&stack);}
+	  '{' {push(&stack);}
 	;
 
 close_brace: 
-	'}' {pop(&stack);}
+	   '}' {pop(&stack);}
 	;
 
 
