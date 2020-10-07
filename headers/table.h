@@ -14,7 +14,7 @@ void create_list(nodoL** p);
 *Inserta el nodo a la lista
 */
 
-int insert(nodoL* head, dato d);
+int insert(nodoL* head, dato* d);
 
 /*
 *Busca el nodo en la lista

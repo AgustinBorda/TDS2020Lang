@@ -15,7 +15,7 @@ typedef struct dato {
 
 //ESTRUCTURA LISTA
 typedef struct nodo {
-	dato info;
+	dato* info;
 	struct nodo* sig;
 
 }nodoL;

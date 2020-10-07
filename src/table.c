@@ -15,7 +15,7 @@ void create_list(nodoL** p) {
 int exist(nodoL* head, char* var) {
 	nodoL* aux = head -> sig;
 	while(aux != NULL) {
-		if(strcmp(var,aux->info.name) == 0) {
+		if(strcmp(var,aux->info->name) == 0) {
 			return 1;
 		}
 		aux = aux -> sig;
@@ -23,8 +23,8 @@ int exist(nodoL* head, char* var) {
 	return 0;
 }
 
-int insert(nodoL* head, dato d) {
-	if(!exist(head, d.name)) {
+int insert(nodoL* head, dato* d) {
+	if(!exist(head, d->name)) {
 		nodoL* aux = malloc(sizeof(nodoL));
 		aux -> info = d;
 		aux -> sig = head -> sig;
@@ -37,7 +37,7 @@ int insert(nodoL* head, dato d) {
 void show(nodoL* head) {
 	nodoL* aux = head -> sig;
 	while(aux != NULL) {
-		printf("Type: %d\nName: %s\nValue: %i\nV\n",aux->info.type,aux->info.name,aux->info.value);
+		printf("Type: %d\nName: %s\nValue: %i\nV\n",aux->info->type,aux->info->name,aux->info->value);
 		aux = aux -> sig;
 	}
 }
@@ -45,7 +45,7 @@ void show(nodoL* head) {
 int delete_node(nodoL* head, char* var) {
 	nodoL* aux = head;
 	while(aux->sig!=NULL) {
-		if(strcmp(var,aux->sig->info.name)==0) {
+		if(strcmp(var,aux->sig->info->name)==0) {
 			nodoL* aux2 = aux ->sig;
 			aux -> sig = aux2 -> sig;
 			free(aux2);
