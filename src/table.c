@@ -68,4 +68,14 @@ void empty_list(nodoL** head) {
 }
 
 
-
+enum type_var_fun tipo(char* t) {
+	if(strcmp(t,"integer")==0) {
+		return INT;
+	}
+	if(strcmp(t,"bool")==0) {
+		return BOOL;
+	}
+	if(strcmp(t,"void")==0) {
+		return VOID;
+	}
+}

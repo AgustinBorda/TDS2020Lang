@@ -54,8 +54,6 @@ void initialize() {
 %left NOT_OP
 %%
 
-programInit:
-	   {initialize();}program ;
 program:
 	var_declarations {}
 	|var_declarations';' method_decl {}
@@ -68,7 +66,17 @@ var_declarations:
 	;
 
 var_decl:
-	type ID { }
+	type ID { 	printf("%s\n", $2);
+				dato* d = malloc(sizeof(dato));
+				d-> type = tipo($1);
+				d-> name = $2;
+				int a = insert((stack->list), d);
+				if(a==1) {
+				  	printf("Se inserto Correctamente \n");
+				} else {
+					printf("Error,no se cargo");
+				}
+			}
 	;
 
 method_decl:
