@@ -8,7 +8,6 @@
 stack_node* stack;
 
 void initialize() {
-	printf("No exploto\n");
 	createStack(&stack);
 }
 
