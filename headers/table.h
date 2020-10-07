@@ -42,4 +42,6 @@ void show(nodoL* head);
 
 int delete_node(nodoL* head, char* var);
 
+void empty_list(nodoL** head);
+
 #endif

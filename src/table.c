@@ -56,5 +56,16 @@ int delete_node(nodoL* head, char* var) {
 	return 0;
 }
 
+void empty_lisy(nodoL** head) {
+	nodoL* aux = *head;
+	*head = NULL;
+	nodoL* aux2;
+	while(aux != NULL) {
+		aux2 = aux;
+		aux = aux->sig;
+		free(aux2);
+	}
+}
+
 
 
