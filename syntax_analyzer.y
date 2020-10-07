@@ -60,17 +60,17 @@ programInit:
 
 program:
 	var_declarations {}
-	|var_declarations';' method_decl {}
+	|var_declarations method_decl {}
 	| method_decl {}
 	;
 
 var_declarations:
-	var_decl ';' {}
-	|var_declarations ';' var_decl {}
+	var_decl {}
+	|var_declarations var_decl {}
 	;
 
 var_decl:
-	type ID { 	printf("%s\n", $2);
+	type ID ';' { 	printf("%s\n", $2);
 				dato* d = malloc(sizeof(dato));
 				if($1 == TYPE_INTEGER) {
 					d-> type = INT;
@@ -111,9 +111,9 @@ parameters:
 
 
 block_content:
-	var_declarations ';' statements {}
+	var_declarations statements {}
 	| statements {}
-	| var_declarations ';' {}
+	| var_declarations {}
 	| {}
 	;
 
