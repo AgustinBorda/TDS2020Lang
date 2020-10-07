@@ -110,7 +110,6 @@ void yyerror() {
 }
 
 int main(int argc, char* argv[]) {
-	initialize();
 	++argv,--argc;
 	if (argc>0)
 		yyin = fopen(argv[0],"r");
