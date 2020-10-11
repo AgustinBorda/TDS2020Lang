@@ -3,17 +3,19 @@
 #include "../headers/table.h"
 
 #include <string.h>
-//TODO: Utilizar un elem. ficticio
-//sino perdemos las referencias
 
-void create_list(nodoL** p) {
-	(*p) = malloc(sizeof(nodoL));
-	(*p) -> sig = NULL;
+void create_list(list** p, type_list type) {
+	(*p) = malloc(sizeof(list));
+	(*p) -> type = type;
+	(*p) -> list = malloc(sizeof(nodoL))
+	(*p) -> list -> sig = NULL;
 	return;
 }
 
-int exist(nodoL* head, char* var) {
-	nodoL* aux = head -> sig;
+//TODO: implementar desde aca (pasar todo a terminos de list)
+
+int exist(list* l, char* var) {
+	nodoL* aux = l -> list -> sig;
 	while(aux != NULL) {
 		if(strcmp(var,aux->info->name) == 0) {
 			return 1;
@@ -23,7 +25,7 @@ int exist(nodoL* head, char* var) {
 	return 0;
 }
 
-int insert(nodoL* head, dato* d) {
+int insert(nodoL* head, void* d) {
 	if(!exist(head, d->name)) {
 		nodoL* aux = malloc(sizeof(nodoL));
 		aux -> info = d;

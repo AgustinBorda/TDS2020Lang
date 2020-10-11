@@ -8,19 +8,20 @@
 /*
 * Crea una nueva lista
 */
-void create_list(nodoL** p);
+void create_list(list** p, type_list type);
+
 
 /*
 *Inserta el nodo a la lista
 */
 
-int insert(nodoL* head, dato* d);
+int insert(list* head, void* d);
 
 /*
 *Busca el nodo en la lista
 */
 
-int exist(nodoL* head, char* var);
+int exist(list* head, char* var);
 
 /*
 *Devuelve el valor de un identificador si existe
@@ -33,15 +34,15 @@ int exist(nodoL* head, char* var);
 *Imprime toda la lista
 */
 
-void show(nodoL* head);
+void show(list* head);
 
 /*
 *Borra el nodo de un identificador si existe
 *en la tabla
 */
 
-int delete_node(nodoL* head, char* var);
+int delete_node(list* head, char* var);
 
-void empty_list(nodoL** head);
+void empty_list(list** head);
 
 #endif
