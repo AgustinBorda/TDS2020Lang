@@ -7,15 +7,6 @@ typedef enum flag_nodo {VAR, FUN, MAIN} flag_nodo;
 
 typedef enum type_list {SYMBOL, PARAM, TREE} type_list;
 
-//ESTRUCTURA VARIABLE O FUNCION
-typedef struct dato {	
-	enum type_var_fun type;
-	char* name;
-	int value;
-	enum flag_nodo flag;
-	//TODO: Lista de tipos para funciones
-}dato;
-
 //ESTRUCTURA LISTA
 typedef struct nodo {
 	void* info;
@@ -29,11 +20,20 @@ typedef struct list {
 	nodoL* list;
 }list;
 
-//ESTRUCTURA NODO
-typedef struct nodo_type {
+//ESTRUCTURA VARIABLE O FUNCION
+typedef struct dato {	
 	enum type_var_fun type;
-	struct nodo *sig;
-}nodoType;
+	char* name;
+	int value;
+	enum flag_nodo flag;
+	list* params;
+}dato;
+
+//ESTRUCTURA NODO
+typedef struct info_type {
+	enum type_var_fun type;
+	char* name;
+}info_type;
 
 // A structure to represent a node stack 
 typedef struct stack_node {

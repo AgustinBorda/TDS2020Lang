@@ -36,12 +36,6 @@ int exist(list* head, char* var);
 
 void show(list* head);
 
-/*
-*Borra el nodo de un identificador si existe
-*en la tabla
-*/
-
-int delete_node(list* head, char* var);
 
 void empty_list(list** head);
 
