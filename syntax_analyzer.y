@@ -4,16 +4,20 @@
 #include <string.h>
 #include "headers/table.h"
 #include "headers/stack.h"
-
+#include "headers/tree.h"
+tree t = NULL;
 stack_node* stack;
 
 void initialize() {
 	createStack(&stack);
 }
-
+list* symbol;
+void initializeList(){
+      create_list(&symbol,SYMBOL);
+}
 %}	
 
-%union { int i; char *s;}
+%union { int i; char *s; struct node *n;}
 
 %token<s> TOKEN_VOID
 %token<s> ID
@@ -32,18 +36,18 @@ void initialize() {
 %token<s> MULT_OP
 
 
-%type<s> var_decl
-%type<s> var_declarations
-%type<s> method_decl
-%type<s> method_declar
-%type<s> method_declaration
-%type<s> parameters
-%type<s> block
-%type<s> type
-%type<s> statements
-%type<s> statement
-%type<s> expr
-%type<s> literal
+%type<n> var_decl
+%type<n> var_declarations
+%type<n> method_decl
+%type<n> method_declar
+%type<n> method_declaration
+%type<n> parameters
+%type<n> block
+%type<n> type
+%type<n> statements
+%type<n> statement
+%type<n> expr
+%type<n> literal
 
 %left EQ_OP
 %left MULT_OP
@@ -55,7 +59,7 @@ void initialize() {
 %%
 
 programInit:
-	   {initialize();} program {}
+	   {initialize(); initializeList();} program {}
 	;
 
 program:
@@ -80,7 +84,7 @@ var_decl:
 		}
 		d-> name = $2;
 		d-> flag = VAR;
-		int a = insert((stack->list), d);
+		int a = insert(symbol, d);
 		if(a==1) {
 			printf("Se inserto Correctamente \n");
 		}
@@ -131,22 +135,35 @@ statements:
 
 
 statement:
-	 ID ASIG_OP expr ';' {}
+	 ID ASIG_OP expr ';' {
+                              
+                             }
 	|RETURN expr ';' {}
 	| ';' {}
 	|block {}
 	;
 
 expr:
-    ID {}
-	|literal {}
-	| expr PLUS_OP expr {}
+         ID                  {
+                              $$ =  load_node(NULL, NULL, NULL, symbol);
+                             }
+	|literal             {list* symbol;
+                              list* params;
+                              create_list(&symbol,SYMBOL);
+                              create_list(&params,PARAM);
+                              dato* d1 = malloc(sizeof(dato));
+                              d1 -> type = 0;
+                              d1 -> name = $1;
+                              insert(symbol,d1);
+                              $$ =  load_node(NULL, NULL, NULL, symbol);
+                             }
+	| expr PLUS_OP expr  {}
 	| expr MINUS_OP expr {}
-	| expr EQ_OP expr {}
-	| expr AND_OP expr {}
-	| expr MULT_OP expr {}
-	|'(' expr ')' {}
-	|NOT_OP expr {}
+	| expr EQ_OP expr    {}
+	| expr AND_OP expr   {}
+	| expr MULT_OP expr  {}
+	|'(' expr ')'        {}
+	|NOT_OP expr         {}
 	;
 
 
