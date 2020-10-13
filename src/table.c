@@ -27,7 +27,7 @@ int exist(list* l, char* var) {
 
 int insert(list* head, void* d) {
 	if(head -> type == 0 || head -> type == 1) {
-	       	/*La tabla de simbolos o una lista de parametros, no queremos repetidos*/
+		/*La tabla de simbolos o una lista de parametros, no queremos repetidos*/
 		info_type* ptr = d;
 		if(!exist(head, ptr->name)) {
 			nodoL* aux = malloc(sizeof(nodoL));
@@ -47,23 +47,37 @@ int insert(list* head, void* d) {
 	}
 }
 
-void show(list* head) {
+void* seek(list* head, char* var) {
 	nodoL* aux = head -> list -> sig;
 	while(aux != NULL) {
-		info_type* ptr1 = aux -> info;
-		printf("Type: %d\nName: %s\n",ptr1 ->type,ptr1->name);
+		info_type* ptr = aux->info;
+		if(strcmp(var,ptr -> name) == 0) {
+			return aux -> info;
+		}
 		aux = aux -> sig;
 	}
+	return NULL;
 }
 
-void empty_list(list** head) {
-	nodoL* aux = (*head) -> list;
-	*head = NULL;
-	nodoL* aux2;
-	while(aux != NULL) {
-		aux2 = aux;
-		aux = aux->sig;
-		free(aux2);
+	void show(list* head) {
+		nodoL* aux = head -> list -> sig;
+		while(aux != NULL) {
+			info_type* ptr1 = aux -> info;
+			printf("Type: %d\nName: %s\n",ptr1 ->type,ptr1->name);
+			aux = aux -> sig;
+		}
 	}
-}
+
+
+
+	void empty_list(list** head) {
+		nodoL* aux = (*head) -> list;
+		*head = NULL;
+		nodoL* aux2;
+		while(aux != NULL) {
+			aux2 = aux;
+			aux = aux->sig;
+			free(aux2);
+		}
+	}
 
