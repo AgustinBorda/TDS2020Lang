@@ -4,8 +4,8 @@
 #include <string.h>
 #include "headers/table.h"
 #include "headers/stack.h"
-#include "headers/tree.h"
-tree t = NULL;
+//#include "headers/tree.h"
+
 stack_node* stack;
 
 void initialize() {
@@ -15,9 +15,10 @@ list* symbol;
 void initializeList(){
       create_list(&symbol,SYMBOL);
 }
+
 %}	
 
-%union { int i; char *s; struct node *n;}
+%union { int i; char *s; struct node *n;struct dato* d;}
 
 %token<s> TOKEN_VOID
 %token<s> ID
@@ -41,7 +42,7 @@ void initializeList(){
 %type<n> method_decl
 %type<n> method_declar
 %type<n> method_declaration
-%type<n> parameters
+%type<d> parameters
 %type<n> block
 %type<n> type
 %type<n> statements
@@ -84,9 +85,10 @@ var_decl:
 		}
 		d-> name = $2;
 		d-> flag = VAR;
+		printf("%s\n",d->name);
 		int a = insert(symbol, d);
 		if(a==1) {
-			printf("Se inserto Correctamente \n");
+			show(symbol);
 		}
 		 else {
 			printf("Error,no se cargo");
@@ -95,7 +97,7 @@ var_decl:
 	;
 
 method_decl:
-	   method_declar {}
+	  method_declar {}
 	|method_decl method_declar {}
 	;
 
@@ -105,16 +107,39 @@ method_declar:
 	;
 
 method_declaration:
-		  type ID '(' parameters ')' {}
+		  type ID '(' parameters ')' {	
+						  dato* d = malloc(sizeof(dato));
+						  if($1 == TYPE_INTEGER) {
+							d-> type = INT;
+						  } 
+						  else {
+							d-> type = BOOL;
+						  }
+							d-> name = $2;
+							d-> flag = FUN;
+							d-> params = $4 -> list;
+						 printf("%s\n",d->name);
+						 int a = insert(symbol, d);
+						 if(a==1) {
+			         		show(symbol);
+						 }
+		 				else {
+							printf("Error,no se cargo");
+						 }
+
+		  							 }
 	|TOKEN_VOID ID '(' parameters ')' {}
 	;
 
 parameters:
-	  var_decl {}
-	|parameters ',' var_decl {}
+	var_decl_params {}
+	|parameters ',' var_decl_params {}
 	|{}
 	;
 
+var_decl_params:
+	type ID ';' {}
+	;
 
 block_content:
 	     var_declarations statements {}
@@ -145,17 +170,9 @@ statement:
 
 expr:
          ID                  {
-                              $$ =  load_node(NULL, NULL, NULL, symbol);
+                              
                              }
-	|literal             {list* symbol;
-                              list* params;
-                              create_list(&symbol,SYMBOL);
-                              create_list(&params,PARAM);
-                              dato* d1 = malloc(sizeof(dato));
-                              d1 -> type = 0;
-                              d1 -> name = $1;
-                              insert(symbol,d1);
-                              $$ =  load_node(NULL, NULL, NULL, symbol);
+	|literal             {
                              }
 	| expr PLUS_OP expr  {}
 	| expr MINUS_OP expr {}
