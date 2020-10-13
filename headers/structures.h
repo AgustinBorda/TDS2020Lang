@@ -38,7 +38,7 @@ typedef struct info_type {
 // A structure to represent a node stack 
 typedef struct stack_node {
 	int level; 
-	nodoL* list;
+	list* list;
 	struct stack_node* sig;
 }stack_node;
 

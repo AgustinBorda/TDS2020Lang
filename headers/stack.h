@@ -10,7 +10,7 @@ void push(struct stack_node** p);
 
 void pop(struct stack_node** p);
 
-nodoL* peek(struct stack_node* p); 
+list* peek(struct stack_node* p); 
 
 
 

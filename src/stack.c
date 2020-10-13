@@ -3,8 +3,8 @@
 #include "../headers/table.h"
 
 void createStack(stack_node** p) {
-	nodoL* list = NULL;
-	create_list(&list);
+	list* list = NULL;
+	create_list(&list,SYMBOL);
 	(*p) = malloc(sizeof(stack_node));
 	(*p) -> level = 0;
 	(*p) -> sig = NULL;
@@ -18,8 +18,8 @@ int isEmpty(struct stack_node* p) {
 }
 
 void push(struct stack_node** p) {
-		nodoL* list = NULL;
-		create_list(&list);
+		list* list = NULL;
+		create_list(&list,SYMBOL);
 		stack_node* p2 = malloc(sizeof(stack_node));
 		p2 -> level = (*p) -> level + 1; 
 		p2 -> list = list; 
@@ -34,7 +34,7 @@ void pop(struct stack_node** p) {
 	free(p2);
 }
 
-nodoL* peek(struct stack_node* p) {
+list* peek(struct stack_node* p) {
 	return p -> list;
 }
 
