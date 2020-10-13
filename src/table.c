@@ -67,32 +67,3 @@ void empty_list(list** head) {
 	}
 }
 
-int main() {
-	list* symbol;
-	list* params;
-	create_list(&symbol,SYMBOL);
-	create_list(&params,PARAM);
-	dato* d1 = malloc(sizeof(dato));
-	d1 -> type = 0;
-	d1 -> name = "var1";
-	insert(symbol,d1);
-	dato* d2 = malloc(sizeof(dato));
-	d2 -> type = 0;
-	d2 -> name = "var2";
-	insert(symbol,d2);
-	info_type* p1 = malloc(sizeof(info_type));
-	info_type* p2 = malloc(sizeof(info_type));
-	p1 -> type = 0;
-	p1 -> name = "param1";
-	p2 -> type = 0;
-	p2 -> name = "param2";
-	insert(params,p1);
-	insert(params,p2);
-	printf("Simbolos: \n");
-	show(symbol);
-	printf("\n");
-	printf("Parametros: \n");
-	show(params);
-	printf("\n");
-
-}
