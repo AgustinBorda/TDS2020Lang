@@ -28,7 +28,7 @@ int exist(list* head, char* var);
 *en la tabla
 */
 
-//int buscar_valor(nodoL* head, char* var);
+void* seek(list* head, char* var);
 
 /*
 *Imprime toda la lista
