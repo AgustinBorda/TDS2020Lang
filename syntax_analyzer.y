@@ -7,7 +7,7 @@
 //#include "headers/tree.h"
 
 stack_node* stack;
-list* l ;
+list* l;
 void initialize() {
 	createStack(&stack);	
 }
@@ -18,7 +18,7 @@ void init_list() {
 
 %}	
 
-%union { int i; char *s; struct node *n;struct dato* d}
+%union { int i; char *s; struct node *n;struct dato* d};
 
 %token<s> TOKEN_VOID
 %token<s> ID
@@ -44,7 +44,7 @@ void init_list() {
 %type<n> method_declaration
 %type<s> parameters
 %type<n> block
-%type<n> type
+%type<i> type
 %type<n> statements
 %type<n> statement
 %type<n> expr
@@ -77,7 +77,7 @@ var_declarations:
 var_decl:
 	type ID ';' {
 		dato* d = malloc(sizeof(dato));
-		if($1 == TYPE_INTEGER) {
+		if($1 == 0) {
 			d-> type = INT;
 		} 
 		else {
@@ -109,11 +109,14 @@ method_declar:
 method_declaration:
 		  type ID '(' parameters ')' {
 		  		dato* d = malloc(sizeof(dato));
-				if($1 == TYPE_INTEGER) {
+				printf("%d\n",$1);
+				if($1 == 0) {
 					d-> type = INT;
+					printf("%d\n",d->type);
 				} 
 				else {
 					d-> type = BOOL;
+					printf("%d\n",d->type);
 				}
 				d-> name = $2;
 				d-> flag = FUN;
@@ -123,6 +126,7 @@ method_declaration:
 				int a = insert(stack->list, d);
 				if(a==1) {
 					show(stack->list);
+					show(d->params);
 				}
 		 		else {
 					printf("Error,no se cargo");
@@ -159,7 +163,7 @@ parameters:
 
 var_decl_params:
 	type ID  {	info_type* inf = malloc(sizeof(info_type));
-					if($1 == TYPE_INTEGER) {
+					if($1 == 0) {
 						inf-> type = INT;
 					} 
 					else {
@@ -179,8 +183,8 @@ block_content:
 	;
 
 type:
-    TYPE_INTEGER {}
-	|TYPE_BOOL {}
+    TYPE_INTEGER {$$ = 0;}
+	|TYPE_BOOL {$$ = 1;}
 	;
 
 statements:

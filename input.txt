@@ -1,3 +1,4 @@
 
+integer main(integer a, bool b) {
+}
 
-extern integer f(integer a);
