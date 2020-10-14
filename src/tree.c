@@ -6,24 +6,16 @@
 
 int cant_nod = 0; // cantidad de variables insertada en la tabla de simbolos
 
- node* load_node( tree nd, tree ni, tree nn , nodoL* inf) {
+ node* load_node( tree nd, tree ni, tree nn , dato_tree* inf) {
  	node* n = malloc(sizeof(node));
  	n->hi = ni;
 	n->hd = nd;
 	n->hh = nn;
-	n->info = inf;
+	n->dato = inf;
 	cant_nod++;
 	return n;
  }
- node* load_node( tree nd, tree ni, tree nn , int constante) {
- 	node* n = malloc(sizeof(node));
- 	n->hi = ni;
-	n->hd = nd;
-	n->hh = nn;
-	n->value = constante;
-	cant_nod++;
-	return n;
- }
+ 
 
  int size() {
  	return cant_nod;

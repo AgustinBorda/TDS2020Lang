@@ -9,10 +9,9 @@ typedef node* tree;
 *Construye un nodo del tipo tree y lo carga
 */
 
- node* load_node( tree nd, tree ni, tree nn , nodoL* inf);
+ node* load_node( tree nd, tree ni, tree nn , dato_tree* inf);
 
- node* load_node( tree nd, tree ni, tree nn , int constante);
-
+ 
 int size();
 
 

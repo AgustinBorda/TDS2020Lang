@@ -7,6 +7,8 @@ typedef enum flag_nodo {VAR, FUN, MAIN} flag_nodo;
 
 typedef enum type_list {SYMBOL, PARAM, TREE} type_list;
 
+typedef enum flag_tree {VAR, CONS, OP} flag_tree;
+
 //ESTRUCTURA LISTA
 typedef struct nodo {
 	void* info;
@@ -28,8 +30,21 @@ typedef struct dato {
 	int value;
 	enum flag_nodo flag;
 	list* params;
+	tree* tree;
 }dato;
 
+typedef struct dato_tree {	
+	enum type_var_fun type;
+	char* op;
+	int value;
+	dato* data;
+	enum flag_tree flag;
+}dato_tree;
+
+typedef struct literal {	
+	int type;
+	int value;
+}literal;
 //ESTRUCTURA NODO
 typedef struct info_type {
 	enum type_var_fun type;
@@ -49,8 +64,7 @@ typedef struct tree {
 	struct tree* hi;
 	struct tree* hd;
 	struct tree* hh;
-	nodoL* info;
-	int value; // Si es un literal se usa value y sino el puntero info.
+	dato_tree* dato; // Si es un literal se usa value y sino el puntero info.
 }tree;
 
 

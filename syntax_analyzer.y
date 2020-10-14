@@ -18,7 +18,7 @@ void init_list() {
 
 %}	
 
-%union { int i; char *s; struct node *n;struct dato* d};
+%union { int i; char *s; struct node *n; tree* t;struct dato* d; literal l;};
 
 %token<s> TOKEN_VOID
 %token<s> ID
@@ -37,18 +37,18 @@ void init_list() {
 %token<s> MULT_OP
 
 
-%type<n> var_decl
-%type<n> var_declarations
-%type<n> method_decl
-%type<n> method_declar
-%type<n> method_declaration
+%type<t> var_decl
+%type<t> var_declarations
+%type<t> method_decl
+%type<t> method_declar
+%type<d> method_declaration
 %type<s> parameters
-%type<n> block
+%type<t> block
 %type<i> type
-%type<n> statements
-%type<n> statement
-%type<n> expr
-%type<n> literal
+%type<t> statements
+%type<t> statement
+%type<t> expr
+%type<l> literal
 
 %left EQ_OP
 %left MULT_OP
@@ -102,8 +102,21 @@ method_decl:
 	;
 
 method_declar:
-	     method_declaration block {}
-	|EXTERN method_declaration ';' {}
+	 method_declaration block 	   {	$1-> tree = $2;
+	 									int a = insert(symbol, $1);
+	 									if (a == 1) {
+	 										printf("inserto correctamente");
+	 									} else {
+	 										printf("error");
+	 									}
+	 							   }
+	|EXTERN method_declaration ';' {	
+	 									int a = insert(symbol, $2);
+	 									if (a == 1) {
+	 										printf("inserto correctamente");
+	 									} else {
+	 										printf("error");
+	 									}}
 	;
 
 method_declaration:
@@ -122,15 +135,7 @@ method_declaration:
 				d-> flag = FUN;
 				d-> params = l;
 				init_list();
-				
-				int a = insert(stack->list, d);
-				if(a==1) {
-					show(stack->list);
-					show(d->params);
-				}
-		 		else {
-					printf("Error,no se cargo");
-				}
+				$$ = d;
 	}
 		  
 	|TOKEN_VOID ID '(' parameters ')' {	
@@ -145,13 +150,7 @@ method_declaration:
 									d-> name = $2;
 									d-> params = l;
 									init_list();
-								    int a = insert(stack->list, d);
-									if(a==1) {
-										show(stack->list);
-									}
-		 							else {
-										printf("Error,no se cargo");
-									}
+								    $$ = d;
 									}
 	;
 
@@ -178,7 +177,7 @@ var_decl_params:
 block_content:
 	var_declarations statements {$$ = $2}
 	| statements {$$ = $1}
-	| var_declarations {}
+	| var_declarations 	{}
 	| {}
 	;
 
@@ -188,36 +187,113 @@ type:
 	;
 
 statements:
-	  statement {}
-	|statements statement {}
+	  statement 		  {
+	  						dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $1;
+   							$$ = load_node($1, NULL, NULL, d);
+	  					  }
+	|statements statement { dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $2;
+   							$$ = load_node($1, NULL, $2, d);}
 	;
 
 
 statement:
-	 ID ASIG_OP expr ';' {}
-	|RETURN expr ';' {}
-	| ';' {}
-	|block {}
+	 ID ASIG_OP expr ';' {
+	 						dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $2;
+   							$$ = load_node($1, NULL, $2, d);
+	 					}
+	|RETURN expr ';' {	
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $1;
+   							$$ = load_node(NULL, $2, NULL, d);
+					 }
+	| ';' 			{
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $1;
+   							$$ = load_node(NULL, NULL, NULL, d);
+					}
+	|block 			{
+   							$$ = $1;
+					}
 	;
 
 expr:
 
-    	ID                  {padre = $1; info = seek(symbol, $1); hi = NULL; hm = NULL; nd = NULL}
+   	ID              {	dato_tree* d = malloc(sizeof(dato_tree));
+   						d-> flag_tree = VAR;
+   						d-> data = seek(symbol, $1);
+   						$$ = load_node(NULL, NULL, NULL, d);
+   					}
+	|literal             {
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = CONS;
+   							d-> type = $1.type;
+   							d-> value =  $1.value;
+   							$$ = load_node(NULL, NULL, NULL, d);
+						}
+	| expr PLUS_OP expr  {
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $2;
+   							$$ = load_node($1, NULL, $2, d);
+						 }
+	| expr MINUS_OP expr {
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $2;
+   							$$ = load_node($1, NULL, $2, d);
+						}
+	| expr EQ_OP expr    {
 
-	|literal             {}
-	| expr PLUS_OP expr  {}
-	| expr MINUS_OP expr {}
-	| expr EQ_OP expr    {}
-	| expr AND_OP expr   {}
-	| expr MULT_OP expr  {}
-	|'(' expr ')'        {}
-	|NOT_OP expr         {}
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $2;
+   							$$ = load_node($1, NULL, $2, d);
+						 }
+	| expr AND_OP expr   {
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $2;
+   							$$ = load_node($1, NULL, $2, d);
+						 }
+	| expr MULT_OP expr  {	
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $2;
+   							$$ = load_node($1, NULL, $2, d);
+						}
+	|'(' expr ')'        {
+							$$ = $2;
+						 }
+	|NOT_OP expr         {
+							dato_tree* d = malloc(sizeof(dato_tree));
+   							d-> flag_tree = OP;
+   							d-> op = $1;
+   							$$ = load_node(NULL, $2, NULL, d);
+						}
 	;
 
 
 literal:
-       INTEGER_LITERAL {}
-	|BOOL_LITERAL {}
+     INTEGER_LITERAL { 
+     					literal l;
+     					l.type = 0;
+     					l.value = $1;
+     				 	$$ = l;
+     				 }
+	|BOOL_LITERAL {
+						literal l;
+     					l.type = 1;
+     					l.value = $1;
+     				 	$$ = l;
+				  }
 	;
 
 block:
