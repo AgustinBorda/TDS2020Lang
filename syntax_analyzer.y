@@ -7,16 +7,17 @@
 //#include "headers/tree.h"
 
 stack_node* stack;
-
+list* l ;
 void initialize() {
 	createStack(&stack);
-	stack_node* head = stack; 
+	create_list(&l, PARAM);
+	
 }
 
 
 %}	
 
-%union { int i; char *s; struct node *n;struct dato* d;}
+%union { int i; char *s; struct node *n;struct dato* d}
 
 %token<s> TOKEN_VOID
 %token<s> ID
@@ -40,7 +41,7 @@ void initialize() {
 %type<n> method_decl
 %type<n> method_declar
 %type<n> method_declaration
-%type<d> parameters
+%type<s> parameters
 %type<n> block
 %type<n> type
 %type<n> statements
@@ -83,11 +84,10 @@ var_decl:
 		}
 		d-> name = $2;
 		d-> flag = VAR;
-		head->list->type = SYMBOL;
-		printf("%s\n",d->name);
-		int a = insert(head->list, d);
+		
+		int a = insert(stack->list, d);
 		if(a==1) {
-			show(head->list);
+			show(stack->list);
 		}
 		 else {
 			printf("Error,no se cargo");
@@ -116,18 +116,18 @@ method_declaration:
 				}
 				d-> name = $2;
 				d-> flag = FUN;
-				d-> params = $4->params;
-				head->list->type = SYMBOL;
-				printf("%s\n",d->name);
-				int a = insert(head->list, d);
+				d-> params = l;
+				create_list(&l, PARAM);
+				
+				int a = insert(stack->list, d);
 				if(a==1) {
-					show(head->list);
+					show(stack->list);
 				}
 		 		else {
 					printf("Error,no se cargo");
 				}
 	}
-		  }
+		  
 	|TOKEN_VOID ID '(' parameters ')' {}
 	;
 
@@ -138,7 +138,17 @@ parameters:
 	;
 
 var_decl_params:
-	type ID ';' {}
+	type ID  {	info_type* inf;
+					if($1 == TYPE_INTEGER) {
+						inf-> type = INT;
+					} 
+					else {
+						inf-> type = BOOL;
+					}
+					inf->name = $2;
+					insert(l, inf);
+
+				}
 	;
 
 block_content:
