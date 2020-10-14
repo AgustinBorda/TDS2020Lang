@@ -9,9 +9,10 @@
 stack_node* stack;
 list* l ;
 void initialize() {
-	createStack(&stack);
+	createStack(&stack);	
+}
+void init_list() {
 	create_list(&l, PARAM);
-	
 }
 
 
@@ -59,7 +60,7 @@ void initialize() {
 %%
 
 programInit:
-	   {initialize();} program {}
+	   {initialize();} {init_list();} program {}
 	;
 
 program:
@@ -117,7 +118,7 @@ method_declaration:
 				d-> name = $2;
 				d-> flag = FUN;
 				d-> params = l;
-				create_list(&l, PARAM);
+				init_list();
 				
 				int a = insert(stack->list, d);
 				if(a==1) {
@@ -128,7 +129,26 @@ method_declaration:
 				}
 	}
 		  
-	|TOKEN_VOID ID '(' parameters ')' {}
+	|TOKEN_VOID ID '(' parameters ')' {	
+									dato* d = malloc(sizeof(dato));
+									d-> type = VOID;
+									if(strcmp($2,"main") == 0) {
+										d-> flag = MAIN;
+									} 
+									else {
+										d-> type = FUN;
+									}
+									d-> name = $2;
+									d-> params = l;
+									init_list();
+								    int a = insert(stack->list, d);
+									if(a==1) {
+										show(stack->list);
+									}
+		 							else {
+										printf("Error,no se cargo");
+									}
+									}
 	;
 
 parameters:
@@ -138,7 +158,7 @@ parameters:
 	;
 
 var_decl_params:
-	type ID  {	info_type* inf;
+	type ID  {	info_type* inf = malloc(sizeof(info_type));
 					if($1 == TYPE_INTEGER) {
 						inf-> type = INT;
 					} 
@@ -170,20 +190,15 @@ statements:
 
 
 statement:
-	 ID ASIG_OP expr ';' {
-                              
-                             }
+	 ID ASIG_OP expr ';' {}
 	|RETURN expr ';' {}
 	| ';' {}
 	|block {}
 	;
 
 expr:
-         ID                  {
-                              
-                             }
-	|literal             {
-                             }
+    ID                  {}
+	|literal             {}
 	| expr PLUS_OP expr  {}
 	| expr MINUS_OP expr {}
 	| expr EQ_OP expr    {}
