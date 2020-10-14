@@ -10,11 +10,9 @@ stack_node* stack;
 
 void initialize() {
 	createStack(&stack);
+	stack_node* head = stack; 
 }
-list* symbol;
-void initializeList(){
-      create_list(&symbol,SYMBOL);
-}
+
 
 %}	
 
@@ -60,7 +58,7 @@ void initializeList(){
 %%
 
 programInit:
-	   {initialize(); initializeList();} program {}
+	   {initialize();} program {}
 	;
 
 program:
@@ -85,10 +83,11 @@ var_decl:
 		}
 		d-> name = $2;
 		d-> flag = VAR;
+		head->list->type = SYMBOL;
 		printf("%s\n",d->name);
-		int a = insert(symbol, d);
+		int a = insert(head->list, d);
 		if(a==1) {
-			show(symbol);
+			show(head->list);
 		}
 		 else {
 			printf("Error,no se cargo");
@@ -107,27 +106,28 @@ method_declar:
 	;
 
 method_declaration:
-		  type ID '(' parameters ')' {	
-						  dato* d = malloc(sizeof(dato));
-						  if($1 == TYPE_INTEGER) {
-							d-> type = INT;
-						  } 
-						  else {
-							d-> type = BOOL;
-						  }
-							d-> name = $2;
-							d-> flag = FUN;
-							d-> params = $4 -> list;
-						 printf("%s\n",d->name);
-						 int a = insert(symbol, d);
-						 if(a==1) {
-			         		show(symbol);
-						 }
-		 				else {
-							printf("Error,no se cargo");
-						 }
-
-		  							 }
+		  type ID '(' parameters ')' {
+		  		dato* d = malloc(sizeof(dato));
+				if($1 == TYPE_INTEGER) {
+					d-> type = INT;
+				} 
+				else {
+					d-> type = BOOL;
+				}
+				d-> name = $2;
+				d-> flag = FUN;
+				d-> params = $4->params;
+				head->list->type = SYMBOL;
+				printf("%s\n",d->name);
+				int a = insert(head->list, d);
+				if(a==1) {
+					show(head->list);
+				}
+		 		else {
+					printf("Error,no se cargo");
+				}
+	}
+		  }
 	|TOKEN_VOID ID '(' parameters ')' {}
 	;
 
