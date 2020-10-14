@@ -18,6 +18,7 @@ typedef struct nodo {
 typedef struct list {
 	type_list type;
 	nodoL* list;
+	int size;
 }list;
 
 //ESTRUCTURA VARIABLE O FUNCION

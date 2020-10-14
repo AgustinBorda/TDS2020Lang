@@ -39,4 +39,8 @@ void show(list* head);
 
 void empty_list(list** head);
 
+void* get(list* head, int i);
+
+int size(list* head);
+
 #endif
