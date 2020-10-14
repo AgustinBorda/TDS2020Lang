@@ -201,7 +201,7 @@ statement:
 	;
 
 expr:
-    ID                  {}
+    ID                   {}
 	|literal             {}
 	| expr PLUS_OP expr  {}
 	| expr MINUS_OP expr {}
