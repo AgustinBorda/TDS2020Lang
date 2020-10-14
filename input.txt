@@ -1,2 +1,3 @@
-integer x;
 
+
+extern integer f(integer a);
