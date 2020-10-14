@@ -116,7 +116,8 @@ method_declar:
 	 										printf("inserto correctamente");
 	 									} else {
 	 										printf("error");
-	 									}}
+	 									}
+	}
 	;
 
 method_declaration:
@@ -150,7 +151,7 @@ method_declaration:
 									d-> name = $2;
 									d-> params = l;
 									init_list();
-								    $$ = d;
+								    	$$ = d;
 									}
 	;
 
@@ -190,12 +191,12 @@ statements:
 	  statement 		  {
 	  						dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $1;
+   							d-> op = ";";
    							$$ = load_node($1, NULL, NULL, d);
 	  					  }
 	|statements statement { dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $2;
+   							d-> op = ";";
    							$$ = load_node($1, NULL, $2, d);}
 	;
 
@@ -204,19 +205,19 @@ statement:
 	 ID ASIG_OP expr ';' {
 	 						dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $2;
+   							d-> op = "=";
    							$$ = load_node($1, NULL, $2, d);
 	 					}
 	|RETURN expr ';' {	
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $1;
-   							$$ = load_node(NULL, $2, NULL, d);
+   							d-> op = "RETURN";
+   							$$ = load_node($1, NULL, NULL, d);
 					 }
 	| ';' 			{
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $1;
+   							d-> op = ";";
    							$$ = load_node(NULL, NULL, NULL, d);
 					}
 	|block 			{
@@ -241,32 +242,32 @@ expr:
 	| expr PLUS_OP expr  {
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $2;
+   							d-> op = "+";
    							$$ = load_node($1, NULL, $2, d);
 						 }
 	| expr MINUS_OP expr {
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $2;
+   							d-> op = "-";
    							$$ = load_node($1, NULL, $2, d);
 						}
 	| expr EQ_OP expr    {
 
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $2;
+   							d-> op = "==";
    							$$ = load_node($1, NULL, $2, d);
 						 }
 	| expr AND_OP expr   {
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $2;
+   							d-> op = "&&";
    							$$ = load_node($1, NULL, $2, d);
 						 }
 	| expr MULT_OP expr  {	
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $2;
+   							d-> op = "*";
    							$$ = load_node($1, NULL, $2, d);
 						}
 	|'(' expr ')'        {
@@ -275,8 +276,8 @@ expr:
 	|NOT_OP expr         {
 							dato_tree* d = malloc(sizeof(dato_tree));
    							d-> flag_tree = OP;
-   							d-> op = $1;
-   							$$ = load_node(NULL, $2, NULL, d);
+   							d-> op = "!";
+   							$$ = load_node($2, NULL, NULL, d);
 						}
 	;
 
