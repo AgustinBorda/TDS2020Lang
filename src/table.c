@@ -9,6 +9,7 @@ void create_list(list** p, type_list type) {
 	(*p) -> type = type;
 	(*p) -> list = malloc(sizeof(nodoL));
 	(*p) -> list -> sig = NULL;
+	(*p) -> size = 0;
 	return;
 }
 
@@ -34,6 +35,7 @@ int insert(list* head, void* d) {
 			aux -> info = d;
 			aux -> sig = head-> list -> sig;
 			head -> list -> sig = aux;
+			head -> size++;
 			return 1;
 		}
 		return 0;
@@ -43,6 +45,7 @@ int insert(list* head, void* d) {
 		aux -> info = d;
 		aux -> sig = head -> list -> sig;
 		head -> list-> sig = aux;
+		head -> size++;
 		return 1;
 	}
 }
@@ -59,25 +62,43 @@ void* seek(list* head, char* var) {
 	return NULL;
 }
 
-	void show(list* head) {
-		nodoL* aux = head -> list -> sig;
-		while(aux != NULL) {
-			info_type* ptr1 = aux -> info;
-			printf("Type: %d\nName: %s\n",ptr1 ->type,ptr1->name);
-			aux = aux -> sig;
-		}
+void show(list* head) {
+	nodoL* aux = head -> list -> sig;
+	while(aux != NULL) {
+		info_type* ptr1 = aux -> info;
+		printf("Type: %d\nName: %s\n",ptr1 ->type,ptr1->name);
+		aux = aux -> sig;
 	}
+}
 
 
 
-	void empty_list(list** head) {
-		nodoL* aux = (*head) -> list;
-		*head = NULL;
-		nodoL* aux2;
-		while(aux != NULL) {
-			aux2 = aux;
-			aux = aux->sig;
-			free(aux2);
-		}
+void empty_list(list** head) {
+	nodoL* aux = (*head) -> list;
+	*head = NULL;
+	nodoL* aux2;
+	(*head) -> size = 0; 
+	while(aux != NULL) {
+		aux2 = aux;
+		aux = aux->sig;
+		free(aux2);
 	}
+}
+
+void* get(list* head, int i) {
+	nodoL* aux = head -> list -> sig;
+	int index = 0;
+	while(index < i && aux != NULL) {
+		aux = aux -> sig;
+		index++;
+	}
+	if(aux == NULL)
+		return NULL;
+	return aux -> info;
+}
+
+
+int size(list* head) {
+	return head -> size;
+}
 

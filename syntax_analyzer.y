@@ -176,14 +176,14 @@ var_decl_params:
 	;
 
 block_content:
-	     var_declarations statements {}
-	| statements {}
+	var_declarations statements {$$ = $2}
+	| statements {$$ = $1}
 	| var_declarations {}
 	| {}
 	;
 
 type:
-    TYPE_INTEGER {$$ = 0;}
+	TYPE_INTEGER {$$ = 0;}
 	|TYPE_BOOL {$$ = 1;}
 	;
 
@@ -201,7 +201,9 @@ statement:
 	;
 
 expr:
-    ID                   {}
+
+    	ID                  {padre = $1; info = seek(symbol, $1); hi = NULL; hm = NULL; nd = NULL}
+
 	|literal             {}
 	| expr PLUS_OP expr  {}
 	| expr MINUS_OP expr {}
@@ -219,7 +221,7 @@ literal:
 	;
 
 block:
-     open_brace block_content close_brace {}
+     open_brace block_content close_brace { $$ = $2 }
 	;
 
 
