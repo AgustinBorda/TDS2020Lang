@@ -10,6 +10,7 @@
 
 stack_node* stack;
 list* l;
+int has_main = 0;
 void initialize() {
 	createStack(&stack);	
 	create_list(&l, PARAM);
@@ -64,8 +65,14 @@ programInit:
 		for(int i=0 ; i < size(stack->list); i++) {
 			dato* curr = get(stack->list,i);
 			if(curr -> flag == FUN || curr -> flag == MAIN) {
+				if(curr -> flag == MAIN) {
+					has_main = 1;
+				}
 				semantic_analyzer(curr);
 			}
+		}
+		if(!has_main) {
+			/*Error de main*/
 		}
 	}
 	;
@@ -196,6 +203,8 @@ statement:
 		dato_tree* d2 = malloc(sizeof(dato_tree));
 		d2-> flag = VARIABLE;
 		d2-> data = seek(stack->list, $1);
+		dato* ptr = d2->data;
+		d2 -> type = ptr -> type;
 		tree* hi = load_node(NULL, NULL, NULL, d2);
 		$$ = load_node(hi, NULL, $3, d);
 	}
