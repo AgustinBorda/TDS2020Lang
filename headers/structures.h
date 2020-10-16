@@ -33,8 +33,8 @@ typedef struct dato_tree {
 //ESTRUCTURA ARBOL
 typedef struct tree {
 	struct tree* hi;
-	struct tree* hd;
 	struct tree* hh;
+	struct tree* hd;
 	dato_tree* dato; // Si es un literal se usa value y sino el puntero info.
 }tree;
 
@@ -49,7 +49,7 @@ typedef struct dato {
 }dato;
 
 typedef struct literal {	
-	int type;
+	enum type_var_fun type;
 	int value;
 }literal;
 
