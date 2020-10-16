@@ -75,9 +75,8 @@ void show(list* head) {
 
 void empty_list(list** head) {
 	nodoL* aux = (*head) -> list;
-	*head = NULL;
-	nodoL* aux2;
-	(*head) -> size = 0; 
+	free(*head);
+	nodoL* aux2; 
 	while(aux != NULL) {
 		aux2 = aux;
 		aux = aux->sig;

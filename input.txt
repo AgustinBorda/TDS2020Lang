@@ -1,4 +1,5 @@
-
-integer main(integer a, bool b) {
+integer x;
+bool y;
+void main(integer a, bool b) {
 }
 
