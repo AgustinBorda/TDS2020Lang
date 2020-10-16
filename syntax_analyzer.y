@@ -115,7 +115,7 @@ method_declaration:
 		d-> name = $2;
 		d-> flag = FUN;
 		d-> params = l;
-		create_list(&l, PARAM);
+		//create_list(&l, PARAM);
 		$$ = d;
 	}
 	|TOKEN_VOID ID '(' parameters ')' {
@@ -129,7 +129,7 @@ method_declaration:
 		}
 		d-> name = $2;
 		d-> params = l;
-		create_list(&l, PARAM);
+		//create_list(&l, PARAM);
 		$$ = d;
 	}
 	;
@@ -284,7 +284,17 @@ block:
 
 
 open_brace:
-	'{' {push(&stack);}
+	'{' {push(&stack);
+	     for(int i=0 ; i < size(l); i++){
+		dato* inf = malloc(sizeof(dato));
+		info_type* current = get(l,i);
+                inf->type = current->type;
+                inf->name = current->name;
+		inf->flag = VAR;
+                insert(stack->list,inf);
+	     }
+	     create_list(&l, PARAM);
+	    }
 	;
 
 close_brace: 
