@@ -1,5 +1,7 @@
 integer x;
 bool y;
 void main(integer a, bool b) {
+	a = b;
+	return;
 }
 

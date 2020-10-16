@@ -6,6 +6,7 @@
 #include "headers/stack.h"
 #include "headers/structures.h"
 #include "headers/tree.h"
+#include "headers/semantic_analyzer.h"
 
 stack_node* stack;
 list* l;
@@ -59,7 +60,14 @@ void initialize() {
 %%
 
 programInit:
-	{initialize();} program {}
+	{initialize();} program {
+		for(int i=0 ; i < size(stack->list); i++) {
+			dato* curr = get(stack->list,i);
+			if(curr -> flag == FUN || curr -> flag == MAIN) {
+				semantic_analyzer(curr);
+			}
+		}
+	}
 	;
 
 program:
@@ -115,7 +123,6 @@ method_declaration:
 		d-> name = $2;
 		d-> flag = FUN;
 		d-> params = l;
-		//create_list(&l, PARAM);
 		$$ = d;
 	}
 	|TOKEN_VOID ID '(' parameters ')' {
@@ -129,7 +136,6 @@ method_declaration:
 		}
 		d-> name = $2;
 		d-> params = l;
-		//create_list(&l, PARAM);
 		$$ = d;
 	}
 	;
@@ -199,6 +205,12 @@ statement:
 		d-> op = "RETURN";
 		$$ = load_node($2, NULL, NULL, d);
 	}
+	|RETURN ';' {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = OP;
+		d-> op = "RETURN";
+		$$ = load_node(NULL, NULL, NULL, d);
+	}
 	| ';' {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
@@ -213,6 +225,8 @@ expr:
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = VARIABLE;
 		d-> data = seek(stack->list, $1);
+		dato* ptr = d->data;
+		d -> type = ptr -> type;
 		$$ = load_node(NULL, NULL, NULL, d);
 	}
 	|literal {
@@ -235,13 +249,13 @@ expr:
 		d-> op = "-";
 		$$ = load_node($1, NULL, $3, d);
 	}
-	| expr EQ_OP expr {
+	| expr EQ_OP expr {//
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
 		d-> op = "==";
 		$$ = load_node($1, NULL, $3, d);
 	}
-	| expr AND_OP expr {
+	| expr AND_OP expr {//
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
 		d-> op = "&&";
@@ -254,7 +268,7 @@ expr:
 		$$ = load_node($1, NULL, $3, d);
 	}
 	|'(' expr ')' {$$ = $2;}
-	|NOT_OP expr {
+	|NOT_OP expr {//
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
 		d-> op = "!";
@@ -284,17 +298,18 @@ block:
 
 
 open_brace:
-	'{' {push(&stack);
-	     for(int i=0 ; i < size(l); i++){
-		dato* inf = malloc(sizeof(dato));
-		info_type* current = get(l,i);
-                inf->type = current->type;
-                inf->name = current->name;
-		inf->flag = VAR;
-                insert(stack->list,inf);
-	     }
-	     create_list(&l, PARAM);
-	    }
+	'{' {
+		push(&stack);
+		for(int i=0 ; i < size(l); i++) {
+			dato* inf = malloc(sizeof(dato));
+			info_type* current = get(l,i);
+                	inf->type = current->type;
+                	inf->name = current->name;
+			inf->flag = VAR;
+                	insert(stack->list,inf);
+		}
+		create_list(&l, PARAM);
+	}
 	;
 
 close_brace: 

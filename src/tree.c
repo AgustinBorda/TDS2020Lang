@@ -5,11 +5,11 @@
 #include <string.h>
 
 
-tree* load_node( tree* nd, tree* ni, tree* nn , dato_tree* inf) {
+tree* load_node( tree* hi, tree* hh, tree* hd , dato_tree* inf) {
  	tree* n = malloc(sizeof(tree));
- 	n->hi = ni;
-	n->hd = nd;
-	n->hh = nn;
+ 	n->hi = hi;
+	n->hd = hd;
+	n->hh = hh;
 	n->dato = inf;
 	return n;
  }

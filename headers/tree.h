@@ -8,7 +8,7 @@
 *Construye un nodo del tipo tree y lo carga
 */
 
-tree* load_node( tree* nd, tree* ni, tree* nn , dato_tree* inf);
+tree* load_node(tree* hi, tree* hh, tree* hd , dato_tree* inf);
 
 
 
