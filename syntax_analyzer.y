@@ -16,6 +16,11 @@ void initialize() {
 	create_list(&l, PARAM);
 }
 
+void syntax_error(char* msg) {
+	printf("%s",msg);
+	exit(1);
+}
+
 %}	
 
 %union { int i; char *s; struct node *n;struct tree* t;struct dato* d;struct literal* l;};
@@ -72,7 +77,7 @@ programInit:
 			}
 		}
 		if(!has_main) {
-			/*Error de main*/
+			syntax_error("Main function not found\n");
 		}
 	}
 	;
@@ -100,6 +105,9 @@ var_decl:
 		d-> name = $2;
 		d-> flag = VAR;
 		int a = insert(stack->list, d);
+		if(a == 0) {
+			syntax_error("Multiple definition of variable\n");
+		}
 	}
 	;
 
@@ -112,9 +120,15 @@ method_declar:
 	method_declaration block {
 		$1-> tree = $2;
 		int a = insert(stack->list, $1);
+		if(a == 0) {
+			syntax_error("Multiple definition of method\n");
+		}
 	}
 	|EXTERN method_declaration ';' {	
 		int a = insert(stack->list, $2);
+		if(a == 0) {
+			syntax_error("Multiple definition of method\n");
+		}
 	}
 	;
 
@@ -163,7 +177,11 @@ var_decl_params:
 			inf-> type = BOOL;
 		}
 		inf->name = $2;
-		insert(l, inf);
+		int a = insert(l, inf);
+		if(a == 0) {
+			syntax_error("Multiple definition of parameter\n");
+		}
+		
 	}
 	;
 
@@ -203,6 +221,9 @@ statement:
 		dato_tree* d2 = malloc(sizeof(dato_tree));
 		d2-> flag = VARIABLE;
 		d2-> data = seek(stack->list, $1);
+		if(d2 -> data == NULL) {
+			syntax_error("Cannot find symbol\n");
+		}
 		dato* ptr = d2->data;
 		d2 -> type = ptr -> type;
 		tree* hi = load_node(NULL, NULL, NULL, d2);
@@ -234,6 +255,9 @@ expr:
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = VARIABLE;
 		d-> data = seek(stack->list, $1);
+		if(d -> data == NULL) {
+			syntax_error("Cannot find symbol\n");
+		}
 		dato* ptr = d->data;
 		d -> type = ptr -> type;
 		$$ = load_node(NULL, NULL, NULL, d);
@@ -258,26 +282,26 @@ expr:
 		d-> op = "-";
 		$$ = load_node($1, NULL, $3, d);
 	}
-	| expr EQ_OP expr {//
+	| expr EQ_OP expr {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
 		d-> op = "==";
 		$$ = load_node($1, NULL, $3, d);
 	}
-	| expr AND_OP expr {//
+	| expr AND_OP expr {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
 		d-> op = "&&";
 		$$ = load_node($1, NULL, $3, d);
 	}
-	| expr MULT_OP expr  {	
+	| expr MULT_OP expr {	
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
 		d-> op = "*";
 		$$ = load_node($1, NULL, $3, d);
 	}
 	|'(' expr ')' {$$ = $2;}
-	|NOT_OP expr {//
+	|NOT_OP expr {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
 		d-> op = "!";
