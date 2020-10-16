@@ -1,5 +1,4 @@
 integer x;
 bool y;
-void main(integer a, bool b) {
-}
+extern void fun(integer a, bool b);
 
