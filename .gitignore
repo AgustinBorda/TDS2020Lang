@@ -1,7 +1,7 @@
-*.tab.c
-*.tab.h
-lex.yy.c
+**/*.tab.c
+**/*.tab.h
+**/lex.yy.c
 *.out
-bin/
-*.h.gch
+**/bin/
+**/*.h.gch
 ctds
