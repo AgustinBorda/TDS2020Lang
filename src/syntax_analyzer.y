@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "headers/table.h"
-#include "headers/stack.h"
-#include "headers/structures.h"
-#include "headers/tree.h"
-#include "headers/semantic_analyzer.h"
-
+#include "../headers/table.h"
+#include "../headers/stack.h"
+#include "../headers/structures.h"
+#include "../headers/tree.h"
+#include "../headers/semantic_analyzer.h"
+/*tabla de simbolos, lista de parametros*/
 stack_node* stack;
 list* l;
 int has_main = 0;
@@ -72,6 +72,9 @@ programInit:
 			if(curr -> flag == FUN || curr -> flag == MAIN) {
 				if(curr -> flag == MAIN) {
 					has_main = 1;
+					if(size(curr -> params) >0) {
+						syntax_error("Main function shouldn't have parameters\n");
+					}
 				}
 				semantic_analyzer(curr);
 			}
@@ -79,6 +82,7 @@ programInit:
 		if(!has_main) {
 			syntax_error("Main function not found\n");
 		}
+		printf("Succesful compilation\n");
 	}
 	;
 
@@ -117,7 +121,7 @@ method_decl:
 	;
 
 method_declar:
-	method_declaration block {
+	method_declaration block {	
 		$1-> tree = $2;
 		int a = insert(stack->list, $1);
 		if(a == 0) {
@@ -126,6 +130,7 @@ method_declar:
 	}
 	|EXTERN method_declaration ';' {	
 		int a = insert(stack->list, $2);
+		create_list(&l, PARAM);
 		if(a == 0) {
 			syntax_error("Multiple definition of method\n");
 		}
@@ -141,8 +146,13 @@ method_declaration:
 		else {
 			d-> type = BOOL;
 		}
+		if(strcmp($2,"main") == 0) {
+			d-> flag = MAIN;
+		} 
+		else {
+			d-> type = FUN;
+		}
 		d-> name = $2;
-		d-> flag = FUN;
 		d-> params = l;
 		$$ = d;
 	}
@@ -188,8 +198,18 @@ var_decl_params:
 block_content:
 	var_declarations statements {$$ = $2;}
 	| statements {$$ = $1;}
-	| var_declarations {$$ = NULL;}
-	| {$$ = NULL;}
+	| var_declarations {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = OP;
+		d-> op = ";";
+		$$ = load_node(NULL, NULL, NULL, d);
+	}
+	| {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = OP;
+		d-> op = ";";
+		$$ = load_node(NULL, NULL, NULL, d);
+	}
 	;
 
 type:

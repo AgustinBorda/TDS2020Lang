@@ -1,6 +1,0 @@
-#!/bin/bash
-
-flex lexical_analyzer.l 
-bison -d syntax_analyzer.y
-gcc -o ctds lex.yy.c syntax_analyzer.tab.c src/*.c
-

@@ -1,0 +1,8 @@
+bool or(bool a, bool b) {
+	integer c;
+	return !(!a && !b);
+}
+void main() {
+	integer a;
+	return;
+}

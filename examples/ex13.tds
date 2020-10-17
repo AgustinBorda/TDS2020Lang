@@ -1,0 +1,4 @@
+extern integer print(bool b);
+void main() {
+	return;
+}
