@@ -8,4 +8,5 @@ Para ejecutar:
 Para correr los ejemplos:
 - ./run_examples.sh (si no tenemos permiso realizar: $ chmod 777 run_examples.sh)
 
-
+Cosas para el futuro:
+	-Mejorar el error logging (el que esta es temporal).
