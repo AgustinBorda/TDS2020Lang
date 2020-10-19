@@ -56,13 +56,13 @@ void syntax_error(char* msg) {
 %type<t> expr
 %type<l> literal
 
-%left EQ_OP
+%left NOT_OP
 %left MULT_OP
 %left PLUS_OP
 %left MINUS_OP
 %left AND_OP
+%left EQ_OP
 %left ASIG_OP
-%left NOT_OP
 %%
 
 programInit:
