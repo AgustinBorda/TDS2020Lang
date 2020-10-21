@@ -1,0 +1,5 @@
+integer aux;
+extern integer suma();
+integer main() {
+    return 1;
+}

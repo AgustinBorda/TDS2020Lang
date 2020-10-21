@@ -69,7 +69,7 @@ programInit:
 	{initialize();} program {
 		for(int i=0 ; i < size(stack->list); i++) {
 			dato* curr = get(stack->list,i);
-			if(curr -> flag == FUN || curr -> flag == MAIN) {
+			if((curr -> flag == FUN || curr -> flag == MAIN) && curr -> tree != NULL ) {
 				if(curr -> flag == MAIN) {
 					has_main = 1;
 					if(size(curr -> params) >0) {
@@ -150,7 +150,7 @@ method_declaration:
 			d-> flag = MAIN;
 		} 
 		else {
-			d-> type = FUN;
+			d-> flag = FUN;
 		}
 		d-> name = $2;
 		d-> params = l;
@@ -163,7 +163,7 @@ method_declaration:
 			d-> flag = MAIN;
 		} 
 		else {
-			d-> type = FUN;
+			d-> flag = FUN;
 		}
 		d-> name = $2;
 		d-> params = l;
@@ -240,7 +240,11 @@ statement:
 		d-> op = "=";	
 		dato_tree* d2 = malloc(sizeof(dato_tree));
 		d2-> flag = VARIABLE;
-		d2-> data = seek(stack->list, $1);
+		stack_node* l = stack;
+		while(d2->data == NULL && l !=NULL) {
+			d2-> data = seek(l->list, $1);
+			l = l -> sig;
+		}
 		if(d2 -> data == NULL) {
 			syntax_error("Cannot find symbol\n");
 		}
@@ -274,7 +278,11 @@ expr:
 	ID {				
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = VARIABLE;
-		d-> data = seek(stack->list, $1);
+		stack_node* l = stack;
+		while(d->data == NULL && l !=NULL) {
+			d-> data = seek(l->list, $1);
+			l = l -> sig;
+		}
 		if(d -> data == NULL) {
 			syntax_error("Cannot find symbol\n");
 		}

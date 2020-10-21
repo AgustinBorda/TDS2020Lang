@@ -1,0 +1,22 @@
+integer z;
+
+bool neg(bool v){
+  return !v;
+}
+
+integer cuadrado(integer a){
+  return a * a;
+}
+
+void hi(integer x){
+  integer y;
+  y=x;
+}
+
+void main(){
+  bool y;
+  integer x,m;
+  y=true;
+  z=0;
+  x=z;
+}

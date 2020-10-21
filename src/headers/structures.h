@@ -1,6 +1,12 @@
 #ifndef _STRUCTURES_H
 #define _STRUCTURES_H
 
+typedef struct dato dato;
+
+typedef struct dato_tree dato_tree;
+
+typedef struct tree tree;
+
 typedef enum type_var_fun {INT, BOOL, VOID} type_var;
 
 typedef enum flag_nodo {VAR, FUN, MAIN} flag_nodo;
@@ -26,7 +32,7 @@ typedef struct dato_tree {
 	enum type_var_fun type;
 	char* op;
 	int value;
-	void* data; //SIEMPRE CASTEAR A dato*
+	dato* data; //SIEMPRE CASTEAR A dato*
 	enum flag_tree flag;
 }dato_tree;
 

@@ -33,7 +33,7 @@ enum type_var_fun analyze_types(tree* t) {
 				return VOID;
 			}
 			else {
-				if(function_return_type!=analyze_types(t->hi)) {
+				if(t->hi == NULL || function_return_type!=analyze_types(t->hi)) {
 					type_error("Type error: wrong type in return\n");
 				}
 				return function_return_type;
