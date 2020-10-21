@@ -1,1 +1,8 @@
-extern void main ();
+/*
+//
+*/
+/*
+*/
+void main () {
+	return;
+}
