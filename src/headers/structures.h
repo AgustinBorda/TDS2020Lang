@@ -11,16 +11,15 @@ typedef enum type_var_fun {INT, BOOL, VOID} type_var;
 
 typedef enum flag_nodo {VAR, FUN, MAIN} flag_nodo;
 
-typedef enum type_list {SYMBOL, PARAM, TREE} type_list;
+typedef enum type_list {SYMBOL, PARAM, THREE-ADDRESS-CODE} type_list;
 
 typedef enum flag_tree {VARIABLE, CONS, OP} flag_tree;
 
-typedef enum op_assembly {
-		ASIG, SUMA, RESTA, MULT, DIV, 
-		MOD, CALL, PRINTI, ANDI, ORI,
-	    MINI, MAXI, EQI, NOTI, JUMP,
-	    FJUMP, LABEL, FUNC, FFUNC,
-	    PARAM, RET, ARG} op_assembly;    
+typedef enum op_assembly {ASIG, SUMA, RESTA, 
+						  MULT, DIV, MOV, MET, NEG} op_assembly;    
+
+
+
 
 //ESTRUCTURA LISTA
 typedef struct nodo {
@@ -42,6 +41,19 @@ typedef struct dato_tree {
 	dato* data; //SIEMPRE CASTEAR A dato*
 	enum flag_tree flag;
 }dato_tree;
+
+typedef struct address {
+	char* name;
+	dato_tree* data;
+}address;
+
+typedef struct three_address_code {
+	enum op_assembly opcode;
+	address a0;
+	address a1;
+	address a2;
+}three_address_code;
+
 
 //ESTRUCTURA ARBOL
 typedef struct tree {

@@ -101,3 +101,15 @@ int size(list* head) {
 	return head -> size;
 }
 
+int insert(list* head, void* d){
+	nodoL* aux = head -> list -> sig;
+	while(aux->sig != NULL) {
+		aux = aux -> sig;
+	}
+	nodoL* aux2 = malloc(sizeof(nodoL));
+	aux2 -> info = d;
+	aux2 -> sig = NULL;
+	aux -> sig = aux2;
+	head -> size++;
+	return 1;
+}

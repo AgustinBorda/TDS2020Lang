@@ -3,30 +3,36 @@
 #include "../headers/tresDirecciones.h"
 #include "../headers/table.h"
 #include "../headers/tempGen.h"
-int threeCode(node* head, nodoL* sym_table) {
+/*void create_file() {
 	FILE* f;
 	f = fopen("threeCode.txt", "w+");
 	fclose(f);
-	write(head, "RESULT", f, sym_table);
+}*/
+
+int threeCode(dato* t, list* l) {
+	tree* tr = t -> tree;
+	write(tr, l);
 	return 0;
 }
 
 
-void writeConst(node* root, char* resLoc, FILE* f) {
-	f =  fopen("threeCode.txt", "a");
-	fprintf(f,"MOV %s, %d\n", resLoc, root->data.value);
-	fclose(f);
+struct address writeConst(node* root) {
+		address* ad = malloc(sizeof(address));
+		ad -> data = root->dato;
+		return ad;
 }
 
-void writeId(node* root, char* resLoc, FILE* f, nodoL* sym_table) {
-	if(existe(sym_table, root->data.var.name)) {
-		f =  fopen("threeCode.txt", "a");
-		fprintf(f,"MOV %s, %d\n", resLoc, buscar_valor(sym_table, root->data.var.name));
-		fclose(f);
+struct address writeId(tree* root) {
+	if(exist(l, root->dato->name)) {
+		address* ad = malloc(sizeof(address));
+		ad -> name =  root->dato->name;
+		ad -> data = root->dato;
+		return ad;
 	}
+	return NULL;// hacer mensaje de error
 }
 
-void writeOp(node* root, char* resLoc, FILE* f, nodoL* sym_table) {
+void writeOp(node* root, list* l) {
 	char* leftVal = genTemp();
 	char* rightVal = genTemp();
 	if(root -> hi != NULL) {
@@ -69,15 +75,16 @@ void writeOp(node* root, char* resLoc, FILE* f, nodoL* sym_table) {
 	fclose(f);
 }
 
-void write(node* root, char* resLoc, FILE* f, nodoL* sym_table) {
-        switch(root->flag) {
-		case 0 : return writeId(root, resLoc, f, sym_table);
+void write(tree* root,list* l) {
+        switch(root->dato->flag) {
+		case 0 : return writeId(root,l);
 			 break;
-		case 1 : return writeConst(root, resLoc, f);
+		case 1 : return writeConst(root,l);
 			 break;
-		case 2 : return writeOp(root, resLoc, f, sym_table);
+		case 2 : return writeOp(root,l);
 			 break;
 		default : exit(1);
 			  break;
 	}
 }
+
