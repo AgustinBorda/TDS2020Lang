@@ -1,0 +1,24 @@
+//Function thats adds two integers
+integer add(integer a, integer b) {
+	return a + b;
+}
+//Function thats applies the logical or to two bools
+bool or(bool p, bool q) {
+	return !(! p && ! q);
+}
+/*Function thats substract b to a
+*/
+integer sub(integer a, integer b) {
+	return a - b;
+}
+//Useless main!
+void main() {
+	return;
+}
+/*
+printf("This is a comment!\n");
+System.out.println("This will not be executed!");
+std :: cout << "Or this won't compile << std :: endl;
+print("Because we are code from serious languages!");
+console.log("Yes! that's it");	
+*/

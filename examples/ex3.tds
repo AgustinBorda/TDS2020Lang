@@ -1,0 +1,7 @@
+void main() {
+	integer a;
+	integer b;
+	a = 5+(20*50);
+	b = a -50;
+	return;
+}

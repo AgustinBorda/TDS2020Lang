@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "../headers/stack.h"
 #include "../headers/table.h"
+#include <stdio.h>
 
 void createStack(stack_node** p) {
 	list* list = NULL;
@@ -37,4 +38,5 @@ void pop(struct stack_node** p) {
 list* peek(struct stack_node* p) {
 	return p -> list;
 }
+
 

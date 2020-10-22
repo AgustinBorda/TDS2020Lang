@@ -1,0 +1,3 @@
+void main(integer a) {
+	return a+1;
+}

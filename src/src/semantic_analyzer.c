@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-int has_return = 0;
+int has_return;
 enum type_var_fun function_return_type;
 
 void type_error(char* msg) {
@@ -33,7 +33,7 @@ enum type_var_fun analyze_types(tree* t) {
 				return VOID;
 			}
 			else {
-				if(function_return_type!=analyze_types(t->hi)) {
+				if(t->hi == NULL || function_return_type!=analyze_types(t->hi)) {
 					type_error("Type error: wrong type in return\n");
 				}
 				return function_return_type;
@@ -98,6 +98,7 @@ void analyze(tree* t) {
 void semantic_analyzer(dato* t) {
 	function_return_type = t->type;
 	tree* tr = t -> tree;
+	has_return = 0;
 	analyze(tr);
 	if(!has_return) {
 		type_error("return statement not found.\n");

@@ -1,0 +1,16 @@
+integer metodo1() {
+    integer var;
+    return var;
+}
+extern void metodo2() ;
+bool metodo3() {
+    return false;
+}
+
+void main() {
+    integer x;
+    {
+        x= 5+1;
+    }
+    return;
+}
