@@ -15,6 +15,13 @@ typedef enum type_list {SYMBOL, PARAM, TREE} type_list;
 
 typedef enum flag_tree {VARIABLE, CONS, OP} flag_tree;
 
+typedef enum op_assembly {
+		ASIG, SUMA, RESTA, MULT, DIV, 
+		MOD, CALL, PRINTI, ANDI, ORI,
+	    MINI, MAXI, EQI, NOTI, JUMP,
+	    FJUMP, LABEL, FUNC, FFUNC,
+	    PARAM, RET, ARG} op_assembly;    
+
 //ESTRUCTURA LISTA
 typedef struct nodo {
 	void* info;
