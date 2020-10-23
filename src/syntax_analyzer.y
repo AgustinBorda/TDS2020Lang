@@ -130,7 +130,12 @@ method_decl:
 
 method_declar:
 	method_declaration block {	
-		$1-> tree = $2;
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = OP;
+		d-> op = "FUN";
+		d-> data = $1;
+		tree* t = load_node($2, NULL, NULL, d);
+		$1 -> tree = t;
 		int a = insert(stack->list, $1);
 		if(a == 0) {
 			syntax_error("Multiple definition of method\n");

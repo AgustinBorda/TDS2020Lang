@@ -78,7 +78,7 @@ enum type_var_fun analyze_types(tree* t) {
 }
 
 void analyze(tree* t) {
-		if(strcmp(t->dato->op,";")==0) {
+		if(strcmp(t->dato->op, ";") == 0 || strcmp(t->dato->op, "FUN") == 0) {
 			if(t->hi != NULL) {
 				analyze(t->hi);
 			}

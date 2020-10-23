@@ -1,85 +1,97 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../headers/tresDirecciones.h"
+#include "../headers/three_way_code.h"
 #include "../headers/table.h"
-#include "../headers/tempGen.h"
-/*void create_file() {
-	FILE* f;
-	f = fopen("threeCode.txt", "w+");
-	fclose(f);
-}*/
 
-int threeCode(dato* t, list* l) {
+int write_three_code(dato* t, list* l) {
 	tree* tr = t -> tree;
-	write(tr, l);
+	three_address_code* tac = malloc(sizeof(three_address_code));
+	tac -> opcode = INIT_FUN;
+	tac -> op1 = tr;
+	insert(l, tac);
+	analyze(tr, l);
+	tac = malloc(sizeof(three_address_code));
+	tac -> opcode = END_FUN;
+	tac -> op1 = tr;
+	insert(l, tac);
 	return 0;
 }
 
-
-struct address writeConst(node* root) {
-		address* ad = malloc(sizeof(address));
-		ad -> data = root->dato;
-		return ad;
-}
-
-struct address writeId(tree* root) {
-	if(exist(l, root->dato->name)) {
-		address* ad = malloc(sizeof(address));
-		ad -> name =  root->dato->name;
-		ad -> data = root->dato;
-		return ad;
-	}
-	return NULL;// hacer mensaje de error
-}
-
-void writeOp(node* root, list* l) {
-	char* leftVal = genTemp();
-	char* rightVal = genTemp();
-	if(root -> hi != NULL) {
-		write(root->hi, leftVal, f, sym_table);
+void analyze(tree* t, list* l) {
+	if(strcmp(t->dato->op, ";") == 0 || strcmp(t->dato->op, "FUN") == 0) {
+		if(t->hi != NULL) {
+			analyze(t->hi, l);
+		}
+		if(t->hh != NULL) {
+			analyze(t->hh, l);
+		}
+		if(t->hd != NULL) {
+			analyze(t->hd, l);
+		}
 	}
 	else {
-		exit(1);
+		write(t, l);
+	}
+}
+
+dato_tree* writeConst(tree* root) {
+		return root -> dato;
+}
+
+dato_tree* writeId(tree* root) {
+	return root -> dato;
+}
+
+dato_tree* writeOp(tree* root, list* l) {
+	dato_tree* val_hi;
+	dato_tree* val_hd;
+	if(root -> hi != NULL) {
+		val_hi = write(root->hi, l);
 	}
 	if(root -> hd != NULL) {
-		write(root->hd, rightVal, f, sym_table);
+		val_hd = write(root->hd, l);
 	}
-	else {
-		exit(1);
+	three_address_code* tac = malloc(sizeof(three_address_code));
+	if(strcmp(t->dato->op, "+") == 0) {
+		tac -> opcode = ADD;
 	}
-	f =  fopen("threeCode.txt", "a");
-	switch (root->data.op) {
-		case '+' : fprintf(f, "MOV EAX, 0\n");
-			   fprintf(f, "ADD EAX, %s\n", leftVal);
-			   fprintf(f, "ADD EAX, %s\n", rightVal);
-			   fprintf(f, "MOV %s, EAX\n", resLoc);
-			   break;
-                case '-' : fprintf(f, "MOV EAX, 0\n");
-			   fprintf(f, "ADD EAX, %s\n", leftVal);
-			   fprintf(f, "SUB EAX, %s\n", rightVal);
-			   fprintf(f, "MOV %s, EAX\n", resLoc);
-			   break;
-		case '*' : fprintf(f, "MOV EAX, 0\n");
-			   fprintf(f, "ADD EAX, %s\n", leftVal);
-			   fprintf(f, "MUL EAX, %s\n", rightVal);
-			   fprintf(f, "MOV %s, EAX\n", resLoc);
-			   break;
-		case '/' : fprintf(f, "MOV EAX, 0\n");
-			   fprintf(f, "ADD EAX, %s\n", leftVal);
-			   fprintf(f, "DIV EAX, %s\n", rightVal);
-		           fprintf(f, "MOV %s, EAX\n", resLoc);
-			   break;
-		default : exit(1);
-			  break;
-		}
-	fclose(f);
+	if(strcmp(t->dato->op, "-") == 0) {
+		tac -> opcode = SUB;
+	}
+	if(strcmp(t->dato->op, "*") == 0) {
+		tac -> opcode = MULT;
+	}
+	if(strcmp(t->dato->op, "&&") == 0) {
+		tac -> opcode = AND;
+	}
+	if(strcmp(t->dato->op, "=") == 0) {
+		tac -> opcode = ASSIGN;
+	}
+	if(strcmp(t->dato->op, "!") == 0) {
+		tac -> opcode = NOT;
+	}
+	if(strcmp(t->dato->op, "RETURN") == 0) {
+		tac -> opcode = RET;
+	}
+	if(strcmp(t->dato->op, "==") == 0) {
+		tac -> opcode = EQ;
+	}
+	if(val_hi != NULL) {
+		tac -> op1 = val_hi;
+	}
+	if(val_hd != NULL) {
+		tac -> op2 = val_hd;
+	}
+	tac -> dest = root -> dato;
+	insert(tac, l);
+	return root -> dato;
 }
 
-void write(tree* root,list* l) {
+dato_tree* write(tree* root, list* l) {
         switch(root->dato->flag) {
-		case 0 : return writeId(root,l);
+		case 0 : return writeId(root);
 			 break;
-		case 1 : return writeConst(root,l);
+		case 1 : return writeConst(root);
 			 break;
 		case 2 : return writeOp(root,l);
 			 break;

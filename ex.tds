@@ -3,6 +3,9 @@
 */
 /*
 */
-void main () {
-	return;
+integer main () {
+	integer a;
+	integer b;
+	b = 5;
+	return a + b;
 }
