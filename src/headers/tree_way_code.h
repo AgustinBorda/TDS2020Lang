@@ -3,36 +3,25 @@
 #include "structures.h"
 #include <stdio.h>
 
-/*
-*Crea el archivo destino y escribe el codigo tres direcciones
-*/
 
-int threeCode(node* head, nodoL* sym_table);
+int write_three_code(dato* t, list* l);
 
-/*
-*Escribe el valor constante de root en resLoc y lo escribe en f
-*/
+void analyze2(tree* t, list* l);
 
-dato_tree* writeConst(node* root, char* resLoc, FILE* f);
 
-/*
-*Escribe el valor de la variable de root en resLoc
-*y lo escribe en f
-*/
 
-dato_tree* writeId(node* root, char* resLoc, FILE* f, nodoL* sym_table);
+dato_tree* writeConst(tree* root); 
 
-/*
-*Realiza la operacion de root guarda el resultado en resLoc
-*y lo escribe en f
-*/
 
-dato_tree* writeOp(node* root, char* resLoc, FILE* f, nodoL* sym_table);
+dato_tree* writeId(tree* root);
 
-/*
-*Decide el tipo de contenido de root y llama al metodo correspondiente
-*/
+void tac_op(three_address_code* tac, tree* t);
 
-void write(node* root, char* resLoc, FILE* f, nodoL* sym_table);
+
+dato_tree* writeOp(tree* root, list* l);
+
+
+dato_tree* write(tree* root, list* l);
+
 
 #endif

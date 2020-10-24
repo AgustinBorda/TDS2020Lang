@@ -101,7 +101,7 @@ int size(list* head) {
 	return head -> size;
 }
 
-int insert(list* head, void* d){
+int last_insert(list* head, void* d){
 	nodoL* aux = head -> list -> sig;
 	while(aux->sig != NULL) {
 		aux = aux -> sig;

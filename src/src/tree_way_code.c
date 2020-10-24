@@ -1,23 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../headers/three_way_code.h"
+#include "../headers/tree_way_code.h"
 #include "../headers/table.h"
+
+
 
 int write_three_code(dato* t, list* l) {
 	tree* tr = t -> tree;
 	three_address_code* tac = malloc(sizeof(three_address_code));
 	tac -> opcode = INIT_FUN;
 	tac -> op1 = tr;
-	insert(l, tac);
-	analyze(tr, l);
+	last_insert(l, tac);
+	analyze2(tr, l);
 	tac = malloc(sizeof(three_address_code));
 	tac -> opcode = END_FUN;
 	tac -> op1 = tr;
-	insert(l, tac);
+	last_insert(l, tac);
 	return 0;
 }
 
-void analyze(tree* t, list* l) {
+void analyze2(tree* t, list* l) {
 	if(strcmp(t->dato->op, ";") == 0 || strcmp(t->dato->op, "FUN") == 0) {
 		if(t->hi != NULL) {
 			analyze(t->hi, l);
@@ -42,6 +44,12 @@ dato_tree* writeId(tree* root) {
 	return root -> dato;
 }
 
+void tac_op(three_address_code* tac, tree* t){
+	tac -> dest = t->dato;
+	tac -> op1 = t->hi;
+	tac -> op2 = t->hd;
+}
+
 dato_tree* writeOp(tree* root, list* l) {
 	dato_tree* val_hi;
 	dato_tree* val_hd;
@@ -52,28 +60,42 @@ dato_tree* writeOp(tree* root, list* l) {
 		val_hd = write(root->hd, l);
 	}
 	three_address_code* tac = malloc(sizeof(three_address_code));
-	if(strcmp(t->dato->op, "+") == 0) {
+	if(strcmp(root->dato->op, "+") == 0) {
 		tac -> opcode = ADD;
+		tac_op(tac, root);
+		last_insert(l, tac);
 	}
-	if(strcmp(t->dato->op, "-") == 0) {
+	if(strcmp(root->dato->op, "-") == 0) {
 		tac -> opcode = SUB;
+		tac_op(tac, root);
+		last_insert(l, tac);
 	}
-	if(strcmp(t->dato->op, "*") == 0) {
+	if(strcmp(root->dato->op, "*") == 0) {
 		tac -> opcode = MULT;
+		tac_op(tac, root);
+		last_insert(l, tac);
 	}
-	if(strcmp(t->dato->op, "&&") == 0) {
+	if(strcmp(root->dato->op, "&&") == 0) {
 		tac -> opcode = AND;
+		tac_op(tac, root);
+		last_insert(l, tac);
+		
 	}
-	if(strcmp(t->dato->op, "=") == 0) {
+	if(strcmp(root->dato->op, "=") == 0) {
 		tac -> opcode = ASSIGN;
+		tac_op(tac, root);
+		last_insert(l, tac);
 	}
-	if(strcmp(t->dato->op, "!") == 0) {
+	if(strcmp(root->dato->op, "!") == 0) {
 		tac -> opcode = NOT;
+		//TODO
+
 	}
-	if(strcmp(t->dato->op, "RETURN") == 0) {
+	if(strcmp(root->dato->op, "RETURN") == 0) {
 		tac -> opcode = RET;
+		printf("hubo un error");
 	}
-	if(strcmp(t->dato->op, "==") == 0) {
+	if(strcmp(root->dato->op, "==") == 0) {
 		tac -> opcode = EQ;
 	}
 	if(val_hi != NULL) {
@@ -83,7 +105,7 @@ dato_tree* writeOp(tree* root, list* l) {
 		tac -> op2 = val_hd;
 	}
 	tac -> dest = root -> dato;
-	insert(tac, l);
+	last_insert(l, tac);
 	return root -> dato;
 }
 

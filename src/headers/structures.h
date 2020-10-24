@@ -11,7 +11,7 @@ typedef enum type_var_fun {INT, BOOL, VOID} type_var;
 
 typedef enum flag_nodo {VAR, FUN, MAIN} flag_nodo;
 
-typedef enum type_list {SYMBOL, PARAM, THREE-ADDRESS-CODE} type_list;
+typedef enum type_list {SYMBOL, PARAM, THREE_ADDRESS_CODE} type_list;
 
 typedef enum flag_tree {VARIABLE, CONS, OP} flag_tree;
 

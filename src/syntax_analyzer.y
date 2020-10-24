@@ -76,18 +76,21 @@ programInit:
 						syntax_error("Main function shouldn't have parameters\n");
 					}
 				}
-				 semantic_analyzer(curr)
+				 semantic_analyzer(curr);
 			}
 		}
+
 		if(!has_main) {
 			syntax_error("Main function not found\n");
 		}
-		list** p;
-		create_list(p, THREE-ADDRESS-CODE);
+		list* p;
+		printf("llegue");
+		create_list(p, THREE_ADDRESS_CODE);
 		for(int i=0 ; i < size(stack->list); i++) {
 			dato* curr = get(stack->list,i);
 			if((curr -> flag == FUN || curr -> flag == MAIN) && curr -> tree != NULL ) {
-				 threeCode(curr, p);
+				 write_three_code(curr, p);
+				 show(p);
 			}
 		}
 
