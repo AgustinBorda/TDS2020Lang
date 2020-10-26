@@ -11,10 +11,12 @@
 /*tabla de simbolos, lista de parametros*/
 stack_node* stack;
 list* l;
+list* id_list;
 int has_main = 0;
 void initialize() {
 	createStack(&stack);	
 	create_list(&l, PARAM);
+        create_list(&id_list, SYMBOL);
 }
 
 void syntax_error(char* msg) {
@@ -109,23 +111,42 @@ var_declarations:
 	;
 
 var_decl:
-	type ID ';' {
-		dato* d = malloc(sizeof(dato));
-		if($1 == 0) {
-			d-> type = INT;
-		} 
-		else {
-			d-> type = BOOL;
-		}
-		d-> name = $2;
-		d-> flag = VAR;
-		int a = insert(stack->list, d);
-		if(a == 0) {
-			syntax_error("Multiple definition of variable\n");
-		}
+	type id_list ';'{ 
+		for(int i=0 ; i < size(id_list); i++) {
+			dato* curr = get(id_list,i);
+		        if($1 == 0) {
+			         curr-> type = INT;
+		        } 
+		        else {
+			         curr-> type = BOOL;
+		        }
+		        int a = insert(stack->list, curr);
+		        if(a == 0) {
+			          syntax_error("Multiple definition of variable\n");
+		        }
+               }
+               create_list(&id_list, SYMBOL);
 	}
 	;
 
+id_list: id_list ',' ID{
+                         dato* d = malloc(sizeof(dato));
+                         d-> name = $3;
+                         d-> flag = VAR;
+                         int a = insert(id_list, d);
+                         if(a == 0) {
+                             syntax_error("Multiple definition of variable\n");
+                        }
+                       }
+        |ID            {
+                         dato* d = malloc(sizeof(dato));
+                         d-> name = $1;
+                         d-> flag = VAR;
+                         int a = insert(id_list, d);
+                         if(a == 0) {
+                             syntax_error("Multiple definition of variable\n");
+                        }
+                       }
 method_decl:
 	method_declar {}
 	|method_decl method_declar {}
