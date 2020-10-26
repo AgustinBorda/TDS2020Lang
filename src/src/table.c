@@ -72,6 +72,15 @@ void show(list* head) {
 }
 
 
+void show_tac(list* head) {
+	nodoL* aux = head -> list -> sig;
+	while(aux != NULL) {
+		three_address_code* ptr1 = aux -> info;
+		printf("Opcode: %d\nDestination: %p\nOperand1: %p\nOperand2: %p\n",ptr1 -> opcode,ptr1->dest, ptr1 -> op1, ptr1 -> op2);
+		aux = aux -> sig;
+	}
+}
+
 
 void empty_list(list** head) {
 	nodoL* aux = (*head) -> list;
@@ -102,7 +111,7 @@ int size(list* head) {
 }
 
 int last_insert(list* head, void* d){
-	nodoL* aux = head -> list -> sig;
+	nodoL* aux = head -> list;
 	while(aux->sig != NULL) {
 		aux = aux -> sig;
 	}

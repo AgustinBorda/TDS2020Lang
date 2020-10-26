@@ -6,7 +6,7 @@
 
 int write_three_code(dato* t, list* l);
 
-void analyze2(tree* t, list* l);
+void analyze_tac(tree* t, list* l);
 
 
 

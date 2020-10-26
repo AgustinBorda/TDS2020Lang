@@ -1,7 +1,9 @@
 integer x;
 bool y;
 
-void main(integer a, bool b){
-a = b;
-return ;
+integer main(){
+integer a, b;
+a = 5;
+b = 10;
+return a + b - x;
 }

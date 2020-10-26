@@ -36,11 +36,14 @@ void* seek(list* head, char* var);
 
 void show(list* head);
 
+void show_tac(list* head);
 
 void empty_list(list** head);
 
 void* get(list* head, int i);
 
 int size(list* head);
+
+int last_insert(list* l, void* p);
 
 #endif

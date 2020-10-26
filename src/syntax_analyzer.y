@@ -7,6 +7,7 @@
 #include "../headers/structures.h"
 #include "../headers/tree.h"
 #include "../headers/semantic_analyzer.h"
+#include "../headers/three_way_code.h"
 /*tabla de simbolos, lista de parametros*/
 stack_node* stack;
 list* l;
@@ -84,13 +85,12 @@ programInit:
 			syntax_error("Main function not found\n");
 		}
 		list* p;
-		printf("llegue");
-		create_list(p, THREE_ADDRESS_CODE);
+		create_list(&p, THREE_ADDRESS_CODE);
 		for(int i=0 ; i < size(stack->list); i++) {
 			dato* curr = get(stack->list,i);
 			if((curr -> flag == FUN || curr -> flag == MAIN) && curr -> tree != NULL ) {
 				 write_three_code(curr, p);
-				 show(p);
+				 show_tac(p);
 			}
 		}
 
