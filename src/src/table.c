@@ -76,7 +76,27 @@ void show_tac(list* head) {
 	nodoL* aux = head -> list -> sig;
 	while(aux != NULL) {
 		three_address_code* ptr1 = aux -> info;
-		printf("Opcode: %d\nDestination: %p\nOperand1: %p\nOperand2: %p\n",ptr1 -> opcode,ptr1->dest, ptr1 -> op1, ptr1 -> op2);
+		printf("Opcode: %d\n Destination: %p\n", ptr1-> opcode, ptr1->dest);
+		if(ptr1->op1 != NULL) {
+			switch (ptr1->op1->flag) {
+				case 0 : printf("%s\n",ptr1->op1->data->name);
+						break;
+				case 1 : printf("%d\n",ptr1->op1->value);
+						break;
+					default : printf("%p\n", ptr1->op1);
+						break;				
+			}
+		}
+		if(ptr1->op2 != NULL) {
+			switch (ptr1->op2->flag) {
+				case 0 : printf("%s\n",ptr1->op2->data->name);
+						break;
+				case 1 : printf("%d\n",ptr1->op2->value);
+						break;
+				default : printf("%p\n", ptr1->op2);
+						break;				
+			}
+		}
 		aux = aux -> sig;
 	}
 }
