@@ -37,6 +37,7 @@ typedef struct dato_tree {
 	int value;
 	dato* data;
 	enum flag_tree flag;
+	char* temp_name;
 }dato_tree;
 
 typedef struct three_address_code {

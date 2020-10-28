@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../headers/three_way_code.h"
 #include "../headers/table.h"
+#include "../headers/tempGen.h"
 
 
 
@@ -10,6 +11,7 @@ int write_three_code(dato* t, list* l) {
 	tree* tr = t -> tree;
 	three_address_code* tac = malloc(sizeof(three_address_code));
 	tac -> opcode = INIT_FUN;
+	tr -> dato -> temp_name = tr -> dato -> data -> name;
 	tac -> op1 = tr -> dato;
 	last_insert(l, tac);
 	analyze_tac(tr, l);
@@ -59,7 +61,7 @@ dato_tree* writeOp(tree* root, list* l) {
 		tac -> opcode = ADD;
 	}
 	if(strcmp(root->dato->op, "-") == 0) {
-		tac -> opcode = SUB;
+	tac -> opcode = SUB;
 	}
 	if(strcmp(root->dato->op, "*") == 0) {
 		tac -> opcode = MULT;
@@ -86,6 +88,9 @@ dato_tree* writeOp(tree* root, list* l) {
 	}
 	if(val_hd != NULL) {
 		tac -> op2 = val_hd;
+	}
+	if(root -> dato != NULL) {
+		root -> dato -> temp_name = genTemp();
 	}
 	tac -> dest = root -> dato;
 	last_insert(l, tac);

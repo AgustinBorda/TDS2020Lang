@@ -71,32 +71,50 @@ void show(list* head) {
 	}
 }
 
+char* get_tac_opcode(op_twc o) {
+	switch (o) {
+		case 0: return "ASSIGN";
+		case 1: return "ADD";
+		case 2: return "SUB";
+		case 3: return "MULT";
+		case 4: return "AND";
+		case 5: return "NOT";
+		case 6: return "RET";
+		case 7: return "INIT_FUN";
+		case 8: return "END_FUN";
+		default: return "EQ";
+	}
+}
 
 void show_tac(list* head) {
 	nodoL* aux = head -> list -> sig;
 	while(aux != NULL) {
 		three_address_code* ptr1 = aux -> info;
-		printf("Opcode: %d\n Destination: %p\n", ptr1-> opcode, ptr1->dest);
+		printf("%s ", get_tac_opcode(ptr1-> opcode));
+		if (ptr1 -> dest != NULL) {
+			printf("%s ",ptr1->dest->temp_name);
+		}
 		if(ptr1->op1 != NULL) {
 			switch (ptr1->op1->flag) {
-				case 0 : printf("%s\n",ptr1->op1->data->name);
+				case 0 : printf("%s ",ptr1->op1->data->name);
 						break;
-				case 1 : printf("%d\n",ptr1->op1->value);
+				case 1 : printf("%d ",ptr1->op1->value);
 						break;
-					default : printf("%p\n", ptr1->op1);
+				default : printf("%s ", ptr1->op1->temp_name);
 						break;				
 			}
 		}
 		if(ptr1->op2 != NULL) {
 			switch (ptr1->op2->flag) {
-				case 0 : printf("%s\n",ptr1->op2->data->name);
+				case 0 : printf("%s",ptr1->op2->data->name);
 						break;
-				case 1 : printf("%d\n",ptr1->op2->value);
+				case 1 : printf("%d",ptr1->op2->value);
 						break;
-				default : printf("%p\n", ptr1->op2);
+				default : printf("%s", ptr1->op2->temp_name);
 						break;				
 			}
 		}
+		printf("\n");
 		aux = aux -> sig;
 	}
 }

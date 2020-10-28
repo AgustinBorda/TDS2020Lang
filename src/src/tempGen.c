@@ -21,7 +21,7 @@ int intLength(int n) {
 char* genTemp() {
 	char* res = malloc(sizeof(char)*(5+intLength(var)));
 	*res = '\0';
-	sprintf(res,"TEMP%d",var);
+	sprintf(res,"t%d",var);
 	var++;
 	return res;	
 }
