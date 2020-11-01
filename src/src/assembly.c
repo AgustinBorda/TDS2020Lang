@@ -3,7 +3,19 @@
 //#include "../headers/assembly.h"
 #include "../headers/table.h"
 
+int init = 0;
+void gen_offset_table(list* l) {
+	int i = 0;
+	while( i < size(l) && get(l,i)->opcode != 8) {
+	three_address_code* curr = get(l,i);
+	if(curr->dest != NULL) {
+		init = init-8;
+		curr -> offset = init; 
+	}
+}
+
 int assemble(list* l) {
+	gen_offset_table(l);
 	FILE* f;
 	f = fopen("assembly.txt", "w+");
 	fclose(f);

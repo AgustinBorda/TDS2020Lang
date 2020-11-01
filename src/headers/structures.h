@@ -45,6 +45,7 @@ typedef struct three_address_code {
 	dato_tree* dest;
 	dato_tree* op1;
 	dato_tree* op2;
+	int offset;
 }three_address_code;
 
 
