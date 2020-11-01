@@ -7,10 +7,11 @@ int init = 0;
 void gen_offset_table(list* l) {
 	int i = 0;
 	while( i < size(l) && get(l,i)->opcode != 8) {
-	three_address_code* curr = get(l,i);
-	if(curr->dest != NULL) {
-		init = init-8;
-		curr -> offset = init; 
+		three_address_code* curr = get(l,i);
+		if(curr->dest != NULL) {
+			init = init-8;
+			curr -> offset = init; 
+		}
 	}
 }
 
@@ -31,10 +32,8 @@ f =  fopen("assembly.txt", "a");
 			case 0 :
 			         fprintf(f, "MOV %s, EAX\n", curr->dest);
 				 break;
-			case 1 : fprintf(f, "MOV EAX, 0\n");
-			  		 fprintf(f, "ADD EAX, %s\n", curr->op1);
-			   		 fprintf(f, "ADD EAX, %s\n", curr->op2);
-			         fprintf(f, "MOV %s, EAX\n", curr->dest);
+			case 1 : 
+			  		 fprintf(f, "addl $%d, %d(%rbp)\n", curr->op1->data->value,curr->offset);
 				 break;
 			case 2 : fprintf(f, "MOV EAX, 0\n");
 			  		 fprintf(f, "ADD EAX, %s\n", curr->op1);
