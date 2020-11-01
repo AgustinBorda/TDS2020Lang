@@ -57,6 +57,18 @@ dato_tree* writeOp(tree* root, list* l) {
 		val_hd = write(root->hd, l);
 	}
 	three_address_code* tac = malloc(sizeof(three_address_code));
+	if(val_hi != NULL) {
+		tac -> op1 = val_hi;
+	}
+	if(val_hd != NULL) {
+		tac -> op2 = val_hd;
+	}
+	if(root -> dato != NULL) {
+		root -> dato -> temp_name = genTemp();
+	}
+
+
+
 	if(strcmp(root->dato->op, "+") == 0) {
 		tac -> opcode = ADD;
 	}
@@ -72,6 +84,10 @@ dato_tree* writeOp(tree* root, list* l) {
 	}
 	if(strcmp(root->dato->op, "=") == 0) {
 		tac -> opcode = ASSIGN;
+		tac -> op1 = val_hd;
+		tac -> op2 = NULL;
+		tac -> dest = val_hi;
+
 	}
 	if(strcmp(root->dato->op, "!") == 0) {
 		tac -> opcode = NOT;
@@ -83,16 +99,9 @@ dato_tree* writeOp(tree* root, list* l) {
 	if(strcmp(root->dato->op, "==") == 0) {
 		tac -> opcode = EQ;
 	}
-	if(val_hi != NULL) {
-		tac -> op1 = val_hi;
+	if(tac -> dest == NULL) {
+		tac -> dest = root -> dato;
 	}
-	if(val_hd != NULL) {
-		tac -> op2 = val_hd;
-	}
-	if(root -> dato != NULL) {
-		root -> dato -> temp_name = genTemp();
-	}
-	tac -> dest = root -> dato;
 	last_insert(l, tac);
 	return root -> dato;
 }

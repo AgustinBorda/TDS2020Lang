@@ -92,7 +92,14 @@ void show_tac(list* head) {
 		three_address_code* ptr1 = aux -> info;
 		printf("%s ", get_tac_opcode(ptr1-> opcode));
 		if (ptr1 -> dest != NULL) {
-			printf("%s ",ptr1->dest->temp_name);
+			switch (ptr1->dest->flag) {
+				case 0 : printf("%s ",ptr1->dest->data->name);
+						break;
+				case 1 : printf("%d ",ptr1->dest->value);
+						break;
+				default : printf("%s ", ptr1->dest->temp_name);
+						break;				
+			}
 		}
 		if(ptr1->op1 != NULL) {
 			switch (ptr1->op1->flag) {
