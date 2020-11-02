@@ -29,41 +29,71 @@ f =  fopen("assembly.txt", "a");
 	for(int i=0 ; i < size(l); i++) {
 		three_address_code* curr = get(l,i);
 		switch(curr->opcode) {
-			case 0 :
-			         fprintf(f, "MOV %s, EAX\n", curr->dest);
+			case 0 :switch(curr -> op2 -> flag){
+					 case 0 :  fprintf(f, "movl $%d, %d(%rbp)\n", curr->op2->data->value , curr->op1->offset);
+					 		   fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op1->offset);  
+						  break;
+					 case 1 : fprintf(f, "movl $%d, %d(%rbp)\n", curr->op2->value , curr->op1->offset);
+					 		  fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op1->offset);  
+				 		  break;
+				 	 default : exit(1);
+						  break;	  
 				 break;
 			case 1 : switch(curr -> op1 -> flag){
 					 case 0 : switch(curr -> op2 -> flag){
-							  case 0 : fprintf(f, "movl $%d(%rbp), (%%edx)\n", curr->op1->offset);
-								   fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op2->offset);
-								   fprintf(f, "addl (%%edx), (%%eax)\n");
-								   break;
-							  case 1 : fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op1->offset);
-								   fprintf(f, "addl $%d, (%%eax)\n",curr->op2->value);
-								   break;
-							  default : exit(1);
-							  	    break;
-						  }
+							  	case 0 : fprintf(f, "movl $%d(%rbp), (%%edx)\n", curr->op1->offset);
+									   fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op2->offset);
+									   fprintf(f, "addl (%%edx), (%%eax)\n");
+									   break;
+								  case 1 : fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op1->offset);
+									   fprintf(f, "addl $%d, (%%eax)\n",curr->op2->value);
+									   break;
+								  default : exit(1);
+							 	 	    break;
+							  }
 						  break;
 					case 1 :  switch(curr -> op2 -> flag){
-                                                          case 0 : fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op2->offset);
-                                                                   fprintf(f, "addl $%d, (%%eax)\n",curr->op1->value);
-                                                                   break;
-                                                          case 1 : fprintf(f, "movl $%d, (%%eax)\n", curr->op1->value);
-                                                                   fprintf(f, "addl $%d, (%%eax)\n", curr->op2->value);
-                                                                   break;
-                                                          default : exit(1);
-                                                                    break;
-                                                  }
-                                                  break;
+                                 	case 0 : fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op2->offset);
+                                             fprintf(f, "addl $%d, (%%eax)\n",curr->op1->value);
+                                         break;
+                                    case 1 : fprintf(f, "movl $%d, (%%eax)\n", curr->op1->value);
+                                             fprintf(f, "addl $%d, (%%eax)\n", curr->op2->value);
+                                         break;
+                                    default : exit(1);
+                                         break;
+                               }
+                          break;
 					default : exit(1);
-                                                  break;
+                          break;
 				 }
 				 break;
-			case 2 : fprintf(f, "MOV EAX, 0\n");
-			  		 fprintf(f, "ADD EAX, %s\n", curr->op1);
-			   		 fprintf(f, "SUB EAX, %s\n", curr->op1);
-			   		 fprintf(f, "MOV %s, EAX\n", curr->dest);
+			case 2 : switch(curr -> op1 -> flag){
+					 case 0 : switch(curr -> op2 -> flag){
+							      case 0 : fprintf(f, "movl $%d(%rbp), (%%edx)\n", curr->op1->offset);
+									     fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op2->offset);
+									     fprintf(f, "subl (%%edx), (%%eax)\n");
+									   break;
+								  case 1 : fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op1->offset);
+									  	   fprintf(f, "subl $%d, (%%eax)\n",curr->op2->value);
+									   break;
+								  default : exit(1);
+							 	 	    break;
+							  }
+						  break;
+					case 1 :  switch(curr -> op2 -> flag){
+                                 	case 0 : fprintf(f, "movl $%d(%rbp), (%%eax)\n", curr->op2->offset);
+                                             fprintf(f, "subl $%d, (%%eax)\n",curr->op1->value);
+                                         break;
+                                    case 1 : fprintf(f, "movl $%d, (%%eax)\n", curr->op1->value);
+                                             fprintf(f, "subl $%d, (%%eax)\n", curr->op2->value);
+                                         break;
+                                    default : exit(1);
+                                         break;
+                               }
+                          break;
+					default : exit(1);
+                          break;
+				 }
 				 break;
 			case 3 : fprintf(f, "MOV EAX, 0\n");
 			   		 fprintf(f, "ADD EAX, %s\n", curr->op1);
