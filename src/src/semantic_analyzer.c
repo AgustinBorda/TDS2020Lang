@@ -44,12 +44,14 @@ enum type_var_fun analyze_types(tree* t) {
 			if(analyze_types(t->hi) != BOOL) {
 				type_error("Type error: The ! operator needs a bool type\n");
 			}
+			t -> type = BOOL;
 			return BOOL;
 		}
 		if(strcmp(t->dato->op,"&&")==0) {
 			val_hi = analyze_types(t->hi);
 			val_hd = analyze_types(t->hd);
 			if(val_hi == BOOL && val_hd == BOOL) {
+				t -> type = BOOL;
 				return BOOL;
 			}
 			else {
@@ -60,6 +62,7 @@ enum type_var_fun analyze_types(tree* t) {
 			val_hi = analyze_types(t->hi);
 			val_hd = analyze_types(t->hd);
 			if(val_hi == val_hd) {
+				t -> type = BOOL;
 				return BOOL;
 			}
 			type_error("Type error: The two expressions in == must be the same type\n");
@@ -68,6 +71,7 @@ enum type_var_fun analyze_types(tree* t) {
 		val_hi = analyze_types(t->hi);
 		val_hd = analyze_types(t->hd);
 		if(val_hi == INT && val_hd == INT) {
+			t -> type = INT;
 			return INT;
 		}
 		type_error("Type error: The two expresions in arithmetic operations must be integer\n");
