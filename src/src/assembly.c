@@ -3,20 +3,14 @@
 //#include "../headers/assembly.h"
 #include "../headers/table.h"
 
-int init = 0;
 void gen_offset_table(list* l) {
+	int init = 0;
 	int i = 0;
 	while( i < size(l) && get(l,i)->opcode != 8) {
 		three_address_code* curr = get(l,i);
 		if(curr->dest != NULL) {
-			if (curr->op1->flag == 0){
-				init = init-8;
-				curr -> op1 -> offset = init;
-			}
-			if (curr->op2->flag == 0){
-				init = init-8;
-				curr -> op2 -> offset = init;
-			}	
+			init = init -8;
+			curr->dest->offset = init;	
 		}
 	}
 }

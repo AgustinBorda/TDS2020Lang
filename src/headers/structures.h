@@ -9,7 +9,7 @@ typedef struct tree tree;
 
 typedef enum type_var_fun {INT, BOOL, VOID} type_var;
 
-typedef enum flag_nodo {VAR, FUN, MAIN} flag_nodo;
+typedef enum flag_nodo {VAR, FUN, MAIN, GLOBAL_VAR} flag_nodo;
 
 typedef enum type_list {SYMBOL, PARAM, THREE_ADDRESS_CODE} type_list;
 
@@ -38,6 +38,7 @@ typedef struct dato_tree {
 	dato* data;
 	enum flag_tree flag;
 	char* temp_name;
+	int offset;
 }dato_tree;
 
 typedef struct three_address_code {
@@ -45,7 +46,6 @@ typedef struct three_address_code {
 	dato_tree* dest;
 	dato_tree* op1;
 	dato_tree* op2;
-	int offset;
 }three_address_code;
 
 

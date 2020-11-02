@@ -132,7 +132,12 @@ var_decl:
 id_list: id_list ',' ID {
 		dato* d = malloc(sizeof(dato));
 		d-> name = $3;
-		d-> flag = VAR;
+		if(stack -> level == 0) {
+			d -> flag = GLOBAL_VAR;
+		}
+		else {
+			d-> flag = VAR;
+		}
 		int a = insert(id_list, d);
 		if(a == 0) {
 			syntax_error("Multiple definition of variable\n");
