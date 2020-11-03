@@ -100,6 +100,7 @@ void show_tac(list* head) {
 				default : printf("%s ", ptr1->dest->temp_name);
 						break;				
 			}
+			printf("offset: %d\n",ptr1->dest->offset);
 		}
 		if(ptr1->op1 != NULL) {
 			switch (ptr1->op1->flag) {

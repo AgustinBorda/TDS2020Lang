@@ -8,6 +8,7 @@
 #include "../headers/tree.h"
 #include "../headers/semantic_analyzer.h"
 #include "../headers/three_way_code.h"
+#include "../headers/assembly.h"
 /*tabla de simbolos, lista de parametros*/
 stack_node* stack;
 list* l;
@@ -92,9 +93,10 @@ programInit:
 			dato* curr = get(stack->list,i);
 			if((curr -> flag == FUN || curr -> flag == MAIN) && curr -> tree != NULL ) {
 				 write_three_code(curr, p);
-				 show_tac(p);
 			}
 		}
+		assemble(p);
+		show_tac(p);
 
 	}
 	;
@@ -146,7 +148,12 @@ id_list: id_list ',' ID {
 	|ID {
 		dato* d = malloc(sizeof(dato));
 		d-> name = $1;
-		d-> flag = VAR;
+		if(stack -> level == 0) {
+			d -> flag = GLOBAL_VAR;
+		}
+		else {
+			d-> flag = VAR;
+		}
 		int a = insert(id_list, d);
 		if(a == 0) {
 			syntax_error("Multiple definition of variable\n");

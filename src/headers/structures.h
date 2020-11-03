@@ -65,6 +65,7 @@ typedef struct dato {
 	enum flag_nodo flag;
 	list* params;
 	tree* tree;
+	int offset;
 }dato;
 
 typedef struct literal {	

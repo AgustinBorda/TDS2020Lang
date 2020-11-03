@@ -5,9 +5,13 @@ integer main(){
 integer a, b;
 bool c;
 a = 5;
-b = 10;
-c = true && !false;
-{a = 6+a;
-x=509;}
-return a + b - x;
+a = 15;
+x = 10;
+return 0;
+}
+
+bool neg() {
+	y = true;
+	y = !y;
+	return y==y;
 }
