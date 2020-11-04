@@ -4,10 +4,11 @@ int add(int a, int b) {
 	return a+b;
 }
 int main() {
-	int c;
+	long c;
 	c = 5;
 	a = 5;
 	b = c;
+	c = (a == b);
 	add(a,c);
 	return 0;
 }

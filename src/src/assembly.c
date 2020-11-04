@@ -56,12 +56,12 @@ void gen_offset_table(list* l) {
 	}
 }
 
-int assemble(list* l) {
+int assemble(list* l, list* ts) {
 	gen_offset_table(l);
 	FILE* f;
-	f = fopen("assembly.txt", "w+");
+	f = fopen("assembly.s", "w+");
 	fclose(f);
-	write_assembly(f, l);
+	write_assembly(f, l, ts);
 	return 0;
 }
 char* resolve_assembly_name(dato_tree* curr) {
@@ -94,9 +94,9 @@ char* resolve_assembly_name(dato_tree* curr) {
 
 
 //{ASSIGN, ADD, SUB, MULT, AND, NOT, RET, INIT_FUN, END_FUN, EQ}
-void write_assembly(FILE* f, list* l) {  
-	f =  fopen("assembly.txt", "a"); 
-	fprintf(f, ".file \"assembly.c\"\n ");
+void write_assembly(FILE* f, list* l, list* ts) {  
+	f =  fopen("assembly.s", "a"); 
+	fprintf(f, ".file \"assembly.c\"\n");
 	fprintf(f, ".text\n");
 	//	fprintf(f, ".globl %s", );
 
@@ -106,6 +106,12 @@ void write_assembly(FILE* f, list* l) {
 	  .globl	main
 	  .type	main, @function
 	  */    
+	for (int i = 0; i < size(ts); ++i) {
+		dato* curr = get(ts,i);
+		if(curr -> flag == 3) {
+			fprintf(f, ".comm %s,8,8\n",curr->name);
+		}	  	   	  
+	}
 	for(int i=0 ; i < size(l); i++) {
 		three_address_code* curr = get(l,i);
 		char* op1 = NULL;
@@ -122,53 +128,55 @@ void write_assembly(FILE* f, list* l) {
 		}
 		switch(curr->opcode) {
 			case 0 : 
-				fprintf(f, "		movq %s, %%rax\n", op1);
-				fprintf(f, "		movq %%rax, %s\n", dest_offset);
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;
 			case 1 : 
-				fprintf(f, "		movq %s, %%rax\n", op1);
-				fprintf(f, "		addq %s, %%rax\n", op2);
-				fprintf(f, "		movq %%rax, %s\n", dest_offset);
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				fprintf(f, "	addq %s, %%rax\n", op2);
+				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;
 			case 2 : 
-				fprintf(f, "		movq %s, %%rax\n", op1);
-				fprintf(f, "		subq %s, %%rax\n", op2);
-				fprintf(f, "		movq %%rax, %s\n", dest_offset);
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				fprintf(f, "	subq %s, %%rax\n", op2);
+				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;
 			case 3 : 
-				fprintf(f, "		movq %s, %%rax\n", op1);
-				fprintf(f, "		mulq %s, %%rax\n", op2);
-				fprintf(f, "		movq %%rax, %s\n", dest_offset);
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				fprintf(f, "	mulq %s, %%rax\n", op2);
+				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;
 			case 4 : 
-				fprintf(f, "		movq %s, %%rax\n", op1);
-				fprintf(f, "		andq %s, %%rax\n", op2);
-				fprintf(f, "		movq %%rax, %s\n", dest_offset);
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				fprintf(f, "	andq %s, %%rax\n", op2);
+				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;
 			case 5 : 
-				fprintf(f, "		movq %s, %%rax\n", op1);
-				fprintf(f, "		negq %%rax\n");
-				fprintf(f, "		movq %%rax, %s\n", dest_offset);
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				fprintf(f, "	negq %%rax\n");
+				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;	    	 	  	 	 
 			case 6 : 
-				fprintf(f, "		movq %s, %%rax\n",op1);
-				fprintf(f, "		leave\n");
-				fprintf(f, "		ret\n");
-
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				fprintf(f, "	leave\n");
+				fprintf(f, "	ret\n");
 				break;	    	 	  	 	 
 			case 7 : 
+				fprintf(f, "	.globl %s\n", curr -> op1 -> data -> name);	
+				fprintf(f, "	.type %s, @function\n", curr -> op1 -> data -> name);	
 				fprintf(f, "%s:\n", curr -> op1 -> data -> name);
-				fprintf(f, "		pushq %%rbp\n");
-				fprintf(f, "		movq %%rsp, %%rbp\n");
-				fprintf(f, "		subl $%d, %%rbp\n", curr -> op1 -> data -> offset);
+				fprintf(f, "	pushq %%rbp\n");
+				fprintf(f, "	movq %%rsp, %%rbp\n");
+				fprintf(f, "	subq $%d, %%rsp\n", curr -> op1 -> data -> offset);
 				break;
-			case 8 : fprintf(f, ".size	%s, .-%s\n",  curr -> op1 -> data -> name, curr -> op1 -> data -> name);	
+			case 8 : fprintf(f, "	.size	%s, .-%s\n",  curr -> op1 -> data -> name, curr -> op1 -> data -> name);
 				 break;
 			case 9 : 
-				 fprintf(f, "		movq %s, %%rax\n", op1);
-				 fprintf(f, "		cmpq %s, %%rax\n", op2);
-				 fprintf(f, "		sete %%rax\n");
-				 fprintf(f, "		movq %%rax, %s\n", dest_offset);
+				fprintf(f, "	movq %%rax, %s\n", op1);
+				 fprintf(f, "	cmpq %s, %%rax\n", op2);
+				 fprintf(f, "	sete %%al\n");
+				 fprintf(f, "	movzbq %%al, %%eax\n");
+				 fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				 break;
 			default : exit(1);
 				  break;   	   	    	 

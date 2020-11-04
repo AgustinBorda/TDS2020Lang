@@ -95,7 +95,7 @@ programInit:
 				 write_three_code(curr, p);
 			}
 		}
-		assemble(p);
+		assemble(p, stack->list);
 		show_tac(p);
 
 	}

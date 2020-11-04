@@ -4,15 +4,8 @@ bool y;
 integer main(){
 integer a, b;
 bool c;
-a = 5;
-b = 15;
-c = true;
-x = 10;
-return 0;
+a = 7;
+b = 5;
+return a+b;
 }
 
-bool neg() {
-	y = true;
-	y = !y;
-	return y==y;
-}
