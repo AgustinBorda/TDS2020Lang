@@ -5,6 +5,7 @@
 	.globl	add
 	.type	add, @function
 add:
+.LFB0:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -26,6 +27,7 @@ add:
 	.globl	main
 	.type	main, @function
 main:
+.LFB1:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -45,7 +47,6 @@ main:
 	movl	%eax, %edi
 	call	add
 	movl	$0, %eax
-	dump_regs 0
 	leave
 	.cfi_def_cfa 7, 8
 	ret
