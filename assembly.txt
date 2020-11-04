@@ -1,7 +1,7 @@
 neg:
 pushq %rbp
 movq %rsp, %rbp
-movl $1, %rax
+subl $16, %rbpmovl $1, %rax
 movl %rax, y(%rip)
 movl y(%rip), %rax
 negl %rax
@@ -16,10 +16,12 @@ ret
 main:
 pushq %rbp
 movq %rsp, %rbp
-movl $5, %rax
+subl $16, %rbpmovl $5, %rax
 movl %rax, -8(%rbp)
 movl $15, %rax
 movl %rax, -8(%rbp)
+movl $1, %rax
+movl %rax, -16(%rbp)
 movl $10, %rax
 movl %rax, x(%rip)
 movl $0, %rax

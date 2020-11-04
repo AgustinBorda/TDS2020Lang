@@ -6,6 +6,7 @@ integer a, b;
 bool c;
 a = 5;
 a = 15;
+c = true;
 x = 10;
 return 0;
 }

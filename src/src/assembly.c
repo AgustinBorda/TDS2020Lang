@@ -8,15 +8,18 @@
 void gen_offset_table(list* l) {
 	int init = 0;
 	int i = 0;
+	int* fun_max_offset;
 	while( i < size(l)) {
 		three_address_code* curr = get(l,i);
-		if(curr -> opcode == 8) {
+		if(curr -> opcode == 7) {
 			init = 0;
+			fun_max_offset = &(curr -> op1 -> data -> offset); 
 		}
 		//TODO: dato para val. constantes
 		if(curr->dest != NULL &&
 			       	(curr -> dest -> flag != VARIABLE || 
-				 curr -> dest -> data -> flag != GLOBAL_VAR)) {
+				 curr -> dest -> data -> flag != GLOBAL_VAR) &&
+				curr -> opcode != RET) {
 			if(curr -> dest -> data != NULL &&
 				       	curr -> dest -> data -> offset != 0) {
 				curr->dest->offset = curr ->dest->data->offset;
@@ -24,6 +27,7 @@ void gen_offset_table(list* l) {
 			else {	
 				init = init -8;
 				curr->dest->offset = init;
+				*fun_max_offset = *fun_max_offset + 8;
 				if(curr -> dest -> data != NULL) {
 					curr -> dest -> data -> offset = init;
 				}
@@ -129,6 +133,7 @@ void write_assembly(FILE* f, list* l) {
 				 fprintf(f, "%s:\n", curr -> op1 -> data -> name);
 				 fprintf(f, "pushq %%rbp\n");
 				 fprintf(f, "movq %%rsp, %%rbp\n");
+				 fprintf(f, "subl $%d, %%rbp\n", curr -> op1 -> data -> offset);
 			   	 break;
 			case 8 :
 			   	 break;

@@ -2,10 +2,9 @@
 	.text
 	.comm	a,4,4
 	.comm	b,8,8
-	.globl	main
-	.type	main, @function
-main:
-.LFB0:
+	.globl	add
+	.type	add, @function
+add:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -13,17 +12,45 @@ main:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register 6
-	movl	$5, -4(%rbp)
-	movl	$5, a(%rip)
-	movl	-4(%rbp), %eax
-	cltq
-	movq	%rax, b(%rip)
-	movl	$0, %eax
+	movl	%edi, -4(%rbp)
+	movl	%esi, -8(%rbp)
+	movl	-4(%rbp), %edx
+	movl	-8(%rbp), %eax
+	addl	%edx, %eax
 	popq	%rbp
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
 .LFE0:
+	.size	add, .-add
+	.globl	main
+	.type	main, @function
+main:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp
+	movl	$5, -4(%rbp)
+	movl	$5, a(%rip)
+	movl	-4(%rbp), %eax
+	cltq
+	movq	%rax, b(%rip)
+	movl	a(%rip), %eax
+	movl	-4(%rbp), %edx
+	movl	%edx, %esi
+	movl	%eax, %edi
+	call	add
+	movl	$0, %eax
+	dump_regs 0
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE1:
 	.size	main, .-main
 	.ident	"GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0"
 	.section	.note.GNU-stack,"",@progbits
