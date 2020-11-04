@@ -13,6 +13,7 @@
 stack_node* stack;
 list* l;
 list* id_list;
+char* file_name;
 int has_main = 0;
 void initialize() {
 	createStack(&stack);	
@@ -23,6 +24,12 @@ void initialize() {
 void syntax_error(char* msg) {
 	printf("%s",msg);
 	exit(1);
+}
+
+void initialize_file_name(char* file) {
+	file = strtok(file, ".");
+	file_name = malloc(strlen(file)*sizeof(char));
+	sprintf(file_name, "%s", file);
 }
 
 %}	
@@ -60,12 +67,12 @@ void syntax_error(char* msg) {
 %type<t> expr
 %type<l> literal
 
-%left NOT_OP
-%left MULT_OP
+%left EQ_OP
+%left AND_OP
 %left PLUS_OP
 %left MINUS_OP
-%left AND_OP
-%left EQ_OP
+%left MULT_OP
+%left NOT_OP
 %left ASIG_OP
 %%
 
@@ -95,8 +102,7 @@ programInit:
 				 write_three_code(curr, p);
 			}
 		}
-		assemble(p, stack->list);
-		show_tac(p);
+		assemble(p, stack->list, file_name);
 
 	}
 	;

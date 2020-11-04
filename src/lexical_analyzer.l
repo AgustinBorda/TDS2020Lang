@@ -115,6 +115,7 @@ int main(int argc, char* argv[]) {
 		yyin = fopen(argv[0],"r");
 	else
 		yyin = stdin;
+	initialize_file_name(argv[0]);
 	yyparse();
 }
 
