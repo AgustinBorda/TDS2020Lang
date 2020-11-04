@@ -6,10 +6,10 @@
 
 void gen_offset_table(list* l);
 
-int assemble(list* l);
+int assemble(list* l, list* ts);
 
 char* resolve_assembly_name(dato_tree* curr);
 
-void write_assembly(FILE* f, list* l);
+void write_assembly(FILE* f, list* l, list* ts);
 
 #endif

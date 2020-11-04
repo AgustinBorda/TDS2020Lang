@@ -86,7 +86,7 @@ void write_assembly(FILE* f, list* l, list* ts) {
 	fprintf(f, ".file \"assembly.c\" ");
 	fprintf(f, ".text");
 	for (int i = 0; i < size(ts); ++i) {
-		dato* curr = get(stack->list,i);
+		dato* curr = get(ts->list,i);
 		switch(curr->flag){
 			case 1: fprintf(f, ".global %s\n",curr->name);
 					fprintf(f, ".type %s, @function",curr->name);
@@ -159,7 +159,7 @@ void write_assembly(FILE* f, list* l, list* ts) {
 			case 9 : 
 				 fprintf(f, "	movq %s, %%rax\n", op1);
 			   	 fprintf(f, "	cmpq %s, %%rax\n", op2);
-			   	 fprintf(f, "	sete %rax");
+			   	 fprintf(f, "	sete %%rax");
 			   	 fprintf(f, "	movq %%rax, %s\n", dest_offset);
 			   	 break;
 			default : exit(1);
