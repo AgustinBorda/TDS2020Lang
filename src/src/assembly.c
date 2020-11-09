@@ -156,6 +156,7 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 			case 5 : 
 				fprintf(f, "	movq %s, %%rax\n", op1);
 				fprintf(f, "	negq %%rax\n");
+				fprintf(f, "	and $0x1, %%rax\n");
 				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;	    	 	  	 	 
 			case 6 :
