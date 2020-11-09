@@ -158,14 +158,16 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				fprintf(f, "	negq %%rax\n");
 				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;	    	 	  	 	 
-			case 6 : 
-				fprintf(f, "	movq %s, %%rax\n", op1);
+			case 6 :
+			       	if (op1 != NULL) {	
+					fprintf(f, "	movq %s, %%rax\n", op1);
+				}
 				fprintf(f, "	leave\n");
 				fprintf(f, "	ret\n");
 				break;	    	 	  	 	 
 			case 7 : 
-				fprintf(f, "	.globl %s\n", curr -> op1 -> data -> name);	
-				fprintf(f, "	.type %s, @function\n", curr -> op1 -> data -> name);
+				fprintf(f, ".globl %s\n", curr -> op1 -> data -> name);	
+				fprintf(f, ".type %s, @function\n", curr -> op1 -> data -> name);
 				fprintf(f, "%s:\n", curr -> op1 -> data -> name);
 				fprintf(f, "	pushq %%rbp\n");
 				fprintf(f, "	movq %%rsp, %%rbp\n");
@@ -174,7 +176,7 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 			case 8 : fprintf(f, ".size %s, .-%s\n",  curr -> op1 -> data -> name, curr -> op1 -> data -> name);
 				 break;
 			case 9 : 
-				fprintf(f, "	movq %s, %%rax\n", op1);
+				 fprintf(f, "	movq %s, %%rax\n", op1);
 				 fprintf(f, "	cmpq %s, %%rax\n", op2);
 				 fprintf(f, "	sete %%al\n");
 				 fprintf(f, "	movzbq %%al, %%eax\n");
