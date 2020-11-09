@@ -172,7 +172,9 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				fprintf(f, "%s:\n", curr -> op1 -> data -> name);
 				fprintf(f, "	pushq %%rbp\n");
 				fprintf(f, "	movq %%rsp, %%rbp\n");
-				fprintf(f, "	subq $%d, %%rsp\n", curr -> op1 -> data -> offset);
+				if (curr -> op1 -> data -> offset > 0) {
+					fprintf(f, "	subq $%d, %%rsp\n", curr -> op1 -> data -> offset);
+				}
 				break;
 			case 8 : fprintf(f, ".size %s, .-%s\n",  curr -> op1 -> data -> name, curr -> op1 -> data -> name);
 				 break;
