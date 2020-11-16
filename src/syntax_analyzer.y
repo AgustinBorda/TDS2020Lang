@@ -257,8 +257,6 @@ var_decl_params:
 
 block_content:
 	var_declarations statements {$$ = $2;}
-	| IF '('expr')' THEN '{'block_content'}' {}
-	| IF '('expr')' THEN '{'block_content'}' ELSE '{'block_content'}' {}
 	| statements {$$ = $1;}
 	| var_declarations {
 		dato_tree* d = malloc(sizeof(dato_tree));
@@ -314,6 +312,18 @@ statement:
 		d2 -> type = ptr -> type;
 		tree* hi = load_node(NULL, NULL, NULL, d2);
 		$$ = load_node(hi, NULL, $3, d);
+	}
+	| IF '('expr')' THEN block {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = OP;
+		d-> op = "IF";
+		$$ = load_node($3, $6, NULL, d);
+        }
+        | IF '('expr')' THEN block ELSE block {
+		dato_tree* d = malloc(sizeof(dato_tree));
+                d-> flag = OP;
+                d-> op = "IF";
+                $$ = load_node($3, $6, $8, d);
 	}
 	|RETURN expr ';' {	
 		dato_tree* d = malloc(sizeof(dato_tree));
