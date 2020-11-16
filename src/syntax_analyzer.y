@@ -325,6 +325,13 @@ statement:
                 d-> op = "IF";
                 $$ = load_node($3, $6, $8, d);
 	}
+	| WHILE '(' expr ')' block {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = OP;
+		d-> op = "WHILE";
+		$$ = load_node($3, $5, NULL, d);
+        }
+	} 
 	|RETURN expr ';' {	
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
