@@ -87,7 +87,7 @@ alpha_num {alpha}|{digit}|[_-]
 	return MINUS_OP;
 }
 "<" {
-	return MENOR_OP;
+	return MINOR_OP;
 }
 "*" {
 	return MULT_OP;

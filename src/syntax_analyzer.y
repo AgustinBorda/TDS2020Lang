@@ -55,7 +55,7 @@ void initialize_file_name(char* file) {
 %token<s> ELSE
 %token<s> THEN
 %token<s> WHILE
-%token<s> MENOR_OP
+%token<s> MINOR_OP
 //%token<s> MAYOR_OP
 
 %type<t> var_decl
@@ -257,6 +257,8 @@ var_decl_params:
 
 block_content:
 	var_declarations statements {$$ = $2;}
+	| IF '('expr')' THEN '{'block_content'}' {}
+	| IF '('expr')' THEN '{'block_content'}' ELSE '{'block_content'}' {}
 	| statements {$$ = $1;}
 	| var_declarations {
 		dato_tree* d = malloc(sizeof(dato_tree));
@@ -302,7 +304,7 @@ statement:
 		d2-> flag = VARIABLE;
 		stack_node* l = stack;
 		while(d2->data == NULL && l !=NULL) {
-			d2-> data = seek(l->list, $1);
+			d2$$ = $2;-> data = seek(l->list, $1);
 			l = l -> sig;
 		}
 		if(d2 -> data == NULL) {
@@ -357,6 +359,12 @@ expr:
 		d-> value =  $1 -> value;
 		free($1);
 		$$ = load_node(NULL, NULL, NULL, d);
+	}
+	| expr MINOR_OP expr {
+		dato_tree* d = malloc(sizeof(dato_tree));
+                d-> flag = OP;
+                d-> op = "<";
+                $$ = load_node($1, NULL, $3, d);
 	}
 	| expr PLUS_OP expr {
 		dato_tree* d = malloc(sizeof(dato_tree));
