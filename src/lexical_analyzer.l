@@ -38,6 +38,22 @@ alpha_num {alpha}|{digit}|[_-]
 	return TYPE_BOOL;
 }
 
+"if" {
+	return IF;
+}
+
+"then" {
+	return THEN;
+}
+
+"else" {
+	return ELSE;
+}
+
+"while" {
+	return WHILE;
+}
+
 "true"|"false" {
 	if(strcmp(yytext,"true")==0) {
 		yylval.i = 1;
@@ -70,7 +86,9 @@ alpha_num {alpha}|{digit}|[_-]
 "-" {
 	return MINUS_OP;
 }
-
+"<" {
+	return MENOR_OP;
+}
 "*" {
 	return MULT_OP;
 }

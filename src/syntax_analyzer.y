@@ -51,7 +51,12 @@ void initialize_file_name(char* file) {
 %token<s> ASIG_OP
 %token<s> NOT_OP
 %token<s> MULT_OP
-
+%token<s> IF
+%token<s> ELSE
+%token<s> THEN
+%token<s> WHILE
+%token<s> MENOR_OP
+//%token<s> MAYOR_OP
 
 %type<t> var_decl
 %type<t> var_declarations
