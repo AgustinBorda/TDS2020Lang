@@ -301,8 +301,8 @@ statement:
 		dato_tree* d2 = malloc(sizeof(dato_tree));
 		d2-> flag = VARIABLE;
 		stack_node* l = stack;
-		while(d2->data == NULL && l !=NULL) {
-			d2$$ = $2;-> data = seek(l->list, $1);
+		while(d2->data == NULL && l !=NULL) {	
+			d2-> data = seek(l->list, $1);
 			l = l -> sig;
 		}
 		if(d2 -> data == NULL) {
@@ -330,8 +330,8 @@ statement:
 		d-> flag = OP;
 		d-> op = "WHILE";
 		$$ = load_node($3, $5, NULL, d);
-        }
-	} 
+    }
+	
 	|RETURN expr ';' {	
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
