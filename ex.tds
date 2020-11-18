@@ -9,15 +9,12 @@ bool not() {
  b = !a;
  return b;
 }
-bool main() {
+integer main() {
 	integer a;
 	integer b;
-	if(1 < true) then {
+	a = 5;
+	if(false) then {
 		a = 1;
 	}
-	return false && true;
-}
-integer fact(integer q) {
-	q = 5;
-	return q*q;
+	return a;
 }

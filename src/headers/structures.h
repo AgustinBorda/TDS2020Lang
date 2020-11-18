@@ -9,7 +9,7 @@ typedef struct tree tree;
 
 typedef enum type_var_fun {INT, BOOL, VOID} type_var;
 
-typedef enum flag_nodo {VAR, FUN, MAIN, GLOBAL_VAR} flag_nodo;
+typedef enum flag_nodo {VAR, FUN, MAIN, GLOBAL_VAR, LABEL_NAME} flag_nodo;
 
 typedef enum type_list {SYMBOL, PARAM, THREE_ADDRESS_CODE} type_list;
 

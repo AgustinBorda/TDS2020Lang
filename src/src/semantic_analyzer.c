@@ -86,6 +86,8 @@ enum type_var_fun analyze_types(tree* t) {
 		type_error("Type error: The two expresions in arithmetic operations must be integer\n");
 	}
 	else {
+		enum type_var_fun val_hi;
+		enum type_var_fun val_hd;
 		if(t->dato->flag == STATEMENT) {
 			/*If statement*/
 			if(strcmp(t->dato->op,"IF")==0) {

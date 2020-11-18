@@ -58,6 +58,7 @@ void gen_offset_table(list* l) {
 
 int assemble(list* l, list* t, char* file_name) {
 	gen_offset_table(l);
+	printf("offsets bien\n");
 	FILE* f;
 	char* ext_file_name = malloc((strlen(file_name)+2)*sizeof(char));
 	sprintf(ext_file_name, "%s.s",file_name);
@@ -77,7 +78,7 @@ char* resolve_assembly_name(dato_tree* curr) {
 			}
 			else {
 				res = malloc((int_length(curr->offset)+6)*sizeof(char));
-				sprintf(res,"%d(%%rbp)",curr -> data -> offset);
+sprintf(res,"%d(%%rbp)",curr -> data -> offset);
 				return res;
 			}
 			break;
@@ -86,6 +87,8 @@ char* resolve_assembly_name(dato_tree* curr) {
 			sprintf(res,"$%d",curr->value);
 			return res;
 			break;
+		case 4 : return curr -> temp_name;
+			 break;
 		default:
 			res = malloc((int_length(curr->offset)+6)*sizeof(char));
 			sprintf(res,"%d(%%rbp)",curr-> offset);    	
@@ -185,6 +188,30 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				 fprintf(f, "	movzbq %%al, %%eax\n");
 				 fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				 break;
+			case 10 : //MINOR
+				 fprintf(f, "	movq %s, %%rax\n", op1);
+				 fprintf(f, "	cmpq %s, %%rax\n", op2);
+				 fprintf(f, "	setl %%al\n");
+				 fprintf(f, "	movzbq %%al, %%rax\n");
+				 fprintf(f, "	movq %%rax, %s\n", dest_offset);
+				break;
+			case 11 : //JUMP
+				fprintf(f, "	jmp .%s\n", op1);
+				break;
+			case 12 : //LABEL
+				fprintf(f, ".%s:\n", op1);
+				break;
+			case 13 : //IF_FALSE
+				printf("tuqui\n");
+				fprintf(f, "	movq %s, %%rax\n", op1);
+				fprintf(f, "	cmpq $0, %%rax\n");
+				fprintf(f, "	jz .%s\n", op2);
+				break;
+			case 14 : //IF_TRUE	
+				fprintf(f, "	movq %s, %%rax\n", op1);
+				fprintf(f, "	cmpq $1, %%rax\n");
+				fprintf(f, "	jz .%s\n", op2);
+				break;
 			default : exit(1);
 				  break;   	   	    	 
 		}

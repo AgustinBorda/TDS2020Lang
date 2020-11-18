@@ -106,24 +106,44 @@ dato_tree* writeOp(tree* root, list* l) {
 	return root -> dato;
 }
 
-dato_tree* write_statement(tree* root, list* l) {
- 	val_exp = write(root -> hi);
-	three_address_code* tac_if = malloc(sizeof(three_address_code));
-	dato_tree* label_else = malloc(sizeof(dato_tree));
-	label_else -> dato -> temp_name = genTemp();
-	tac_if -> opcode = IF_FALSE
-	tac_if -> op1 = val_exp;
-	tac_if -> op2 = label_else;
-	last_insert(l, tac_if);
-	write(root -> hh);
-	if(root -> hd != NULL) {
-		dato_tree* label_end = malloc(sizeof(dato_tree));
-		label_end -> dato -> temp_name = genTemp();
-		three_address_code* jump_end = malloc(sizeof(three_address_code));
-		jump_end -> op1 = label_end;
-		jump_end -> opcode = JUMP;
-		last_insert(l, jump_end);
-		three_address_code* tac_else
+void write_statement(tree* root, list* l) {
+	if(strcmp(root->dato->op, "IF")==0) {
+ 		dato_tree* val_exp = write(root -> hi, l);
+		three_address_code* tac_if = malloc(sizeof(three_address_code));
+		dato_tree* label_else = malloc(sizeof(dato_tree));
+		label_else -> temp_name = genTemp();
+		label_else -> flag = LABEL_NAME;
+		tac_if -> opcode = IF_FALSE;
+		tac_if -> op1 = val_exp;
+		tac_if -> op2 = label_else;
+		last_insert(l, tac_if);
+		if (root -> hh != NULL) {
+			write(root -> hh, l);
+		}
+		if(root -> hd != NULL) {
+			dato_tree* label_end = malloc(sizeof(dato_tree));
+			label_end -> temp_name = genTemp();
+			label_end -> flag = LABEL_NAME;
+			three_address_code* jump_end = malloc(sizeof(three_address_code));
+			jump_end -> op1 = label_end;
+			jump_end -> opcode = JUMP;
+			last_insert(l, jump_end);
+			three_address_code* tac_else = malloc(sizeof(three_address_code));
+			tac_else -> op1 = label_else;
+			tac_else -> opcode = LABEL;
+			last_insert(l, tac_else);
+			write(root -> hd, l);
+			three_address_code* tac_end = malloc(sizeof(three_address_code));
+			tac_end -> opcode = LABEL;
+			tac_end -> op1 = label_end;
+			last_insert(l, tac_end);
+		}
+		else {
+			three_address_code* tac_else = malloc(sizeof(three_address_code));
+			tac_else -> op1 = label_else;
+			tac_else -> opcode = LABEL;
+			last_insert(l, tac_else);
+		}
 	}
 	
  }
@@ -137,7 +157,8 @@ dato_tree* write(tree* root, list* l) {
 			 break;
 		case 2 : return writeOp(root,l);
 			 break;
-		case 3 : return writeStatement(root, l);
+		case 3 : write_statement(root, l);
+			 return NULL; //peligroso
 			 break;
 		default : exit(1);
 			  break;

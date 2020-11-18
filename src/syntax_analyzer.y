@@ -108,7 +108,6 @@ programInit:
 			}
 		}
 		assemble(p, stack->list, file_name);
-
 	}
 	;
 

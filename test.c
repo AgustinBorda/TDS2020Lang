@@ -8,7 +8,12 @@ int main() {
 	c = 5;
 	a = 5;
 	b = c;
-	c = (a == b);
+	if(c == a) {
+		a = 1;
+	}
+	else {
+		a = 0;
+	}
 	add(a,c);
 	return 0;
 }

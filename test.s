@@ -41,12 +41,14 @@ main:
 	movq	-8(%rbp), %rax
 	movq	%rax, b(%rip)
 	movl	a(%rip), %eax
-	movslq	%eax, %rdx
-	movq	b(%rip), %rax
-	cmpq	%rax, %rdx
-	sete	%al
-	movzbl	%al, %eax
-	movq	%rax, -8(%rbp)
+	cltq
+	cmpq	%rax, -8(%rbp)
+	jne	.L4
+	movl	$1, a(%rip)
+	jmp	.L5
+.L4:
+	movl	$0, a(%rip)
+.L5:
 	movq	-8(%rbp), %rax
 	movl	%eax, %edx
 	movl	a(%rip), %eax

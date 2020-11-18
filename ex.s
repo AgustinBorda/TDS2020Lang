@@ -1,35 +1,23 @@
 .file "ex.ctds"
 .text
 .comm a,8,8
-.globl fact
-.type fact, @function
-fact:
-	pushq %rbp
-	movq %rsp, %rbp
-	subq $16, %rsp
-	movq $5, %rax
-	movq %rax, -8(%rbp)
-	movq -8(%rbp), %rax
-	imulq -8(%rbp), %rax
-	movq %rax, -16(%rbp)
-	movq -16(%rbp), %rax
-	leave
-	ret
-.size fact, .-fact
 .globl main
 .type main, @function
 main:
 	pushq %rbp
 	movq %rsp, %rbp
-	subq $32, %rsp
+	subq $16, %rsp
+	movq $5, %rax
+	movq %rax, -8(%rbp)
+	movq $0, %rax
+	cmpq $0, %rax
+	jz .t1
 	movq $1, %rax
 	movq %rax, -8(%rbp)
-	movq -8(%rbp), %rax
+	movq 0(%rbp), %rax
 	movq %rax, -16(%rbp)
-	movq $0, %rax
-	andq $1, %rax
-	movq %rax, -24(%rbp)
-	movq -24(%rbp), %rax
+.t1:
+	movq -8(%rbp), %rax
 	leave
 	ret
 .size main, .-main
