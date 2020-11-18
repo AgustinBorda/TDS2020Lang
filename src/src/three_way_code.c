@@ -118,7 +118,7 @@ void write_statement(tree* root, list* l) {
 		tac_if -> op2 = label_else;
 		last_insert(l, tac_if);
 		if (root -> hh != NULL) {
-			write(root -> hh, l);
+			analyze_tac(root -> hh, l);
 		}
 		if(root -> hd != NULL) {
 			dato_tree* label_end = malloc(sizeof(dato_tree));
@@ -132,7 +132,7 @@ void write_statement(tree* root, list* l) {
 			tac_else -> op1 = label_else;
 			tac_else -> opcode = LABEL;
 			last_insert(l, tac_else);
-			write(root -> hd, l);
+			analyze_tac(root -> hd, l);
 			three_address_code* tac_end = malloc(sizeof(three_address_code));
 			tac_end -> opcode = LABEL;
 			tac_end -> op1 = label_end;

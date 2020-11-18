@@ -58,7 +58,6 @@ void gen_offset_table(list* l) {
 
 int assemble(list* l, list* t, char* file_name) {
 	gen_offset_table(l);
-	printf("offsets bien\n");
 	FILE* f;
 	char* ext_file_name = malloc((strlen(file_name)+2)*sizeof(char));
 	sprintf(ext_file_name, "%s.s",file_name);
@@ -202,7 +201,6 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				fprintf(f, ".%s:\n", op1);
 				break;
 			case 13 : //IF_FALSE
-				printf("tuqui\n");
 				fprintf(f, "	movq %s, %%rax\n", op1);
 				fprintf(f, "	cmpq $0, %%rax\n");
 				fprintf(f, "	jz .%s\n", op2);
