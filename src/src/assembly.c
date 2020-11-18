@@ -184,7 +184,7 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				 fprintf(f, "	movq %s, %%rax\n", op1);
 				 fprintf(f, "	cmpq %s, %%rax\n", op2);
 				 fprintf(f, "	sete %%al\n");
-				 fprintf(f, "	movzbq %%al, %%eax\n");
+				 fprintf(f, "	movzbq %%al, %%rax\n");
 				 fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				 break;
 			case 10 : //MINOR

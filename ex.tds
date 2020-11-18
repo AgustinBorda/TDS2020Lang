@@ -3,18 +3,11 @@
 */
 /*
 */
-bool a;
-bool not() {
- bool b;
- b = !a;
- return b;
-}
 integer main() {
 	integer a;
-	integer b;
-	a = 5;
-	if(3 < 2) then {
-		a = 2;
-	}
+	a = 0;
+	while(a < 256) {
+		a = a+1;
+	} 
 	return a;
 }
