@@ -56,7 +56,6 @@ void initialize_file_name(char* file) {
 %token<s> THEN
 %token<s> WHILE
 %token<s> MINOR_OP
-//%token<s> MAYOR_OP
 
 %type<t> var_decl
 %type<t> var_declarations
@@ -72,6 +71,7 @@ void initialize_file_name(char* file) {
 %type<t> expr
 %type<l> literal
 
+%left MINOR_OP
 %left EQ_OP
 %left AND_OP
 %left PLUS_OP
@@ -315,19 +315,19 @@ statement:
 	}
 	| IF '('expr')' THEN block {
 		dato_tree* d = malloc(sizeof(dato_tree));
-		d-> flag = OP;
+		d-> flag = STATEMENT;
 		d-> op = "IF";
 		$$ = load_node($3, $6, NULL, d);
         }
         | IF '('expr')' THEN block ELSE block {
 		dato_tree* d = malloc(sizeof(dato_tree));
-                d-> flag = OP;
+                d-> flag = STATEMENT;
                 d-> op = "IF";
                 $$ = load_node($3, $6, $8, d);
 	}
 	| WHILE '(' expr ')' block {
 		dato_tree* d = malloc(sizeof(dato_tree));
-		d-> flag = OP;
+		d-> flag = STATEMENT;
 		d-> op = "WHILE";
 		$$ = load_node($3, $5, NULL, d);
     }

@@ -67,6 +67,15 @@ enum type_var_fun analyze_types(tree* t) {
 			}
 			type_error("Type error: The two expressions in == must be the same type\n");
 		}
+		if(strcmp(t->dato->op,"<")==0) {
+			val_hi = analyze_types(t->hi);
+			val_hd = analyze_types(t->hd);
+			if(val_hi == val_hd) {
+				t -> dato -> type = BOOL;
+				return BOOL;
+			}
+			type_error("Type error: The two expressions in < must be the same type\n");
+		}
 		/*Si se llego hasta aca, solo nos quedan operadores aritmeticos(+,-,*)*/
 		val_hi = analyze_types(t->hi);
 		val_hd = analyze_types(t->hd);
@@ -77,25 +86,44 @@ enum type_var_fun analyze_types(tree* t) {
 		type_error("Type error: The two expresions in arithmetic operations must be integer\n");
 	}
 	else {
-		return t -> dato -> type;
+		if(t->dato->flag == STATEMENT) {
+			/*If statement*/
+			if(strcmp(t->dato->op,"IF")==0) {
+				val_hi = analyze_types(t->hi);
+				if(val_hi == BOOL) {
+					t -> dato -> type = BOOL;
+					if(t -> hh != NULL) {
+						analyze(t -> hh);
+					}
+					if(t -> hd != NULL){
+						analyze(t -> hd);
+					}
+					return BOOL;
+				}
+				type_error("Type error: The expression in a if statement must be BOOL\n");
+			}
+		}
+		else {
+			return t -> dato -> type;
+		}
 	}
 }
 
 void analyze(tree* t) {
-		if(strcmp(t->dato->op, ";") == 0 || strcmp(t->dato->op, "FUN") == 0) {
-			if(t->hi != NULL) {
-				analyze(t->hi);
-			}
-			if(t->hh != NULL) {
-				analyze(t->hh);
-			}
-			if(t->hd != NULL) {
-				analyze(t->hd);
-			}
+	if(strcmp(t->dato->op, ";") == 0 || strcmp(t->dato->op, "FUN") == 0) {
+		if(t->hi != NULL) {
+			analyze(t->hi);
 		}
-		else {
-			analyze_types(t);
+		if(t->hh != NULL) {
+			analyze(t->hh);
 		}
+		if(t->hd != NULL) {
+			analyze(t->hd);
+		}
+	}
+	else {
+		analyze_types(t);
+	}
 }
 
 

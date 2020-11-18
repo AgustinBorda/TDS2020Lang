@@ -3,9 +3,21 @@
 */
 /*
 */
-integer main () {
+bool a;
+bool not() {
+ bool b;
+ b = !a;
+ return b;
+}
+bool main() {
 	integer a;
 	integer b;
-	b = 5;
-	return a + b;
+	if(1 < true) then {
+		a = 1;
+	}
+	return false && true;
+}
+integer fact(integer q) {
+	q = 5;
+	return q*q;
 }

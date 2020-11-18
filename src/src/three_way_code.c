@@ -40,7 +40,7 @@ void analyze_tac(tree* t, list* l) {
 }
 
 dato_tree* writeConst(tree* root) {
-		return root -> dato;
+	return root -> dato;
 }
 
 dato_tree* writeId(tree* root) {
@@ -66,9 +66,6 @@ dato_tree* writeOp(tree* root, list* l) {
 	if(root -> dato != NULL) {
 		root -> dato -> temp_name = genTemp();
 	}
-
-
-
 	if(strcmp(root->dato->op, "+") == 0) {
 		tac -> opcode = ADD;
 	}
@@ -98,6 +95,9 @@ dato_tree* writeOp(tree* root, list* l) {
 	}
 	if(strcmp(root->dato->op, "==") == 0) {
 		tac -> opcode = EQ;
+	}	
+	if(strcmp(root->dato->op, "<") == 0) {
+		tac -> opcode = MINOR;
 	}
 	if(tac -> dest == NULL) {
 		tac -> dest = root -> dato;
@@ -106,6 +106,29 @@ dato_tree* writeOp(tree* root, list* l) {
 	return root -> dato;
 }
 
+dato_tree* write_statement(tree* root, list* l) {
+ 	val_exp = write(root -> hi);
+	three_address_code* tac_if = malloc(sizeof(three_address_code));
+	dato_tree* label_else = malloc(sizeof(dato_tree));
+	label_else -> dato -> temp_name = genTemp();
+	tac_if -> opcode = IF_FALSE
+	tac_if -> op1 = val_exp;
+	tac_if -> op2 = label_else;
+	last_insert(l, tac_if);
+	write(root -> hh);
+	if(root -> hd != NULL) {
+		dato_tree* label_end = malloc(sizeof(dato_tree));
+		label_end -> dato -> temp_name = genTemp();
+		three_address_code* jump_end = malloc(sizeof(three_address_code));
+		jump_end -> op1 = label_end;
+		jump_end -> opcode = JUMP;
+		last_insert(l, jump_end);
+		three_address_code* tac_else
+	}
+	
+ }
+
+
 dato_tree* write(tree* root, list* l) {
         switch(root->dato->flag) {
 		case 0 : return writeId(root);
@@ -113,6 +136,8 @@ dato_tree* write(tree* root, list* l) {
 		case 1 : return writeConst(root);
 			 break;
 		case 2 : return writeOp(root,l);
+			 break;
+		case 3 : return writeStatement(root, l);
 			 break;
 		default : exit(1);
 			  break;

@@ -13,9 +13,10 @@ typedef enum flag_nodo {VAR, FUN, MAIN, GLOBAL_VAR} flag_nodo;
 
 typedef enum type_list {SYMBOL, PARAM, THREE_ADDRESS_CODE} type_list;
 
-typedef enum flag_tree {VARIABLE, CONS, OP} flag_tree;
+typedef enum flag_tree {VARIABLE, CONS, OP, STATEMENT} flag_tree;
 
-typedef enum op_twc {ASSIGN, ADD, SUB, MULT, AND, NOT, RET, INIT_FUN, END_FUN, EQ} op_twc;    
+typedef enum op_twc {ASSIGN, ADD, SUB, MULT, AND, NOT, RET, INIT_FUN, END_FUN, EQ, MINOR,
+JUMP, LABEL, IF_FALSE, IF_TRUE} op_twc;    
 
 
 //ESTRUCTURA LISTA
