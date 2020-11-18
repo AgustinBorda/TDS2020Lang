@@ -9,14 +9,17 @@ main:
 	subq $16, %rsp
 	movq $5, %rax
 	movq %rax, -8(%rbp)
-	movq $0, %rax
-	cmpq $0, %rax
-	jz .t1
-	movq $1, %rax
-	movq %rax, -8(%rbp)
-	movq 0(%rbp), %rax
+	movq $3, %rax
+	cmpq $2, %rax
+	setl %al
+	movzbq %al, %rax
 	movq %rax, -16(%rbp)
-.t1:
+	movq -16(%rbp), %rax
+	cmpq $0, %rax
+	jz .t2
+	movq $2, %rax
+	movq %rax, -8(%rbp)
+.t2:
 	movq -8(%rbp), %rax
 	leave
 	ret

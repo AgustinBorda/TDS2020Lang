@@ -13,8 +13,8 @@ integer main() {
 	integer a;
 	integer b;
 	a = 5;
-	if(false) then {
-		a = 1;
+	if(3 < 2) then {
+		a = 2;
 	}
 	return a;
 }

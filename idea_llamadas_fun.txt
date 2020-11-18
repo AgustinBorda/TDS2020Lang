@@ -1,0 +1,36 @@
+CALL_STATEMENT fun param1 param2 ->
+
+push rdi
+push rsi
+mov param1, rdi
+mov param2, rsi
+call fun
+pop rsi
+pop rdi 
+
+void fun(a, b) -> statement
+
+CALL_EXP fun param1 param2 ->
+
+push rdi
+push rsi
+mov param1, rdi
+mov param2, rsi
+call fun
+mov rax, -8(%rbp)
+pop rsi
+pop rdi 
+
+integer a;
+bool assign_a() {
+	if(a == 1) then {
+		a = 2;
+		return true;
+	}
+	a = 3;
+	return false;
+}
+
+assign_a();
+
+(integer|bool) fun(a, b) -> expr,statement

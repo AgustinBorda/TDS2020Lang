@@ -82,7 +82,12 @@ char* get_tac_opcode(op_twc o) {
 		case 6: return "RET";
 		case 7: return "INIT_FUN";
 		case 8: return "END_FUN";
-		default: return "EQ";
+		case 9: return "EQ";
+		case 10: return "MINOR";
+		case 11: return "JUMP";
+		case 12: return "LABEL";
+		case 13: return "IF_FALSE";
+		default: return "IF_TRUE";
 	}
 }
 
