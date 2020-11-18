@@ -145,7 +145,25 @@ void write_statement(tree* root, list* l) {
 			last_insert(l, tac_else);
 		}
 	}
-	
+	if(strcmp(root->dato->op, "WHILE")==0) {
+ 		dato_tree* val_exp = write(root -> hi, l);
+		three_address_code* tac_while = malloc(sizeof(three_address_code));
+		dato_tree* label_inic = malloc(sizeof(dato_tree));
+		label_inic -> temp_name = genTemp();
+		label_inic -> flag = LABEL_NAME;
+		tac_while -> opcode = IF_FALSE;
+		tac_while -> op1 = val_exp;
+		tac_while -> op2 = label_inic;
+		last_insert(l, tac_while);
+		if (root -> hh != NULL) {
+			dato_tree* label_while = malloc(sizeof(dato_tree));
+			label_while -> temp_name = genTemp();
+			label_while -> flag = LABEL_NAME;
+			three_address_code* jump_inic = malloc(sizeof(three_address_code));
+			jump_inic -> op1 = label_while;
+			jump_inic -> opcode = JUMP;
+			last_insert(l, jump_inic);
+		}
  }
 
 
