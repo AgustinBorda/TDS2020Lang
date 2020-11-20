@@ -146,24 +146,37 @@ void write_statement(tree* root, list* l) {
 		}
 	}
 	if(strcmp(root->dato->op, "WHILE")==0) {
+		three_address_code* tac_init = malloc(sizeof(three_address_code));
+		dato_tree* label_init = malloc(sizeof(dato_tree));
+		label_init -> temp_name = genTemp();
+		label_init -> flag = LABEL_NAME;
+		tac_init -> opcode = LABEL;
+		tac_init -> op1 = label_init;
+		last_insert(l, tac_init);
+
  		dato_tree* val_exp = write(root -> hi, l);
+
+		dato_tree* label_end = malloc(sizeof(dato_tree));
+		label_end -> temp_name = genTemp();
+		label_end -> flag = LABEL_NAME;
+
 		three_address_code* tac_while = malloc(sizeof(three_address_code));
-		dato_tree* label_inic = malloc(sizeof(dato_tree));
-		label_inic -> temp_name = genTemp();
-		label_inic -> flag = LABEL_NAME;
 		tac_while -> opcode = IF_FALSE;
 		tac_while -> op1 = val_exp;
-		tac_while -> op2 = label_inic;
+		tac_while -> op2 = label_end;
 		last_insert(l, tac_while);
 		if (root -> hh != NULL) {
-			dato_tree* label_while = malloc(sizeof(dato_tree));
-			label_while -> temp_name = genTemp();
-			label_while -> flag = LABEL_NAME;
-			three_address_code* jump_inic = malloc(sizeof(three_address_code));
-			jump_inic -> op1 = label_while;
-			jump_inic -> opcode = JUMP;
-			last_insert(l, jump_inic);
+			analyze_tac(root -> hh, l);
 		}
+		three_address_code* jump_init = malloc(sizeof(three_address_code));
+		jump_init -> op1 = label_init;
+		jump_init -> opcode = JUMP;
+		last_insert(l, jump_init);
+		three_address_code* tac_end = malloc(sizeof(three_address_code));
+		tac_end -> opcode = LABEL;
+		tac_end -> op1 = label_end;
+		last_insert(l, tac_end);
+	}
  }
 
 
