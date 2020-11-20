@@ -10,14 +10,14 @@ void type_error(char* msg) {
 	exit(1);
 }
 
-enum type_var_fun analyze_types(tree* t) {
+enum type_var_fun analyze_types(tree* t, int flag) {
 	if(t->dato->flag==OP) {
 		enum type_var_fun val_hi;
 		enum type_var_fun val_hd;
 		/*Asignacion*/
 		if(strcmp(t->dato->op,"=")==0) {
-			val_hi = analyze_types(t->hi);
-			val_hd = analyze_types(t->hd);;
+			val_hi = analyze_types(t->hi, 0);
+			val_hd = analyze_types(t->hd, 0);
 			if(val_hi == val_hd) {
 				return val_hi;
 			}
@@ -25,7 +25,9 @@ enum type_var_fun analyze_types(tree* t) {
 		}
 		/*Return*/
 		if(strcmp(t->dato->op,"RETURN")==0) {
-			has_return = 1;
+			if(!flag) {	
+				has_return = 1;
+			}
 			if(function_return_type==VOID) {
 				if(t->hi!=NULL) {
 					type_error("Type error: return must be void\n");
@@ -33,7 +35,7 @@ enum type_var_fun analyze_types(tree* t) {
 				return VOID;
 			}
 			else {
-				if(t->hi == NULL || function_return_type!=analyze_types(t->hi)) {
+				if(t->hi == NULL || function_return_type!=analyze_types(t->hi, 0)) {
 					type_error("Type error: wrong type in return\n");
 				}
 				return function_return_type;
@@ -41,15 +43,15 @@ enum type_var_fun analyze_types(tree* t) {
 		}
 		/*Operadores booleanos*/
 		if(strcmp(t->dato->op,"!")==0) {
-			if(analyze_types(t->hi) != BOOL) {
+			if(analyze_types(t->hi, 0) != BOOL) {
 				type_error("Type error: The ! operator needs a bool type\n");
 			}
 			t -> dato -> type = BOOL;
 			return BOOL;
 		}
 		if(strcmp(t->dato->op,"&&")==0) {
-			val_hi = analyze_types(t->hi);
-			val_hd = analyze_types(t->hd);
+			val_hi = analyze_types(t->hi, 0);
+			val_hd = analyze_types(t->hd, 0);
 			if(val_hi == BOOL && val_hd == BOOL) {
 				t -> dato -> type = BOOL;
 				return BOOL;
@@ -59,8 +61,8 @@ enum type_var_fun analyze_types(tree* t) {
 			}
 		}
 		if(strcmp(t->dato->op,"==")==0) {
-			val_hi = analyze_types(t->hi);
-			val_hd = analyze_types(t->hd);
+			val_hi = analyze_types(t->hi, 0);
+			val_hd = analyze_types(t->hd, 0);
 			if(val_hi == val_hd) {
 				t -> dato -> type = BOOL;
 				return BOOL;
@@ -68,8 +70,8 @@ enum type_var_fun analyze_types(tree* t) {
 			type_error("Type error: The two expressions in == must be the same type\n");
 		}
 		if(strcmp(t->dato->op,"<")==0) {
-			val_hi = analyze_types(t->hi);
-			val_hd = analyze_types(t->hd);
+			val_hi = analyze_types(t->hi, 0);
+			val_hd = analyze_types(t->hd, 0);
 			if(val_hi == val_hd) {
 				t -> dato -> type = BOOL;
 				return BOOL;
@@ -77,8 +79,8 @@ enum type_var_fun analyze_types(tree* t) {
 			type_error("Type error: The two expressions in < must be the same type\n");
 		}
 		/*Si se llego hasta aca, solo nos quedan operadores aritmeticos(+,-,*)*/
-		val_hi = analyze_types(t->hi);
-		val_hd = analyze_types(t->hd);
+		val_hi = analyze_types(t->hi, 0);
+		val_hd = analyze_types(t->hd, 0);
 		if(val_hi == INT && val_hd == INT) {
 			t -> dato -> type = INT;
 			return INT;
@@ -87,22 +89,40 @@ enum type_var_fun analyze_types(tree* t) {
 	}
 	else {
 		enum type_var_fun val_hi;
-		enum type_var_fun val_hd;
 		if(t->dato->flag == STATEMENT) {
 			/*If statement*/
 			if(strcmp(t->dato->op,"IF")==0) {
-				val_hi = analyze_types(t->hi);
+				int unsecure_ret_then = 0;
+				int unsecure_ret_else = 0;
+				val_hi = analyze_types(t->hi, 0);
 				if(val_hi == BOOL) {
 					t -> dato -> type = BOOL;
 					if(t -> hh != NULL) {
-						analyze(t -> hh);
+						analyze(t -> hh, 1);
+						unsecure_ret_then = has_not_secure_return(t -> hh);
 					}
 					if(t -> hd != NULL){
-						analyze(t -> hd);
+						analyze(t -> hd, 1);
+						unsecure_ret_else = has_not_secure_return(t -> hd);
+					}
+					if(unsecure_ret_then && unsecure_ret_else && !flag) {
+						has_return = 1;
 					}
 					return BOOL;
 				}
 				type_error("Type error: The expression in a if statement must be BOOL\n");
+			}
+			if(strcmp(t->dato->op, "WHILE") == 0) {
+				val_hi = analyze_types(t -> hi, 0);
+				if(val_hi == BOOL) {
+					t -> dato -> type = BOOL;
+					if(t -> hh != NULL) {
+						analyze(t -> hh, 1);
+					}
+				}
+				else {
+					type_error("Type error: The expression in a while statement must be BOOL\n");
+				}
 			}
 		}
 		else {
@@ -111,20 +131,57 @@ enum type_var_fun analyze_types(tree* t) {
 	}
 }
 
-void analyze(tree* t) {
+void analyze(tree* t, int flag) {
 	if(strcmp(t->dato->op, ";") == 0 || strcmp(t->dato->op, "FUN") == 0) {
 		if(t->hi != NULL) {
-			analyze(t->hi);
+			analyze(t->hi, flag);
 		}
 		if(t->hh != NULL) {
-			analyze(t->hh);
+			analyze(t->hh, flag);
 		}
 		if(t->hd != NULL) {
-			analyze(t->hd);
+			analyze(t->hd, flag);
 		}
 	}
 	else {
-		analyze_types(t);
+		analyze_types(t, flag);
+	}
+}
+
+int has_not_secure_return(tree* t) {
+	if(strcmp(t->dato->op, ";") == 0) {
+		int ret = 0;
+		if(t->hi != NULL) {
+			ret = has_not_secure_return(t->hi);
+			if(ret) {
+				return 1;
+			}
+		}
+		if(t->hh != NULL) {
+			ret = has_not_secure_return(t->hh);
+			if(ret) {
+				return 1;
+			}
+		}
+		if(t->hd != NULL) {
+			ret = has_not_secure_return(t->hd);
+			if(ret) {
+				return 1;
+			}
+		}
+		return ret;
+	}
+	else {
+		if(strcmp(t->dato->op, "IF") == 0) {
+			if(t ->  hi != NULL && t -> hd != NULL) {
+				return has_not_secure_return(t -> hh) && has_not_secure_return(t -> hd);
+			}
+			return 0;
+		}
+		if(strcmp(t->dato->op,"RETURN")==0) {
+			return 1;
+		}
+		return 0;
 	}
 }
 
@@ -133,7 +190,7 @@ void semantic_analyzer(dato* t) {
 	function_return_type = t->type;
 	tree* tr = t -> tree;
 	has_return = 0;
-	analyze(tr);
+	analyze(tr, 0);
 	if(!has_return) {
 		type_error("return statement not found.\n");
 	}

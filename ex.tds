@@ -5,9 +5,14 @@
 */
 integer main() {
 	integer a;
-	a = 0;
-	while(a < 256) {
-		a = a+1;
-	} 
-	return a;
+	if(true) then {
+		while(false){}
+		if(true) then {}
+		return 1;
+	}
+	else {
+		{}{}{}{}
+		if(true) then {}
+		return 2;
+	}
 }
