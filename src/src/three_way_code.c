@@ -183,3 +183,4 @@ dato_tree* write(tree* root, list* l) {
 	}
 }
 
+}
