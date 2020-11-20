@@ -210,8 +210,22 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				fprintf(f, "	cmpq $1, %%rax\n");
 				fprintf(f, "	jz .%s\n", op2);
 				break;
+			case 15 : //CALL	
+				if (curr->op1 != NULL && curr->op2 != NULL) {
+				 	fprintf(f, "	pushq %s", op1);
+					fprintf(f, "	pushq %s", op2);
+					fprintf(f, "	callq%s\n", curr->dest->temp_name);
+ 				}
+				if (curr->op1 != NULL && curr->op2 == NULL) {
+				 	fprintf(f, "	pushq %s", op1);
+					fprintf(f, "	callq%s\n", curr->dest->temp_name);	
+				}
+ 				if (curr->op1 == NULL && curr->op2== NULL) {
+ 					fprintf(f, "	callq%s\n", curr->dest->temp_name);
+ 				}
+				break;
 			default : exit(1);
-				  break;   	   	    	 
+				  break;   		    	   	    	 
 		}
 	}
 	fclose(f);        

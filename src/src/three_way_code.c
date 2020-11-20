@@ -178,6 +178,26 @@ void write_statement(tree* root, list* l) {
 		last_insert(l, tac_end);
 	}
  }
+ void write_function(tree* root, list* l) {
+ 	if (root->hd != NULL && root->hi != NULL) {
+ 		three_address_code* fun = malloc(sizeof(three_address_code));
+ 		fun -> opcode = CALL;
+ 		fun -> op1 = root->hd->dato;
+ 		fun -> op2 = root->hi->dato;
+ 		fun -> dest -> temp_name = root -> dato->data->name;
+ 	}
+ 	if (root->hd != NULL && root->hi == NULL) {
+ 		three_address_code* fun = malloc(sizeof(three_address_code));
+ 		fun -> opcode = CALL;
+ 		fun -> op1 = root->hd->dato;
+ 		fun -> dest -> temp_name = root -> dato->data->name;
+ 	}
+ 	if (root->hd == NULL && root->hi == NULL) {
+ 		three_address_code* fun = malloc(sizeof(three_address_code));
+ 		fun -> opcode = CALL;
+ 		fun -> dest -> temp_name = root -> dato->data->name;
+ 	}
+ }
 
 
 dato_tree* write(tree* root, list* l) {
@@ -191,9 +211,11 @@ dato_tree* write(tree* root, list* l) {
 		case 3 : write_statement(root, l);
 			 return NULL; //peligroso
 			 break;
+		case 4 : write_function(root, l);
+			 return NULL; //peligroso
+			 break;	 
 		default : exit(1);
 			  break;
 	}
 }
 
-}
