@@ -185,17 +185,20 @@ void write_statement(tree* root, list* l) {
  		fun -> op1 = root->hd->dato;
  		fun -> op2 = root->hi->dato;
  		fun -> dest -> temp_name = root -> dato->data->name;
+ 		last_insert(l, fun);
  	}
  	if (root->hd != NULL && root->hi == NULL) {
  		three_address_code* fun = malloc(sizeof(three_address_code));
  		fun -> opcode = CALL;
  		fun -> op1 = root->hd->dato;
  		fun -> dest -> temp_name = root -> dato->data->name;
+ 		last_insert(l, fun);
  	}
  	if (root->hd == NULL && root->hi == NULL) {
  		three_address_code* fun = malloc(sizeof(three_address_code));
  		fun -> opcode = CALL;
  		fun -> dest -> temp_name = root -> dato->data->name;
+ 		last_insert(l, fun);
  	}
  }
 
