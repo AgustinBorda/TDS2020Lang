@@ -197,7 +197,6 @@ void write_statement(tree* root, list* l) {
 		last_insert(l,tac);
 	}
  }
-
 dato_tree* write(tree* root, list* l) {
         switch(root->dato->flag) {
 		case 0 : return writeId(root);
