@@ -44,7 +44,8 @@ dato_tree* writeConst(tree* root) {
 }
 
 dato_tree* writeId(tree* root) {
-	return root -> dato;
+	return root -> dato;/*Aca podemos resolver los nombres de params
+				una bandera isParam es la que va*/
 }
 
 dato_tree* writeOp(tree* root, list* l) {
@@ -177,28 +178,25 @@ void write_statement(tree* root, list* l) {
 		tac_end -> op1 = label_end;
 		last_insert(l, tac_end);
 	}
+	if(strcmp(root->dato->op, "FUN_S") == 0 || strcmp(root->dato->op, "FUN_E") == 0) {
+		dato_tree* val_hi = NULL;
+		dato_tree* val_hd = NULL; 
+		if( root -> hi != NULL) {
+ 			 val_hi = write(root -> hi, l);
+		}
+		if( root -> hd != NULL) {
+ 			 val_hd = write(root -> hd, l);
+		}
+		three_address_code* tac = malloc(sizeof(three_address_code));
+		tac -> opcode = CALL; 
+		if(strcmp(root->dato->op, "FUN_E") == 0) {
+			tac -> dest = root -> dato;
+		}
+		tac -> op1 = val_hi;
+		tac -> op2 = val_hd;
+		last_insert(l,tac);
+	}
  }
- void write_function(tree* root, list* l) {
- 	if (root->hd != NULL && root->hi != NULL) {
- 		three_address_code* fun = malloc(sizeof(three_address_code));
- 		fun -> opcode = CALL;
- 		fun -> op1 = root->hd->dato;
- 		fun -> op2 = root->hi->dato;
- 		fun -> dest -> temp_name = root -> dato->data->name;
- 	}
- 	if (root->hd != NULL && root->hi == NULL) {
- 		three_address_code* fun = malloc(sizeof(three_address_code));
- 		fun -> opcode = CALL;
- 		fun -> op1 = root->hd->dato;
- 		fun -> dest -> temp_name = root -> dato->data->name;
- 	}
- 	if (root->hd == NULL && root->hi == NULL) {
- 		three_address_code* fun = malloc(sizeof(three_address_code));
- 		fun -> opcode = CALL;
- 		fun -> dest -> temp_name = root -> dato->data->name;
- 	}
- }
-
 
 dato_tree* write(tree* root, list* l) {
         switch(root->dato->flag) {
@@ -211,9 +209,6 @@ dato_tree* write(tree* root, list* l) {
 		case 3 : write_statement(root, l);
 			 return NULL; //peligroso
 			 break;
-		case 4 : write_function(root, l);
-			 return NULL; //peligroso
-			 break;	 
 		default : exit(1);
 			  break;
 	}

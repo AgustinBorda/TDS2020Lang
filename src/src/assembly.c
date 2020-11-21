@@ -77,7 +77,7 @@ char* resolve_assembly_name(dato_tree* curr) {
 			}
 			else {
 				res = malloc((int_length(curr->offset)+6)*sizeof(char));
-sprintf(res,"%d(%%rbp)",curr -> data -> offset);
+				sprintf(res,"%d(%%rbp)",curr -> data -> offset);
 				return res;
 			}
 			break;
@@ -89,9 +89,9 @@ sprintf(res,"%d(%%rbp)",curr -> data -> offset);
 		case 4 : return curr -> temp_name;
 			 break;
 		default:
-			res = malloc((int_length(curr->offset)+6)*sizeof(char));
-			sprintf(res,"%d(%%rbp)",curr-> offset);    	
-			return res;
+			 res = malloc((int_length(curr->offset)+6)*sizeof(char));
+			 sprintf(res,"%d(%%rbp)",curr-> offset);    	
+			 return res;
 	}
 	return NULL;
 }	
@@ -162,7 +162,7 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				break;	    	 	  	 	 
 			case 6 :
-			       	if (op1 != NULL) {	
+				if (op1 != NULL) {	
 					fprintf(f, "	movq %s, %%rax\n", op1);
 				}
 				fprintf(f, "	leave\n");
@@ -193,37 +193,37 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				 fprintf(f, "	setl %%al\n");
 				 fprintf(f, "	movzbq %%al, %%rax\n");
 				 fprintf(f, "	movq %%rax, %s\n", dest_offset);
-				break;
+				 break;
 			case 11 : //JUMP
-				fprintf(f, "	jmp .%s\n", op1);
-				break;
+				 fprintf(f, "	jmp .%s\n", op1);
+				 break;
 			case 12 : //LABEL
-				fprintf(f, ".%s:\n", op1);
-				break;
+				 fprintf(f, ".%s:\n", op1);
+				 break;
 			case 13 : //IF_FALSE
-				fprintf(f, "	movq %s, %%rax\n", op1);
-				fprintf(f, "	cmpq $0, %%rax\n");
-				fprintf(f, "	jz .%s\n", op2);
-				break;
+				 fprintf(f, "	movq %s, %%rax\n", op1);
+				 fprintf(f, "	cmpq $0, %%rax\n");
+				 fprintf(f, "	jz .%s\n", op2);
+				 break;
 			case 14 : //IF_TRUE	
-				fprintf(f, "	movq %s, %%rax\n", op1);
-				fprintf(f, "	cmpq $1, %%rax\n");
-				fprintf(f, "	jz .%s\n", op2);
-				break;
+				 fprintf(f, "	movq %s, %%rax\n", op1);
+				 fprintf(f, "	cmpq $1, %%rax\n");
+				 fprintf(f, "	jz .%s\n", op2);
+				 break;
 			case 15 : //CALL	
-				if (curr->op1 != NULL && curr->op2 != NULL) {
-				 	fprintf(f, "	pushq %s", op1);
-					fprintf(f, "	pushq %s", op2);
-					fprintf(f, "	callq%s\n", curr->dest->temp_name);
- 				}
-				if (curr->op1 != NULL && curr->op2 == NULL) {
-				 	fprintf(f, "	pushq %s", op1);
-					fprintf(f, "	callq%s\n", curr->dest->temp_name);	
-				}
- 				if (curr->op1 == NULL && curr->op2== NULL) {
- 					fprintf(f, "	callq%s\n", curr->dest->temp_name);
- 				}
-				break;
+				 if (curr->op1 != NULL && curr->op2 != NULL) {
+					 fprintf(f, "	pushq %s", op1);
+					 fprintf(f, "	pushq %s", op2);
+					 fprintf(f, "	callq%s\n", curr->dest->temp_name);
+				 }
+				 if (curr->op1 != NULL && curr->op2 == NULL) {
+					 fprintf(f, "	pushq %s", op1);
+					 fprintf(f, "	callq%s\n", curr->dest->temp_name);	
+				 }
+				 if (curr->op1 == NULL && curr->op2== NULL) {
+					 fprintf(f, "	callq%s\n", curr->dest->temp_name);
+				 }
+				 break;
 			default : exit(1);
 				  break;   		    	   	    	 
 		}

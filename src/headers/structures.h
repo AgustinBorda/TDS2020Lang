@@ -9,11 +9,11 @@ typedef struct tree tree;
 
 typedef enum type_var_fun {INT, BOOL, VOID} type_var;
 
-typedef enum flag_nodo {VAR, FUN, MAIN, GLOBAL_VAR, LABEL_NAME} flag_nodo;
+typedef enum flag_nodo {VAR, FUN, MAIN, GLOBAL_VAR} flag_nodo;
 
 typedef enum type_list {SYMBOL, PARAM, THREE_ADDRESS_CODE} type_list;
 
-typedef enum flag_tree {VARIABLE, CONS, OP, STATEMENT} flag_tree;
+typedef enum flag_tree {VARIABLE, CONS, OP, STATEMENT, LABEL_NAME, PARAMETER} flag_tree;
 
 typedef enum op_twc {ASSIGN, ADD, SUB, MULT, AND, NOT, RET, INIT_FUN, END_FUN, EQ, MINOR,
 JUMP, LABEL, IF_FALSE, IF_TRUE, CALL} op_twc;    
@@ -38,6 +38,7 @@ typedef struct dato_tree {
 	int value;
 	dato* data;
 	enum flag_tree flag;
+	int param_place;
 	char* temp_name;
 	int offset;
 }dato_tree;

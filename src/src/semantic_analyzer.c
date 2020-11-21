@@ -1,4 +1,5 @@
 #include "../headers/semantic_analyzer.h"
+#include "../headers/table.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -87,48 +88,69 @@ enum type_var_fun analyze_types(tree* t, int flag) {
 		}
 		type_error("Type error: The two expresions in arithmetic operations must be integer\n");
 	}
-	else {
-		enum type_var_fun val_hi;
-		if(t->dato->flag == STATEMENT) {
-			/*If statement*/
-			if(strcmp(t->dato->op,"IF")==0) {
-				int unsecure_ret_then = 0;
-				int unsecure_ret_else = 0;
-				val_hi = analyze_types(t->hi, 0);
-				if(val_hi == BOOL) {
-					t -> dato -> type = BOOL;
-					if(t -> hh != NULL) {
-						analyze(t -> hh, 1);
-						unsecure_ret_then = has_not_secure_return(t -> hh);
-					}
-					if(t -> hd != NULL){
-						analyze(t -> hd, 1);
-						unsecure_ret_else = has_not_secure_return(t -> hd);
-					}
-					if(unsecure_ret_then && unsecure_ret_else && !flag) {
-						has_return = 1;
-					}
-					return BOOL;
+	enum type_var_fun val_hi;
+	enum type_var_fun val_hd;
+	if(t->dato->flag == STATEMENT) {
+		/*If statement*/
+		if(strcmp(t->dato->op,"IF")==0) {
+			int unsecure_ret_then = 0;
+			int unsecure_ret_else = 0;
+			val_hi = analyze_types(t->hi, 0);
+			if(val_hi == BOOL) {
+				t -> dato -> type = BOOL;
+				if(t -> hh != NULL) {
+					analyze(t -> hh, 1);
+					unsecure_ret_then = has_not_secure_return(t -> hh);
 				}
-				type_error("Type error: The expression in a if statement must be BOOL\n");
+				if(t -> hd != NULL){
+					analyze(t -> hd, 1);
+					unsecure_ret_else = has_not_secure_return(t -> hd);
+				}
+				if(unsecure_ret_then && unsecure_ret_else && !flag) {
+					has_return = 1;
+				}
+				return BOOL;
 			}
-			if(strcmp(t->dato->op, "WHILE") == 0) {
-				val_hi = analyze_types(t -> hi, 0);
-				if(val_hi == BOOL) {
-					t -> dato -> type = BOOL;
-					if(t -> hh != NULL) {
-						analyze(t -> hh, 1);
-					}
-				}
-				else {
-					type_error("Type error: The expression in a while statement must be BOOL\n");
+			type_error("Type error: The expression in a if statement must be BOOL\n");
+		}
+		/*While statement*/
+		if(strcmp(t->dato->op, "WHILE") == 0) {
+			val_hi = analyze_types(t -> hi, 0);
+			if(val_hi == BOOL) {
+				t -> dato -> type = BOOL;
+				if(t -> hh != NULL) {
+					analyze(t -> hh, 1);
 				}
 			}
+			else {
+				type_error("Type error: The expression in a while statement must be BOOL\n");
+			}
+			return BOOL;
 		}
-		else {
-			return t -> dato -> type;
+		/*Functions call*/
+		int cant_actual_params = 0;
+		if(t -> hi != NULL) {
+			val_hi = analyze_types(t -> hi, 0);
+			cant_actual_params++;
+			info_type* actual_param1 = get(t -> dato -> data -> params, 0);
+			if(val_hi != actual_param1 -> type) {
+				type_error("Type mismatch in parameter 1\n");
+			}
 		}
-	}
+		if(t -> hd != NULL) {
+			val_hd = analyze_types(t -> hd, 0);
+			cant_actual_params++;
+			info_type* actual_param2 = get(t -> dato -> data -> params, 1);
+			if(val_hd != actual_param2 -> type) {
+				type_error("Type mismatch in parameter 2\n");
+			}
+		}
+		if(cant_actual_params != size(t -> dato -> data -> params)) {
+			type_error("Quantity of parameters differ in declaration and invocation\n");
+		}
+		return t -> dato -> type;
+	}	
+	return t -> dato -> type;
 }
 
 void analyze(tree* t, int flag) {

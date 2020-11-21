@@ -246,7 +246,7 @@ var_decl_params:
 			inf-> type = BOOL;
 		}
 		inf->name = $2;
-		int a = insert(l, inf);
+		int a = last_insert(l, inf);
 		if(a == 0) {
 			syntax_error("Multiple definition of parameter\n");
 		}
@@ -312,6 +312,54 @@ statement:
 		tree* hi = load_node(NULL, NULL, NULL, d2);
 		$$ = load_node(hi, NULL, $3, d);
 	}
+	|ID '(' expr ',' expr ')' {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = STATEMENT;
+		d -> op = "FUN_S";
+		stack_node* l = stack;
+		while(d->data == NULL && l !=NULL) {
+			d-> data = seek(l->list, $1);
+			l = l -> sig;
+		}
+		if(d -> data == NULL) {
+			syntax_error("Cannot find symbol\n");
+		}
+		dato* ptr = d->data;
+		d -> type = ptr -> type;
+		$$ = load_node($3, NULL, $5, d);
+	}
+	|ID '(' expr ')' {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = STATEMENT;
+		d -> op = "FUN_S";
+		stack_node* l = stack;
+		while(d->data == NULL && l !=NULL) {
+			d-> data = seek(l->list, $1);
+			l = l -> sig;
+		}
+		if(d -> data == NULL) {
+			syntax_error("Cannot find symbol\n");
+		}
+		dato* ptr = d->data;
+		d -> type = ptr -> type;
+		$$ = load_node($3, NULL, NULL, d);
+	}
+	|ID '('')' {
+		dato_tree* d = malloc(sizeof(dato_tree));
+		d-> flag = STATEMENT;
+		d -> op = "FUN_S";
+		stack_node* l = stack;
+		while(d->data == NULL && l !=NULL) {
+			d-> data = seek(l->list, $1);
+			l = l -> sig;
+		}
+		if(d -> data == NULL) {
+			syntax_error("Cannot find symbol\n");
+		}
+		dato* ptr = d->data;
+		d -> type = ptr -> type;
+		$$ = load_node(NULL, NULL, NULL, d);
+	}
 	| IF '('expr')' THEN block {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = STATEMENT;
@@ -329,8 +377,7 @@ statement:
 		d-> flag = STATEMENT;
 		d-> op = "WHILE";
 		$$ = load_node($3, $5, NULL, d);
-    }
-	
+  	}
 	|RETURN expr ';' {	
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = OP;
@@ -371,6 +418,7 @@ expr:
 	|ID '(' expr ',' expr ')' {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = STATEMENT;
+		d -> op = "FUN_E";
 		stack_node* l = stack;
 		while(d->data == NULL && l !=NULL) {
 			d-> data = seek(l->list, $1);
@@ -386,6 +434,7 @@ expr:
 	|ID '(' expr ')' {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = STATEMENT;
+		d -> op = "FUN_E";
 		stack_node* l = stack;
 		while(d->data == NULL && l !=NULL) {
 			d-> data = seek(l->list, $1);
@@ -401,6 +450,7 @@ expr:
 	|ID '('')' {
 		dato_tree* d = malloc(sizeof(dato_tree));
 		d-> flag = STATEMENT;
+		d -> op = "FUN_E";
 		stack_node* l = stack;
 		while(d->data == NULL && l !=NULL) {
 			d-> data = seek(l->list, $1);
