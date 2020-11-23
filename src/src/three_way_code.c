@@ -5,10 +5,11 @@
 #include "../headers/table.h"
 #include "../headers/tempGen.h"
 
-
+list* param_list = NULL;
 
 int write_three_code(dato* t, list* l) {
 	tree* tr = t -> tree;
+	param_list = t -> params;
 	three_address_code* tac = malloc(sizeof(three_address_code));
 	tac -> opcode = INIT_FUN;
 	tr -> dato -> temp_name = tr -> dato -> data -> name;
@@ -44,8 +45,17 @@ dato_tree* writeConst(tree* root) {
 }
 
 dato_tree* writeId(tree* root) {
-	return root -> dato;/*Aca podemos resolver los nombres de params
-				una bandera isParam es la que va*/
+	int i = 0;
+	info_type* p = NULL;
+	while (i < size(param_list)) {
+		p = get(param_list, i);
+		if(strcmp(root -> dato -> data -> name, p -> name) == 0) {
+			root -> dato -> flag = PARAMETER;
+			root -> dato -> param_place = i;
+		}
+		i++;
+	}
+	return root -> dato;
 }
 
 dato_tree* writeOp(tree* root, list* l) {
@@ -187,11 +197,13 @@ void write_statement(tree* root, list* l) {
 		if( root -> hd != NULL) {
  			 val_hd = write(root -> hd, l);
 		}
+		if(strcmp(root->dato->op, "FUN_S") == 0) {
+			root -> dato -> offset = 1;
+			printf("aaaaa\n");
+		}
 		three_address_code* tac = malloc(sizeof(three_address_code));
 		tac -> opcode = CALL; 
-		if(strcmp(root->dato->op, "FUN_E") == 0) {
-			tac -> dest = root -> dato;
-		}
+		tac -> dest = root -> dato;
 		tac -> op1 = val_hi;
 		tac -> op2 = val_hd;
 		last_insert(l,tac);

@@ -18,7 +18,7 @@ int next_16_multiple(int n) {
 	}
 	return n;
 }
-//
+
 void gen_offset_table(list* l) {
 	int init = 0;
 	int i = 0;
@@ -87,6 +87,14 @@ char* resolve_assembly_name(dato_tree* curr) {
 			return res;
 			break;
 		case 4 : return curr -> temp_name;
+			 break;
+		case 5 : //parametros
+			 if(curr -> param_place == 1) {
+				 return "%rdi";
+			 }
+			 else {
+				 return "%rsi";
+			 }
 			 break;
 		default:
 			 res = malloc((int_length(curr->offset)+6)*sizeof(char));
@@ -211,17 +219,23 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				 fprintf(f, "	jz .%s\n", op2);
 				 break;
 			case 15 : //CALL	
-				 if (curr->op1 != NULL && curr->op2 != NULL) {
-					 fprintf(f, "	pushq %s", op1);
-					 fprintf(f, "	pushq %s", op2);
-					 fprintf(f, "	callq%s\n", curr->dest->temp_name);
+				 if(op2 != NULL) {
+					 fprintf(f, "	pushq %%rdi\n");
+					 fprintf(f, "	movq %s, %%rdi\n", op2);
 				 }
-				 if (curr->op1 != NULL && curr->op2 == NULL) {
-					 fprintf(f, "	pushq %s", op1);
-					 fprintf(f, "	callq%s\n", curr->dest->temp_name);	
+				 if(op1 != NULL) {
+					 fprintf(f, "	pushq %%rsi\n");
+					 fprintf(f, "	movq %s, %%rsi\n", op1);
 				 }
-				 if (curr->op1 == NULL && curr->op2== NULL) {
-					 fprintf(f, "	callq%s\n", curr->dest->temp_name);
+				 fprintf(f, "	call %s\n", curr -> dest -> data -> name);
+				 if(curr -> dest -> offset != 1) {
+				 	fprintf(f, "	movq %%rax, %s\n", dest_offset);
+				 }
+				 if(op1 != NULL) {
+					 fprintf(f, "	pushq %%rsi\n");
+				 }
+				 if(op2 != NULL) {
+					 fprintf(f, "	pushq %%rdi\n");
 				 }
 				 break;
 			default : exit(1);

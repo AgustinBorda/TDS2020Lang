@@ -3,14 +3,32 @@
 */
 /*
 */
-void neg(bool a, integer b) {
-	return ;
+integer or(integer a, integer b) {
+	return a + b;
+}
+
+integer fun() {
+	if(false) then {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+integer fun1(integer in) {
+	integer i;
+	i = 0;
+	while(i < in) {
+		i = i+1;
+	}
+	return i;
 }
 
 integer main() {
 	integer a;
-	neg();
-	a = 1;
+	fun();
+	a = fun1(1);
 	return 0;
 	
 }
