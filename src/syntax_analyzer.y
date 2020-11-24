@@ -21,11 +21,6 @@ void initialize() {
         create_list(&id_list, SYMBOL);
 }
 
-void syntax_error(char* msg) {
-	printf("%s",msg);
-	exit(1);
-}
-
 void initialize_file_name(char* file) {
 	file = strtok(file, ".");
 	file_name = malloc(strlen(file)*sizeof(char));

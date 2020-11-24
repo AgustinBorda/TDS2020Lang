@@ -120,6 +120,11 @@ void lex_error(char* msg) {
 	exit(1);
 }
 
+void syntax_error(char* msg) {
+	 printf("Syntax error: %s on line %d",msg, yylineno);
+	exit(1);
+}
+
 void yyerror() {
 	printf("Syntax error on line %d\n",yylineno);
 }
