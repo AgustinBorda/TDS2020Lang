@@ -2,11 +2,8 @@ Todos los scripts necesarios para compilar y correr los ejemplos se encuentran e
 Para compilar:
 - ./compile_compiler.sh (si no tenemos permiso realizar: $ chmod 777 compile_compiler.sh)
 
-Para ejecutar:
-- ./ctds input.tds (donde input.tds es el archivo que queremos analizar)
+Para ejecutarel compilador:
+- ./ctds input.ctds (donde input.tds es el archivo que queremos analizar)
+- gcc input.s {archivos objeto que queramos incluir, mas todas las opciones que da gcc}
+- ./a.out (o el nombre que le hayamos dado al ejecutable).
 
-Para correr los ejemplos:
-- ./run_examples.sh (si no tenemos permiso realizar: $ chmod 777 run_examples.sh)
-
-Cosas para el futuro:
-	-Mejorar el error logging (el que esta es temporal).
