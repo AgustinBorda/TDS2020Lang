@@ -1,0 +1,16 @@
+integer x;
+bool y;
+externed integer add(integer a, integer b) {
+	a = a();
+	b = inexistentedFunction();
+	return a + b;
+}
+integer a(){
+}
+void main() {
+	integer c;
+	c = 2;
+	add(x,c)
+	a = a(); 
+	return;
+}
