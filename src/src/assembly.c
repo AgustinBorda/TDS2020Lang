@@ -90,10 +90,10 @@ char* resolve_assembly_name(dato_tree* curr) {
 			 break;
 		case 5 : //parametros
 			 if(curr -> param_place == 1) {
-				 return "%rdi";
+				 return "%rsi";
 			 }
 			 else {
-				 return "%rsi";
+				 return "%rdi";
 			 }
 			 break;
 		default:
@@ -220,22 +220,20 @@ void write_assembly(FILE* f, list* l, list* ts, char* file_name) {
 				 break;
 			case 15 : //CALL	
 				 if(op2 != NULL) {
-					 fprintf(f, "	pushq %%rdi\n");
-					 fprintf(f, "	movq %s, %%rdi\n", op2);
+					 fprintf(f, "	pushq %%rsi\n");
+					 fprintf(f, "	movq %s, %%rsi\n", op2);
 				 }
 				 if(op1 != NULL) {
-					 fprintf(f, "	pushq %%rsi\n");
-					 fprintf(f, "	movq %s, %%rsi\n", op1);
+					 fprintf(f, "	pushq %%rdi\n");
+					 fprintf(f, "	movq %s, %%rdi\n", op1);
 				 }
 				 fprintf(f, "	call %s\n", curr -> dest -> data -> name);
-				 if(curr -> dest -> offset != 1) {
-				 	fprintf(f, "	movq %%rax, %s\n", dest_offset);
-				 }
+				 fprintf(f, "	movq %%rax, %s\n", dest_offset);
 				 if(op1 != NULL) {
-					 fprintf(f, "	pushq %%rsi\n");
+					 fprintf(f, "	popq %%rdi\n");
 				 }
 				 if(op2 != NULL) {
-					 fprintf(f, "	pushq %%rdi\n");
+					 fprintf(f, "	popq %%rsi\n");
 				 }
 				 break;
 			default : exit(1);

@@ -87,7 +87,8 @@ char* get_tac_opcode(op_twc o) {
 		case 11: return "JUMP";
 		case 12: return "LABEL";
 		case 13: return "IF_FALSE";
-		default: return "IF_TRUE";
+		case 14: return "IF_TRUE";
+		defaul: return "CALL";
 	}
 }
 

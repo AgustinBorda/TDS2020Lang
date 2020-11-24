@@ -111,10 +111,7 @@ alpha_num {alpha}|{digit}|[_-]
 
 "//".*"\n"|"\s"+|"/t"+|"\n"+|"/*"[^*]*|[\/*]*"*/" ;
 
-. { 
-//	printf("%s\n",yytext);
-	//lex_error(yytext);
-}
+. ;
 
 %%
 

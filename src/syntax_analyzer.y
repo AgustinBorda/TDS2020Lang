@@ -84,6 +84,7 @@ void initialize_file_name(char* file) {
 programInit:
 	{initialize();} program {
 		for(int i=0 ; i < size(stack->list); i++) {
+			
 			dato* curr = get(stack->list,i);
 			if((curr -> flag == FUN || curr -> flag == MAIN) && curr -> tree != NULL ) {
 				if(curr -> flag == MAIN) {
@@ -94,8 +95,8 @@ programInit:
 				}
 				 semantic_analyzer(curr);
 			}
+			
 		}
-
 		if(!has_main) {
 			syntax_error("Main function not found\n");
 		}
@@ -126,12 +127,16 @@ var_decl:
 	type id_list ';'{ 
 		for(int i=0 ; i < size(id_list); i++) {
 			dato* curr = get(id_list,i);
-		        if($1 == 0) {
-			         curr-> type = INT;
-		        } 
-		        else {
-			         curr-> type = BOOL;
-		        }
+			switch($1) {
+				case 1 : 
+					curr -> type = INT;
+					break;
+				case 2 :
+					curr -> type = BOOL;
+					break;
+				default : syntax_error("Unknown type\n");
+					break;
+			}
 		        int a = insert(stack->list, curr);
 		        if(a == 0) {
 			          syntax_error("Multiple definition of variable\n");
@@ -199,11 +204,15 @@ method_declar:
 method_declaration:
 	type ID '(' parameters ')' {
 		dato* d = malloc(sizeof(dato));
-		if($1 == 0) {
-			d-> type = INT;
-		} 
-		else {
-			d-> type = BOOL;
+		switch($1) {
+			case 1 : 
+				d -> type = INT;
+				break;
+			case 2 :
+				d -> type = BOOL;
+				break;
+			default : syntax_error("Unknown type\n");
+				break;
 		}
 		if(strcmp($2,"main") == 0) {
 			d-> flag = MAIN;
@@ -239,11 +248,15 @@ parameters:
 var_decl_params:
 	type ID {
 		info_type* inf = malloc(sizeof(info_type));
-		if($1 == 0) {
-			inf-> type = INT;
-		} 
-		else {
-			inf-> type = BOOL;
+		switch($1) {
+			case 1 : 
+				inf -> type = INT;
+				break;
+			case 2 :
+				inf -> type = BOOL;
+				break;
+			default : syntax_error("Unknown type\n");
+				break;
 		}
 		inf->name = $2;
 		int a = last_insert(l, inf);
@@ -272,8 +285,9 @@ block_content:
 	;
 
 type:
-	TYPE_INTEGER {$$ = 0;}
-	|TYPE_BOOL {$$ = 1;}
+	TYPE_INTEGER {$$ = 1;}
+	|TYPE_BOOL {$$ = 2;}
+	|ID {syntax_error("Malformed type\n");}
 	;
 
 statements:

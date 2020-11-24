@@ -117,7 +117,7 @@ dato_tree* writeOp(tree* root, list* l) {
 	return root -> dato;
 }
 
-void write_statement(tree* root, list* l) {
+dato_tree* write_statement(tree* root, list* l) {
 	if(strcmp(root->dato->op, "IF")==0) {
  		dato_tree* val_exp = write(root -> hi, l);
 		three_address_code* tac_if = malloc(sizeof(three_address_code));
@@ -155,6 +155,7 @@ void write_statement(tree* root, list* l) {
 			tac_else -> opcode = LABEL;
 			last_insert(l, tac_else);
 		}
+		return NULL;
 	}
 	if(strcmp(root->dato->op, "WHILE")==0) {
 		three_address_code* tac_init = malloc(sizeof(three_address_code));
@@ -187,6 +188,7 @@ void write_statement(tree* root, list* l) {
 		tac_end -> opcode = LABEL;
 		tac_end -> op1 = label_end;
 		last_insert(l, tac_end);
+		return NULL;
 	}
 	if(strcmp(root->dato->op, "FUN_S") == 0 || strcmp(root->dato->op, "FUN_E") == 0) {
 		dato_tree* val_hi = NULL;
@@ -197,16 +199,13 @@ void write_statement(tree* root, list* l) {
 		if( root -> hd != NULL) {
  			 val_hd = write(root -> hd, l);
 		}
-		if(strcmp(root->dato->op, "FUN_S") == 0) {
-			root -> dato -> offset = 1;
-			printf("aaaaa\n");
-		}
 		three_address_code* tac = malloc(sizeof(three_address_code));
 		tac -> opcode = CALL; 
 		tac -> dest = root -> dato;
 		tac -> op1 = val_hi;
 		tac -> op2 = val_hd;
 		last_insert(l,tac);
+		return root -> dato;
 	}
  }
 dato_tree* write(tree* root, list* l) {
@@ -217,8 +216,7 @@ dato_tree* write(tree* root, list* l) {
 			 break;
 		case 2 : return writeOp(root,l);
 			 break;
-		case 3 : write_statement(root, l);
-			 return NULL; //peligroso
+		case 3 : return write_statement(root, l);
 			 break;
 		default : exit(1);
 			  break;
