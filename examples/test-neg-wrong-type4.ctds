@@ -1,0 +1,16 @@
+integer x;
+bool y;
+integer add(integer a, integer b) {
+	a = a();
+	return a + b;
+}
+intege a(){
+}
+void main() {
+	integer c;
+	c = 2;
+	add(x,c)
+	a = a(); 
+	return;
+}
+
