@@ -1,0 +1,13 @@
+integer x;
+bool y;
+integer add(integer a, integer b) {
+	return a + b;
+}
+integer a(){
+}
+void main() {
+	integer c;
+	c = true; 
+	return;
+}
+
