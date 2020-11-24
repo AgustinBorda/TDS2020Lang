@@ -1,0 +1,18 @@
+
+integer prod(integer x, integer y){
+	integer i;
+	integer acum;
+	i = 0;
+	while (i < y) {
+		acum = x+y;
+		i = i+1;
+	}
+	return acum; 
+}
+
+integer main(){
+	
+	return prod(5, 5);
+}
+
+

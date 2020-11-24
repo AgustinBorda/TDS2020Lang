@@ -1,0 +1,17 @@
+
+//extern integer f1(integer x, integer y);
+
+integer dif(integer n, integer m){
+	integer acum;
+	acum = m - n;
+	if (acum < 0) then {
+		return acum * (0-1);
+	} else {
+		return acum;
+	}
+}
+
+integer main(){
+	return dif(6, 8);
+}
+	

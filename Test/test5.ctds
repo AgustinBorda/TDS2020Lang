@@ -1,0 +1,15 @@
+
+bool equals_num(integer a, integer b){
+	if (a == b) then {
+		return true;
+	} else { 
+		return false;
+	}
+}
+integer main(){
+	if (equals_num(5, 5)) then {
+		return 0;
+	} else { 
+		return 1;
+	}
+}
