@@ -1,0 +1,14 @@
+
+integer max(integer x, integer y){
+	if(x < y) then {
+		return y; 	
+	} else {
+		return x;
+	}
+	
+}
+integer main(){
+	return max(5, 6);
+}
+
+
